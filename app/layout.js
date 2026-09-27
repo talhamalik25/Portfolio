@@ -1,14 +1,10 @@
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Space_Mono } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const spaceMono = Space_Mono({
+  variable: "--font-space-mono",
   subsets: ["latin"],
-});
-
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
-  subsets: ["latin"],
+  weight: ["400", "700"],
 });
 
 export const metadata = {
@@ -20,8 +16,11 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${spaceGrotesk.variable} h-full antialiased`}
+      className={`${spaceMono.variable} h-full antialiased`}
     >
+      <head>
+        <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" />
+      </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

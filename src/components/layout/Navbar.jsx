@@ -58,8 +58,8 @@ export default function Navbar() {
         <nav
           aria-label="Main navigation"
           className={[
-            "relative flex items-center justify-between gap-3 rounded-[22px] border border-white/10 bg-[#111111]/60 px-3 py-2.5 backdrop-blur-xl transition-all duration-300 ease-out sm:px-4 lg:px-5",
-            isScrolled ? "border-white/12 bg-[#111111]/82" : "",
+            "relative flex items-center justify-between gap-3 rounded-[22px] border border-white/10 bg-[#111111]/40 px-4 py-2.5 backdrop-blur-xl transition-all duration-400 ease-out sm:px-5 lg:px-6",
+            isScrolled ? "border-white/15 bg-[#111111]/85 shadow-lg backdrop-blur-2xl" : "",
           ].join(" ")}
         >
           <a
@@ -76,10 +76,24 @@ export default function Navbar() {
                 <li key={item.label}>
                   <a
                     href={item.href}
-                    className="group relative inline-flex h-[1.2em] items-center overflow-hidden text-[0.68rem] font-medium uppercase tracking-[0.2em] text-white/70 transition-colors duration-200 hover:text-[#EB5002]"
+                    className="group relative inline-flex items-center pb-[2px] text-[0.68rem] font-medium uppercase tracking-[0.2em] text-white/70 transition-colors duration-200 hover:text-[#EB5002] after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-full after:origin-left after:scale-x-0 after:bg-[#EB5002] after:transition-transform after:duration-500 after:ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:after:scale-x-100"
                   >
-                    <span className="block transition-transform duration-450 ease-[cubic-bezier(0.22,1,0.36,1) group-hover:-translate-y-[110%] group-focus-visible:-translate-y-[110%]">{item.label}</span>
-                    <span className="absolute inset-0 block translate-y-[110%] text-[#EB5002] opacity-0 transition-all duration-450 ease-[cubic-bezier(0.22,1,0.36,1) group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">{item.label}</span>
+                    <span className="relative flex overflow-hidden">
+                      <span className="flex">
+                        {item.label.split("").map((char, i) => (
+                          <span key={i} className="inline-block transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-[110%]" style={{ transitionDelay: `${i * 30}ms` }}>
+                            {char === " " ? "\u00A0" : char}
+                          </span>
+                        ))}
+                      </span>
+                      <span className="absolute inset-0 flex text-[#EB5002]">
+                        {item.label.split("").map((char, i) => (
+                          <span key={i} className="inline-block translate-y-[110%] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" style={{ transitionDelay: `${i * 30}ms` }}>
+                            {char === " " ? "\u00A0" : char}
+                          </span>
+                        ))}
+                      </span>
+                    </span>
                   </a>
                 </li>
               ))}
@@ -102,28 +116,26 @@ export default function Navbar() {
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-navigation"
               onClick={() => setIsMobileMenuOpen((open) => !open)}
-              className="relative flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-[#111111]/70 text-white transition-all duration-200 ease-out hover:border-[#EB5002] hover:text-[#EB5002] focus:outline-none focus:ring-2 focus:ring-[#EB5002] focus:ring-offset-2 focus:ring-offset-[#0b0b0b] lg:hidden"
+              className="relative flex h-10 items-center justify-center rounded-full border border-white/10 bg-[#111111]/70 px-4 text-[0.65rem] font-semibold uppercase tracking-[0.15em] text-white transition-all duration-200 ease-out hover:border-[#EB5002] hover:text-[#EB5002] focus:outline-none focus:ring-2 focus:ring-[#EB5002] focus:ring-offset-2 focus:ring-offset-[#0b0b0b] lg:hidden"
             >
-              <span className="relative block h-4 w-5">
+              <div className="relative flex items-center justify-center overflow-hidden h-4 w-12">
                 <span
                   className={[
-                    "absolute left-0 top-0 block h-0.5 w-5 rounded-full bg-current transition-all duration-300 ease-out",
-                    isMobileMenuOpen ? "translate-y-[7px] rotate-45" : "translate-y-0 rotate-0",
+                    "absolute w-full text-center transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+                    isMobileMenuOpen ? "-translate-y-4 opacity-0" : "translate-y-0 opacity-100"
                   ].join(" ")}
-                />
+                >
+                  MENU
+                </span>
                 <span
                   className={[
-                    "absolute left-0 top-[7px] block h-0.5 w-5 rounded-full bg-current transition-all duration-200 ease-out",
-                    isMobileMenuOpen ? "opacity-0" : "opacity-100",
+                    "absolute w-full text-center transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
+                    isMobileMenuOpen ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
                   ].join(" ")}
-                />
-                <span
-                  className={[
-                    "absolute left-0 top-[14px] block h-0.5 w-5 rounded-full bg-current transition-all duration-300 ease-out",
-                    isMobileMenuOpen ? "-translate-y-[7px] -rotate-45" : "translate-y-0 rotate-0",
-                  ].join(" ")}
-                />
-              </span>
+                >
+                  CLOSE
+                </span>
+              </div>
             </button>
           </div>
         </nav>
