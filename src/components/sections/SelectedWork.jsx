@@ -1,10 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import { useMemo, useState } from "react";
 
 const projects = [
   {
@@ -40,192 +36,23 @@ const projects = [
 ];
 
 export default function SelectedWork() {
-  const rootRef = useRef(null);
-  const stackRef = useRef(null);
-  const cardRefs = useRef([]);
-  const [isDesktop, setIsDesktop] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
 
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(min-width: 1024px)");
-    const handleChange = () => setIsDesktop(mediaQuery.matches);
+  const orderedCards = useMemo(() => {
+    if (projects.length <= 1) return projects;
 
-    handleChange();
+    const left = projects[(activeIndex + projects.length - 1) % projects.length];
+    const center = projects[activeIndex];
+    const right = projects[(activeIndex + 1) % projects.length];
 
-    if (mediaQuery.addEventListener) {
-      mediaQuery.addEventListener("change", handleChange);
-      return () => mediaQuery.removeEventListener("change", handleChange);
-    }
+    return [left, center, right];
+  }, [activeIndex]);
 
-    mediaQuery.addListener(handleChange);
-    return () => mediaQuery.removeListener(handleChange);
-  }, []);
-
-  useLayoutEffect(() => {
-    if (!isDesktop || !rootRef.current || !stackRef.current) {
-      return undefined;
-    }
-
-    const cards = cardRefs.current.filter(Boolean);
-
-    let rafDelay;
-    let loadHandler;
-    let fontsCleanup;
-
-    const ctx = gsap.context(() => {
-      const prefersReducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
-
-      if (prefersReducedMotion) {
-        gsap.set(cards, { opacity: 1, scale: 1, y: 0, x: 0, rotateX: 0, rotateY: 0 });
-        return;
-      }
-
-      gsap.set(cards, {
-        position: "absolute",
-        left: "50%",
-        top: "50%",
-        xPercent: -50,
-        yPercent: -50,
-        transformPerspective: 1200,
-        transformOrigin: "center center",
-        opacity: 0,
-        scale: 0.9,
-      });
-
-      gsap.set(cards[0], { opacity: 1, scale: 1, y: 0 });
-      gsap.set(cards.slice(1), {
-        y: 120,
-        scale: 0.92,
-        opacity: 0.15,
-      });
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: rootRef.current,
-          pin: stackRef.current,
-          scrub: 0.7,
-          start: "top top",
-          end: "+=" + cards.length * 600,
-          invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            const nextIndex = Math.min(
-              cards.length - 1,
-              Math.round(self.progress * (cards.length - 1)),
-            );
-            setActiveIndex(nextIndex);
-          },
-          onRefresh: (self) => {
-            if (typeof window !== "undefined" && window.__DEV_PORTFOLIO_LOG__) {
-              console.log("[Work ScrollTrigger] range:", {
-                start: self.start,
-                end: self.end,
-              });
-            }
-          },
-        },
-      });
-
-      let offset = 0;
-
-      cards.forEach((card, index) => {
-        if (index === cards.length - 1) return;
-
-        tl.to(
-          card,
-          {
-            y: -36,
-            scale: 0.94,
-            opacity: 0.52,
-            duration: 1,
-            ease: "none",
-          },
-          offset,
-        );
-
-        tl.to(
-          cards[index + 1],
-          {
-            y: 0,
-            scale: 1,
-            opacity: 1,
-            duration: 1,
-            ease: "none",
-          },
-          offset + 0.2,
-        );
-
-        offset += 1;
-      });
-    }, rootRef);
-
-    const refreshOnce = () => {
-      ScrollTrigger.refresh();
-    };
-    const fontsReady =
-      typeof document !== "undefined" && document.fonts && document.fonts.ready;
-    if (fontsReady) {
-      let cancelled = false;
-      fontsReady.then(() => {
-        if (!cancelled) refreshOnce();
-      });
-      fontsCleanup = () => {
-        cancelled = true;
-      };
-    }
-    loadHandler = () => refreshOnce();
-    window.addEventListener("load", loadHandler, { once: true });
-    rafDelay = window.setTimeout(refreshOnce, 500);
-
-    return () => {
-      if (loadHandler) {
-        window.removeEventListener("load", loadHandler);
-      }
-      if (rafDelay) {
-        window.clearTimeout(rafDelay);
-      }
-      if (fontsCleanup) {
-        fontsCleanup();
-      }
-      ctx.revert();
-      ScrollTrigger.getAll().forEach((st) => st.kill());
-    };
-  }, [isDesktop]);
-
-  const handlePointerMove = (event) => {
-    const card = event.currentTarget;
-    const bounds = card.getBoundingClientRect();
-    const x = (event.clientX - bounds.left) / bounds.width;
-    const y = (event.clientY - bounds.top) / bounds.height;
-    const rotateY = (x - 0.5) * 10;
-    const rotateX = (0.5 - y) * 10;
-
-    gsap.to(card, {
-      rotateX,
-      rotateY,
-      duration: 0.3,
-      ease: "power2.out",
-      transformPerspective: 1200,
-      overwrite: true,
-    });
-  };
-
-  const handlePointerLeave = (event) => {
-    gsap.to(event.currentTarget, {
-      rotateX: 0,
-      rotateY: 0,
-      duration: 0.45,
-      ease: "power3.out",
-      transformPerspective: 1200,
-      overwrite: true,
-    });
-  };
+  const activeProject = projects[activeIndex];
 
   return (
     <section
       id="work"
-      ref={rootRef}
       className="relative overflow-hidden border-t border-[#1B1714]/10 bg-[#FAF7F2] text-[#1A1613]"
       style={{
         backgroundImage:
@@ -234,8 +61,8 @@ export default function SelectedWork() {
       }}
       aria-label="Selected Work"
     >
-      <div className="relative mx-auto max-w-[1240px] px-4 pb-20 pt-24 sm:px-6 lg:px-8 lg:pb-24 lg:pt-28">
-        <div data-project-eyebrow className="portfolio-kicker mb-5 text-[#EB5002]">
+      <div className="relative mx-auto max-w-[1240px] px-4 pb-20 pt-24 sm:px-6 lg:px-8 lg:pb-28 lg:pt-28">
+        <div className="portfolio-kicker mb-5 text-[#EB5002]">
           SELECTED WORK
         </div>
 
@@ -250,193 +77,214 @@ export default function SelectedWork() {
           </p>
         </div>
 
-        {isDesktop ? (
-          <div className="relative hidden lg:block">
-            <div
-              ref={stackRef}
-              className="relative h-[760px] w-full"
-              aria-label="Project stack"
-            >
-              {projects.map((project, index) => (
-                <article
-                  key={project.title}
-                  ref={(element) => {
-                    cardRefs.current[index] = element;
+        <div className="hidden lg:block">
+          <div
+            className="relative mx-auto flex h-[560px] items-center justify-center overflow-visible"
+            style={{ perspective: "1200px" }}
+          >
+            {orderedCards.map((project, index) => {
+              const isCenter = index === 1;
+              const isLeft = index === 0;
+              const isRight = index === 2;
+
+              return (
+                <button
+                  key={`${project.title}-${index}`}
+                  type="button"
+                  onClick={() => {
+                    const clickedIndex = projects.findIndex(
+                      (item) => item.title === project.title,
+                    );
+                    setActiveIndex(clickedIndex);
                   }}
-                  className={[
-                    "group absolute w-full max-w-[1080px] overflow-hidden rounded-[30px] border border-[#1B1714]/10 bg-[#FFFDFB] p-4 shadow-[0_24px_60px_rgba(16,14,12,0.08)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]",
-                    activeIndex === index ? "border-[#EB5002]/20" : "border-[#1B1714]/10",
-                  ].join(" ")}
-                  onMouseMove={handlePointerMove}
-                  onMouseLeave={handlePointerLeave}
+                  className="group absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 cursor-pointer appearance-none overflow-visible border-0 bg-transparent p-0 text-left transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                  style={{
+                    width: isCenter ? "min(70vw, 700px)" : "min(58vw, 560px)",
+                    height: isCenter ? "420px" : "350px",
+                    transform: isCenter
+                      ? "translate(-50%, -50%) rotateY(0deg) scale(1)"
+                      : isLeft
+                        ? "translate(-112%, -50%) rotateY(28deg) scale(0.9)"
+                        : "translate(12%, -50%) rotateY(-28deg) scale(0.9)",
+                    zIndex: isCenter ? 30 : 20,
+                    opacity: isCenter ? 1 : 0.75,
+                    filter: isCenter ? "none" : "saturate(0.8)",
+                  }}
                 >
-                  <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100" style={{ background: "radial-gradient(circle at 30% 28%, rgba(235, 80, 2, 0.15), transparent 32%)" }} />
+                  <div className="relative h-full w-full overflow-hidden rounded-[28px] border border-[#1B1714]/10 bg-[#FFFDFB] shadow-[0_24px_60px_rgba(16,14,12,0.1)]">
+                    <div
+                      className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                      style={{
+                        backgroundImage: `url(${project.image})`,
+                        filter: "contrast(1.05) saturate(0.9) brightness(0.82)",
+                      }}
+                    />
 
-                  <div className="relative z-10">
-                    <div className="project-visual relative aspect-[16/9] overflow-hidden rounded-[24px] border border-[#1B1714]/8 bg-[#EDE7E0]">
-                      <div
-                        className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-                        style={{
-                          backgroundImage: `url(${project.image})`,
-                          filter: "contrast(1.05) saturate(0.9) brightness(0.8)",
-                        }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-b from-[#1B1714]/0 via-[#1B1714]/10 to-[#1B1714]/50" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0B]/80 via-[#0B0B0B]/15 to-transparent" />
 
-                      <div className="absolute inset-x-0 top-0 flex items-center justify-between p-4">
-                        <span aria-hidden="true" className="portfolio-meta text-[#F2F0EE]">
-                          {project.category}
-                        </span>
-                        <span aria-hidden="true" className="portfolio-meta text-[#EB5002]">
-                          {project.number}
-                        </span>
-                      </div>
+                    <div className="absolute left-4 top-4 z-10 flex items-center gap-2">
+                      <span className="portfolio-meta rounded-full border border-white/15 bg-[#0B0B0B]/45 px-2.5 py-1 text-[#EB5002] backdrop-blur-sm">
+                        {project.number}
+                      </span>
                     </div>
 
-                    <div className="mt-5 flex flex-col gap-4 px-1 pb-2">
-                      <div className="flex items-center justify-between gap-3">
-                        <span className="portfolio-meta text-[#6B625D]">
-                          {project.category}
-                        </span>
-                        <span className="portfolio-meta text-[#EB5002]">
-                          {project.number}
-                        </span>
+                    <div className="absolute inset-x-0 bottom-0 z-10 p-5">
+                      <div className="mb-2 text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[#F4F1EE]/80">
+                        {project.category}
                       </div>
-
-                      <h3 className="portfolio-display text-[2rem] leading-[0.98] tracking-[-0.06em] text-[#111111] sm:text-[2.6rem]">
+                      <h3 className="portfolio-display text-[1.7rem] font-bold leading-[0.98] tracking-[-0.06em] text-white sm:text-[2rem]">
                         {project.title}
                       </h3>
-
-                      <p className="portfolio-copy max-w-[34rem] text-[0.96rem] text-[#5D5652]">
-                        {project.description}
-                      </p>
-
-                      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[#1B1714]/8 pt-4">
-                        <div className="flex flex-wrap gap-2">
-                          {project.tags.map((tag) => (
-                            <span
-                              key={tag}
-                              className="portfolio-tag rounded-full border border-[#1B1714]/10 bg-[#F5F0EB] px-3 py-1.5 text-[0.68rem] font-medium text-[#5C5753]"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-
-                        <a
-                          href={project.href}
-                          className="portfolio-button-label inline-flex items-center gap-2 text-[#EB5002] transition-transform duration-300 ease-out group-hover:translate-x-[-3px]"
-                        >
-                          <span>View Case Study</span>
-                          <span aria-hidden="true" className="text-base leading-none">
-                            →
-                          </span>
-                        </a>
-                      </div>
                     </div>
                   </div>
-                </article>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="mx-auto mt-10 max-w-[760px] rounded-[28px] border border-[#1B1714]/10 bg-[#FFFDFB] p-6 shadow-[0_18px_40px_rgba(16,14,12,0.04)]">
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <span className="portfolio-meta text-[#EB5002]">
+                {activeProject.number}
+              </span>
+              <span className="portfolio-meta text-[#6B625D]">
+                {activeProject.category}
+              </span>
+            </div>
+
+            <h3 className="portfolio-display text-[2rem] leading-[0.98] tracking-[-0.06em] text-[#111111] sm:text-[2.4rem]">
+              {activeProject.title}
+            </h3>
+
+            <p className="portfolio-copy mt-3 text-[0.96rem] text-[#5D5652]">
+              {activeProject.description}
+            </p>
+
+            <div className="mt-5 flex flex-wrap gap-2">
+              {activeProject.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="portfolio-tag rounded-full border border-[#1B1714]/10 bg-[#F5F0EB] px-3 py-1.5 text-[0.68rem] font-medium text-[#5C5753]"
+                >
+                  {tag}
+                </span>
               ))}
             </div>
 
-            <div className="pointer-events-none absolute left-[-30px] top-1/2 hidden -translate-y-1/2 lg:flex">
-              <div className="flex flex-col items-center gap-3">
-                {projects.map((project, index) => (
-                  <div
-                    key={project.title}
-                    className={[
-                      "h-2.5 w-2.5 rounded-full border transition-all duration-300",
-                      activeIndex === index
-                        ? "scale-125 border-[#EB5002] bg-[#EB5002]"
-                        : "border-[#1B1714]/30 bg-transparent",
-                    ].join(" ")}
-                    aria-label={`Project ${index + 1} active`}
-                  />
-                ))}
-                <div className="mt-1 text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-[#6B625D]">
-                  {String(activeIndex + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
-                </div>
-              </div>
+            <div className="mt-6">
+              <a
+                href={activeProject.href}
+                className="portfolio-button-label inline-flex items-center gap-2 text-[#EB5002]"
+              >
+                <span>View Case Study</span>
+                <span aria-hidden="true" className="text-base leading-none">
+                  →
+                </span>
+              </a>
             </div>
           </div>
-        ) : (
-          <div className="grid gap-5 lg:hidden">
-            {projects.map((project, index) => (
-              <article
-                key={project.title}
-                className="group relative overflow-hidden rounded-[28px] border border-[#1B1714]/10 bg-[#FFFDFB] p-4 shadow-[0_16px_40px_rgba(17,17,17,0.05)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
-                onMouseMove={handlePointerMove}
-                onMouseLeave={handlePointerLeave}
-              >
-                <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100" style={{ background: "radial-gradient(circle at 30% 30%, rgba(235, 80, 2, 0.12), transparent 38%)" }} />
+        </div>
 
-                <div className="relative z-10">
-                  <div className="project-visual relative aspect-[16/9] overflow-hidden rounded-[22px] border border-[#1B1714]/8 bg-[#EDE7E0]">
+        <div className="lg:hidden">
+          <div className="flex gap-4 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {projects.map((project, index) => {
+              const isActive = index === activeIndex;
+
+              return (
+                <button
+                  key={project.title}
+                  type="button"
+                  onClick={() => setActiveIndex(index)}
+                  className="group relative min-w-[82%] shrink-0 overflow-hidden rounded-[24px] border border-[#1B1714]/10 bg-[#FFFDFB] p-3 text-left shadow-[0_16px_40px_rgba(17,17,17,0.05)] transition-all duration-300 ease-out"
+                  style={{
+                    transform: isActive ? "scale(1)" : "scale(0.96)",
+                    opacity: isActive ? 1 : 0.8,
+                  }}
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden rounded-[18px] bg-[#EDE7E0]">
                     <div
-                      className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                      className="absolute inset-0 bg-cover bg-center"
                       style={{
                         backgroundImage: `url(${project.image})`,
                         filter: "contrast(1.05) saturate(0.9) brightness(0.8)",
                       }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-b from-[#1B1714]/0 via-[#1B1714]/10 to-[#1B1714]/50" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0B]/80 via-[#0B0B0B]/20 to-transparent" />
 
-                    <div className="absolute inset-x-0 top-0 flex items-center justify-between p-3">
-                      <span aria-hidden="true" className="portfolio-meta text-[#F2F0EE]">
-                        {project.category}
-                      </span>
-                      <span aria-hidden="true" className="portfolio-meta text-[#EB5002]">
-                        {project.number}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="mt-5 flex flex-col gap-4 px-1 pb-2">
-                    <div className="flex items-center justify-between gap-3">
-                      <span className="portfolio-meta text-[#6B625D]">
-                        {project.category}
-                      </span>
-                      <span className="portfolio-meta text-[#EB5002]">
+                    <div className="absolute left-3 top-3 z-10">
+                      <span className="portfolio-meta rounded-full border border-white/15 bg-[#0B0B0B]/45 px-2.5 py-1 text-[#EB5002] backdrop-blur-sm">
                         {project.number}
                       </span>
                     </div>
 
-                    <h3 className="portfolio-display text-[1.6rem] leading-[1] tracking-[-0.06em] text-[#111111]">
-                      {project.title}
-                    </h3>
-
-                    <p className="portfolio-copy text-[0.94rem] text-[#5D5652]">
-                      {project.description}
-                    </p>
-
-                    <div className="flex flex-wrap gap-2">
-                      {project.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="portfolio-tag rounded-full border border-[#1B1714]/10 bg-[#F5F0EB] px-3 py-1.5 text-[0.68rem] font-medium text-[#5C5753]"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-
-                    <div className="flex justify-end pt-2">
-                      <a
-                        href={project.href}
-                        className="portfolio-button-label inline-flex items-center gap-2 text-[#EB5002]"
-                      >
-                        <span>View Case Study</span>
-                        <span aria-hidden="true" className="text-base leading-none">
-                          →
-                        </span>
-                      </a>
+                    <div className="absolute inset-x-0 bottom-0 z-10 p-3">
+                      <div className="mb-2 text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-[#F4F1EE]/80">
+                        {project.category}
+                      </div>
+                      <h3 className="portfolio-display text-[1.35rem] font-bold leading-[0.98] tracking-[-0.04em] text-white">
+                        {project.title}
+                      </h3>
                     </div>
                   </div>
-                </div>
-              </article>
-            ))}
+                </button>
+              );
+            })}
           </div>
-        )}
+
+          <div className="mt-6 rounded-[24px] border border-[#1B1714]/10 bg-[#FFFDFB] p-5 shadow-[0_18px_40px_rgba(16,14,12,0.04)]">
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <span className="portfolio-meta text-[#EB5002]">
+                {activeProject.number}
+              </span>
+              <span className="portfolio-meta text-[#6B625D]">
+                {activeProject.category}
+              </span>
+            </div>
+
+            <h3 className="portfolio-display text-[1.7rem] leading-[0.98] tracking-[-0.06em] text-[#111111]">
+              {activeProject.title}
+            </h3>
+
+            <p className="portfolio-copy mt-3 text-[0.94rem] text-[#5D5652]">
+              {activeProject.description}
+            </p>
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              {activeProject.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="portfolio-tag rounded-full border border-[#1B1714]/10 bg-[#F5F0EB] px-3 py-1.5 text-[0.68rem] font-medium text-[#5C5753]"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            <div className="mt-5">
+              <a
+                href={activeProject.href}
+                className="portfolio-button-label inline-flex items-center gap-2 text-[#EB5002]"
+              >
+                <span>View Case Study</span>
+                <span aria-hidden="true" className="text-base leading-none">
+                  →
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-10 flex justify-center">
+          <a
+            href="#work"
+            className="group inline-flex items-center gap-2 rounded-full border border-[#1B1714]/10 bg-[#111111] px-6 py-3.5 text-sm font-semibold uppercase tracking-[0.14em] text-white transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-[#EB5002]/40 hover:bg-[#EB5002] hover:text-[#111111]"
+          >
+            <span>View All Work</span>
+            <span aria-hidden="true" className="text-base leading-none transition-transform duration-300 ease-out group-hover:translate-x-1">
+              →
+            </span>
+          </a>
+        </div>
       </div>
     </section>
   );
