@@ -138,6 +138,7 @@ export default function Hero() {
             <div
               data-hero-word
               data-hero-animate
+              aria-hidden="true"
               className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center select-none"
             >
               <span className="portfolio-display whitespace-nowrap text-[clamp(8rem,22vw,20rem)] font-bold leading-[0.8] tracking-[-0.04em] text-[#EB5002] text-opacity-30%">

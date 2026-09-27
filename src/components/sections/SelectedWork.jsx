@@ -68,6 +68,10 @@ export default function SelectedWork() {
 
     const cards = cardRefs.current.filter(Boolean);
 
+    let rafDelay;
+    let loadHandler;
+    let fontsCleanup;
+
     const ctx = gsap.context(() => {
       const prefersReducedMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
@@ -104,12 +108,21 @@ export default function SelectedWork() {
           scrub: 0.7,
           start: "top top",
           end: "+=" + cards.length * 600,
+          invalidateOnRefresh: true,
           onUpdate: (self) => {
             const nextIndex = Math.min(
               cards.length - 1,
               Math.round(self.progress * (cards.length - 1)),
             );
             setActiveIndex(nextIndex);
+          },
+          onRefresh: (self) => {
+            if (typeof window !== "undefined" && window.__DEV_PORTFOLIO_LOG__) {
+              console.log("[Work ScrollTrigger] range:", {
+                start: self.start,
+                end: self.end,
+              });
+            }
           },
         },
       });
@@ -147,7 +160,37 @@ export default function SelectedWork() {
       });
     }, rootRef);
 
-    return () => ctx.revert();
+    const refreshOnce = () => {
+      ScrollTrigger.refresh();
+    };
+    const fontsReady =
+      typeof document !== "undefined" && document.fonts && document.fonts.ready;
+    if (fontsReady) {
+      let cancelled = false;
+      fontsReady.then(() => {
+        if (!cancelled) refreshOnce();
+      });
+      fontsCleanup = () => {
+        cancelled = true;
+      };
+    }
+    loadHandler = () => refreshOnce();
+    window.addEventListener("load", loadHandler, { once: true });
+    rafDelay = window.setTimeout(refreshOnce, 500);
+
+    return () => {
+      if (loadHandler) {
+        window.removeEventListener("load", loadHandler);
+      }
+      if (rafDelay) {
+        window.clearTimeout(rafDelay);
+      }
+      if (fontsCleanup) {
+        fontsCleanup();
+      }
+      ctx.revert();
+      ScrollTrigger.getAll().forEach((st) => st.kill());
+    };
   }, [isDesktop]);
 
   const handlePointerMove = (event) => {
@@ -241,10 +284,10 @@ export default function SelectedWork() {
                       <div className="absolute inset-0 bg-gradient-to-b from-[#1B1714]/0 via-[#1B1714]/10 to-[#1B1714]/50" />
 
                       <div className="absolute inset-x-0 top-0 flex items-center justify-between p-4">
-                        <span className="portfolio-meta text-[#F2F0EE]">
+                        <span aria-hidden="true" className="portfolio-meta text-[#F2F0EE]">
                           {project.category}
                         </span>
-                        <span className="portfolio-meta text-[#EB5002]">
+                        <span aria-hidden="true" className="portfolio-meta text-[#EB5002]">
                           {project.number}
                         </span>
                       </div>
@@ -339,10 +382,10 @@ export default function SelectedWork() {
                     <div className="absolute inset-0 bg-gradient-to-b from-[#1B1714]/0 via-[#1B1714]/10 to-[#1B1714]/50" />
 
                     <div className="absolute inset-x-0 top-0 flex items-center justify-between p-3">
-                      <span className="portfolio-meta text-[#F2F0EE]">
+                      <span aria-hidden="true" className="portfolio-meta text-[#F2F0EE]">
                         {project.category}
                       </span>
-                      <span className="portfolio-meta text-[#EB5002]">
+                      <span aria-hidden="true" className="portfolio-meta text-[#EB5002]">
                         {project.number}
                       </span>
                     </div>

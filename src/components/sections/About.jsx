@@ -22,47 +22,87 @@ export default function About() {
   useEffect(() => {
     if (!paragraphRef.current) return undefined;
 
+    let rafDelay;
+    let loadHandler;
+    let fontsCleanup;
+
     const context = gsap.context(() => {
       const prefersReducedMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
       ).matches;
 
       const lines = linesRef.current.filter(Boolean);
+      const N = lines.length;
 
       if (prefersReducedMotion) {
         lines.forEach((line) => {
-          gsap.set(line, { clipPath: "inset(0 0% 0 0)" });
+          line.style.clipPath = "inset(0 0% 0 0)";
         });
         return;
       }
 
-      const totalPinDistance = lines.length * 420;
+      const totalPinDistance = N * 350;
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: paragraphRef.current,
-          pin: true,
-          scrub: 0.5,
-          start: "top top",
-          end: "+=" + totalPinDistance,
+      ScrollTrigger.create({
+        trigger: paragraphRef.current,
+        pin: true,
+        start: "top top",
+        end: "+=" + totalPinDistance,
+        scrub: 0.3,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          const globalProgress = self.progress;
+          for (let i = 0; i < N; i++) {
+            const lineProgress = Math.min(
+              Math.max(globalProgress * N - i, 0),
+              1,
+            );
+            const insetRight = (1 - lineProgress) * 100;
+            lines[i].style.clipPath = `inset(0 ${insetRight}% 0 0)`;
+          }
         },
-      });
-
-      lines.forEach((line) => {
-        gsap.set(line, { clipPath: "inset(0 100% 0 0)" });
-        tl.to(
-          line,
-          {
-            clipPath: "inset(0 0% 0 0)",
-            duration: 1,
-            ease: "none",
-          },
-          "<",
-        );
+        onRefresh: (self) => {
+          if (typeof window !== "undefined" && window.__DEV_PORTFOLIO_LOG__) {
+            console.log("[About ScrollTrigger] range:", {
+              start: self.start,
+              end: self.end,
+            });
+          }
+        },
       });
     }, paragraphRef);
 
-    return () => context.revert();
+    const refreshOnce = () => {
+      ScrollTrigger.refresh();
+    };
+    const fontsReady =
+      typeof document !== "undefined" && document.fonts && document.fonts.ready;
+    if (fontsReady) {
+      let cancelled = false;
+      fontsReady.then(() => {
+        if (!cancelled) refreshOnce();
+      });
+      fontsCleanup = () => {
+        cancelled = true;
+      };
+    }
+    loadHandler = () => refreshOnce();
+    window.addEventListener("load", loadHandler, { once: true });
+    rafDelay = window.setTimeout(refreshOnce, 400);
+
+    return () => {
+      if (loadHandler) {
+        window.removeEventListener("load", loadHandler);
+      }
+      if (rafDelay) {
+        window.clearTimeout(rafDelay);
+      }
+      if (fontsCleanup) {
+        fontsCleanup();
+      }
+      context.revert();
+      ScrollTrigger.getAll().forEach((st) => st.kill());
+    };
   }, []);
 
   return (
@@ -87,6 +127,7 @@ export default function About() {
                     {line}
                   </span>
                   <span
+                    aria-hidden="true"
                     ref={(element) => {
                       linesRef.current[index] = element;
                     }}

@@ -3,7 +3,7 @@
 :root {
   --background: #0b0b0b;
   --foreground: #f5f5f5;
-  --font-display: var(--font-space-mono), monospace;
+  --font-display: 'General Sans', sans-serif;
   --font-body: 'General Sans', sans-serif;
 }
 
