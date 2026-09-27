@@ -6,6 +6,8 @@ import SelectedWork from "@/src/components/sections/SelectedWork";
 import Stack from "@/src/components/sections/Stack";
 import Journey from "@/src/components/sections/Journey";
 import FinalCta from "@/src/components/sections/FinalCta";
+import Contact from "@/src/components/sections/Contact";
+import Footer from "@/src/components/sections/Footer";
 
 export default function Home() {
   return (
@@ -18,6 +20,8 @@ export default function Home() {
       <Stack />
       <Journey />
       <FinalCta />
+      <Contact />
+      <Footer />
     </>
   );
 }

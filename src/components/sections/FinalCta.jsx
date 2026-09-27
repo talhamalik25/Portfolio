@@ -23,6 +23,7 @@ export default function FinalCta() {
   const sectionRef = useRef(null);
   const contentRef = useRef(null);
   const scatterRef = useRef(null);
+  const badgeTextRef = useRef(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -58,6 +59,22 @@ export default function FinalCta() {
           toggleActions: "play none none none",
         },
       });
+
+      if (badgeTextRef.current) {
+        const badgeTween = gsap.to(badgeTextRef.current, {
+          rotation: 360,
+          duration: 18,
+          repeat: -1,
+          ease: "none",
+          transformOrigin: "50% 50%",
+        });
+
+        const badgeWrap = badgeTextRef.current.closest(".spinning-badge");
+        if (badgeWrap) {
+          badgeWrap.addEventListener("mouseenter", () => badgeTween.timeScale(2.5));
+          badgeWrap.addEventListener("mouseleave", () => badgeTween.timeScale(1));
+        }
+      }
 
       return undefined;
     }, sectionRef);
@@ -147,7 +164,31 @@ export default function FinalCta() {
               ))}
             </div>
 
-            <div className="mt-8 flex justify-center">
+            <div className="mt-8 flex items-center justify-center gap-4 sm:gap-5">
+              <div className="spinning-badge relative flex h-[92px] w-[92px] items-center justify-center overflow-visible">
+                <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full" aria-label="Let's talk rotating text badge">
+                  <defs>
+                    <path id="cta-badge-loop" d="M 50,50 m -38,0 a 38,38 0 1,1 76,0 a 38,38 0 1,1 -76,0" />
+                  </defs>
+                  <g ref={badgeTextRef} className="origin-center">
+                    <text
+                      fill="#FF6B00"
+                      fontSize="7.2"
+                      fontWeight="700"
+                      letterSpacing="1.8"
+                      textLength="210"
+                    >
+                      <textPath href="#cta-badge-loop" startOffset="0%" side="left">
+                        LET&apos;S TALK • LET&apos;S TALK • LET&apos;S TALK • LET&apos;S TALK • LET&apos;S TALK •
+                      </textPath>
+                    </text>
+                  </g>
+                </svg>
+                <span className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full border border-[#FF6B00]/30 bg-[#0A0A0A] text-lg font-medium text-[#FF6B00] shadow-[0_0_18px_rgba(255,107,0,0.2)]">
+                  →
+                </span>
+              </div>
+
               <a
                 href="#contact"
                 className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full border border-[#FF6B00] bg-[#FF6B00] px-7 py-3.5 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-[#0b0b0b] shadow-[0_0_20px_rgba(255,107,0,0.32)] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#FF6B00]"

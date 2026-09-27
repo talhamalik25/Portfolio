@@ -219,8 +219,8 @@ export default function Hero() {
                 data-hero-animate
                 className="portfolio-button-label group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full border border-white/20 bg-transparent px-7 py-3.5 font-semibold text-white transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-white/40 focus:outline-none focus:ring-2 focus:ring-[#EB5002]"
               >
-                <span className="absolute inset-0 translate-y-[105%] bg-white/5 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" />
-                <span className="relative font-bold text-white transition-colors duration-400 ease-out">
+                <span className="absolute inset-0 -translate-x-[105%] bg-white/10 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
+                <span className="relative font-bold text-white transition-colors duration-400 ease-out group-hover:text-[#EB5002]">
                   LET&apos;S WORK TOGETHER
                 </span>
               </a>
