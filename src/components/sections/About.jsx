@@ -1,115 +1,178 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import SplitType from "split-type";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const aboutLines = [
-  "I'm not just writing code — I'm building systems",
-  "that solve real problems. As a full-stack developer",
-  "and AI automation specialist, I turn ideas into",
-  "scalable digital products, blending clean engineering",
-  "with intelligent automation to turn ideas into",
-  "outcomes that matter.",
-];
+const ABOUT_TEXT =
+  "I'm not just writing code — I'm building systems that solve real problems. As a full-stack developer and AI automation specialist, I turn ideas into scalable digital products, blending clean engineering with intelligent automation to turn ideas into outcomes that matter.";
 
 export default function About() {
-  const paragraphRef = useRef(null);
-  const linesRef = useRef([]);
+  const sectionRef = useRef(null);
+  const textRef = useRef(null);
+  const splitInstanceRef = useRef(null);
+  const resizeTimerRef = useRef(null);
+
+  const buildReveal = useCallback(() => {
+    if (!textRef.current || !sectionRef.current) return;
+
+    // Clean up previous overlays
+    textRef.current.querySelectorAll(".reveal-overlay").forEach((el) => el.remove());
+
+    // Kill existing ScrollTriggers scoped to this section
+    ScrollTrigger.getAll().forEach((st) => {
+      if (st.vars?.trigger && sectionRef.current?.contains(st.vars.trigger)) {
+        st.kill();
+      }
+      if (st.vars?.trigger === sectionRef.current) {
+        st.kill();
+      }
+    });
+
+    // Split text into actual rendered lines
+    if (splitInstanceRef.current) {
+      splitInstanceRef.current.revert();
+    }
+    splitInstanceRef.current = new SplitType(textRef.current, {
+      types: "lines",
+      lineClass: "about-line",
+    });
+
+    const lines = splitInstanceRef.current.lines;
+    if (!lines || lines.length === 0) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    // Build overlay clones for each detected line
+    lines.forEach((line) => {
+      line.style.position = "relative";
+
+      const overlay = line.cloneNode(true);
+      overlay.classList.add("reveal-overlay");
+      overlay.setAttribute("aria-hidden", "true");
+      overlay.style.position = "absolute";
+      overlay.style.inset = "0";
+      overlay.style.color = "#EB5002";
+      overlay.style.clipPath = prefersReducedMotion
+        ? "inset(0 0% 0 0)"
+        : "inset(0 100% 0 0)";
+      overlay.style.pointerEvents = "none";
+      line.appendChild(overlay);
+    });
+
+    if (prefersReducedMotion) return;
+
+    // Create pinned ScrollTrigger that scrubs through all lines sequentially
+    const N = lines.length;
+    const totalPinDistance = N * 350;
+    const overlays = Array.from(
+      textRef.current.querySelectorAll(".about-line > .reveal-overlay"),
+    );
+
+    ScrollTrigger.create({
+      trigger: sectionRef.current,
+      pin: true,
+      start: "top top",
+      end: "+=" + totalPinDistance,
+      scrub: 0.3,
+      invalidateOnRefresh: true,
+      onUpdate: (self) => {
+        const globalProgress = self.progress;
+        for (let i = 0; i < N; i++) {
+          const lineProgress = Math.min(
+            Math.max(globalProgress * N - i, 0),
+            1,
+          );
+          const insetRight = (1 - lineProgress) * 100;
+          if (overlays[i]) {
+            overlays[i].style.clipPath = `inset(0 ${insetRight}% 0 0)`;
+          }
+        }
+      },
+    });
+  }, []);
 
   useEffect(() => {
-    if (!paragraphRef.current) return undefined;
+    if (!textRef.current || !sectionRef.current) return undefined;
 
-    let rafDelay;
     let loadHandler;
     let fontsCleanup;
 
-    const context = gsap.context(() => {
-      const prefersReducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
-
-      const lines = linesRef.current.filter(Boolean);
-      const N = lines.length;
-
-      if (prefersReducedMotion) {
-        lines.forEach((line) => {
-          line.style.clipPath = "inset(0 0% 0 0)";
-        });
-        return;
-      }
-
-      const totalPinDistance = N * 350;
-
-      ScrollTrigger.create({
-        trigger: paragraphRef.current,
-        pin: true,
-        start: "top top",
-        end: "+=" + totalPinDistance,
-        scrub: 0.3,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          const globalProgress = self.progress;
-          for (let i = 0; i < N; i++) {
-            const lineProgress = Math.min(
-              Math.max(globalProgress * N - i, 0),
-              1,
-            );
-            const insetRight = (1 - lineProgress) * 100;
-            lines[i].style.clipPath = `inset(0 ${insetRight}% 0 0)`;
-          }
-        },
-        onRefresh: (self) => {
-          if (typeof window !== "undefined" && window.__DEV_PORTFOLIO_LOG__) {
-            console.log("[About ScrollTrigger] range:", {
-              start: self.start,
-              end: self.end,
-            });
-          }
-        },
-      });
-    }, paragraphRef);
-
-    const refreshOnce = () => {
-      ScrollTrigger.refresh();
+    // Wait for fonts, then build
+    const init = () => {
+      buildReveal();
     };
+
     const fontsReady =
       typeof document !== "undefined" && document.fonts && document.fonts.ready;
     if (fontsReady) {
       let cancelled = false;
       fontsReady.then(() => {
-        if (!cancelled) refreshOnce();
+        if (!cancelled) init();
       });
       fontsCleanup = () => {
         cancelled = true;
       };
+    } else {
+      // Fallback: build after a short delay
+      const timer = window.setTimeout(init, 200);
+      fontsCleanup = () => window.clearTimeout(timer);
     }
-    loadHandler = () => refreshOnce();
+
+    loadHandler = () => {
+      buildReveal();
+      ScrollTrigger.refresh();
+    };
     window.addEventListener("load", loadHandler, { once: true });
-    rafDelay = window.setTimeout(refreshOnce, 400);
+
+    // Debounced resize handler to re-split on viewport change
+    const handleResize = () => {
+      if (resizeTimerRef.current) {
+        window.clearTimeout(resizeTimerRef.current);
+      }
+      resizeTimerRef.current = window.setTimeout(() => {
+        buildReveal();
+        ScrollTrigger.refresh();
+      }, 300);
+    };
+    window.addEventListener("resize", handleResize);
 
     return () => {
       if (loadHandler) {
         window.removeEventListener("load", loadHandler);
       }
-      if (rafDelay) {
-        window.clearTimeout(rafDelay);
+      window.removeEventListener("resize", handleResize);
+      if (resizeTimerRef.current) {
+        window.clearTimeout(resizeTimerRef.current);
       }
       if (fontsCleanup) {
         fontsCleanup();
       }
-      context.revert();
+      // Clean up SplitType
+      if (splitInstanceRef.current) {
+        splitInstanceRef.current.revert();
+        splitInstanceRef.current = null;
+      }
+      // Kill all ScrollTriggers
       ScrollTrigger.getAll().forEach((st) => st.kill());
     };
-  }, []);
+  }, [buildReveal]);
 
   return (
     <section
       id="about"
-      className="relative bg-[#FAF7F2] py-24 text-[#1A1613] lg:py-36"
-      ref={paragraphRef}
+      className="relative bg-[#FAF7F2] pt-24 pb-[160px] text-[#1A1613] lg:pt-36 lg:pb-[200px]"
+      style={{
+        minHeight: "auto",
+        height: "auto",
+        overflow: "visible"
+      }}
+      ref={sectionRef}
     >
       <div className="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-8 lg:flex-row lg:justify-between lg:gap-16">
@@ -120,25 +183,12 @@ export default function About() {
           </div>
 
           <div className="lg:w-3/4">
-            <div className="flex flex-col gap-1">
-              {aboutLines.map((line, index) => (
-                <div key={line} className="relative block">
-                  <span className="block text-3xl font-medium leading-[1.35] tracking-tight text-[#B8B0A6] sm:text-4xl md:text-5xl">
-                    {line}
-                  </span>
-                  <span
-                    aria-hidden="true"
-                    ref={(element) => {
-                      linesRef.current[index] = element;
-                    }}
-                    className="pointer-events-none absolute inset-0 block text-3xl font-medium leading-[1.35] tracking-tight text-[#EB5002] sm:text-4xl md:text-5xl"
-                    style={{ clipPath: "inset(0 100% 0 0)" }}
-                  >
-                    {line}
-                  </span>
-                </div>
-              ))}
-            </div>
+            <p
+              ref={textRef}
+              className="text-3xl font-medium leading-[1.35] tracking-tight text-[#B8B0A6] sm:text-4xl md:text-5xl"
+            >
+              {ABOUT_TEXT}
+            </p>
           </div>
         </div>
 

@@ -200,7 +200,7 @@ export default function Capabilities() {
       }}
       aria-label="Services"
     >
-      <div className="relative mx-auto max-w-[1240px] px-4 py-24 sm:px-6 lg:px-8 lg:py-36">
+      <div className="relative mx-auto max-w-[1240px] px-4 pt-32 pb-24 sm:px-6 lg:px-8 lg:pt-44 lg:pb-36">
         <div className="mb-6 max-w-[760px]">
           <div
             data-svc-eyebrow

@@ -110,14 +110,14 @@ export default function Hero() {
           <div
             data-hero-kicker
             data-hero-animate
-            className="portfolio-kicker relative z-30 mb-4 flex items-center justify-center gap-3 text-white sm:text-[0.64rem]"
+            className="portfolio-kicker relative z-30 mb-4 flex items-center justify-center gap-3 text-white sm:text-[0.64rem] mt-8"
           >
             <span
               className="inline-block h-2 w-2 rounded-full bg-[#EB5002] shadow-[0_0_0_5px_rgba(235,80,2,0.16)]"
               aria-hidden="true"
             />
             <span>Hi, I&apos;m</span>
-            <span className="font-mono text-[#EB5002]">TALHA</span>
+            <span className="text-[#EB5002]">TALHA</span>
           </div>
 
           {/* Eyebrow */}
@@ -141,21 +141,10 @@ export default function Hero() {
               aria-hidden="true"
               className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center select-none"
             >
-              <span className="portfolio-display whitespace-nowrap text-[clamp(8rem,22vw,20rem)] font-bold leading-[0.8] tracking-[-0.04em] text-[#EB5002] text-opacity-30%">
+              <span className="portfolio-display whitespace-nowrap text-[clamp(8rem,22vw,20rem)] font-bold leading-[0.8] tracking-[-0.04em] text-[#EB5002] opacity-[0.80]">
                 TALHA
               </span>
             </div>
-
-            {/* Orange ambient glow behind photo */}
-            <div
-              className="pointer-events-none absolute left-1/2 top-1/2 z-[1] h-[28rem] w-[28rem] -translate-x-1/2 -translate-y-1/2 animate-[pulse_6s_ease-in-out_infinite]"
-              style={{
-                background:
-                  "radial-gradient(circle, rgba(255,107,0,0.35) 0%, transparent 70%)",
-                filter: "blur(100px)",
-              }}
-              aria-hidden="true"
-            />
 
             {/* Photo — sits on top of text, soft edge fade via mask-image */}
             {/* TODO: awaiting updated source photo without badge artifact */}
@@ -235,18 +224,6 @@ export default function Hero() {
                   LET&apos;S WORK TOGETHER
                 </span>
               </a>
-            </div>
-
-            <div
-              data-hero-float
-              data-hero-animate
-              className="mt-10 flex items-center justify-center gap-3 text-[0.7rem] font-semibold uppercase tracking-[0.15em] text-[#8A8A8A]"
-            >
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#10b981] opacity-75" />
-                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-[#10b981]" />
-              </span>
-              Available for selected projects — 2025
             </div>
           </div>
         </div>

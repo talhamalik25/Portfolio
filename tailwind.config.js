@@ -7,7 +7,7 @@ const config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["'General Sans'", "sans-serif"],
+        sans: ['General Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
     },
   },

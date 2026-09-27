@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 
 const projects = [
   {
@@ -37,6 +37,7 @@ const projects = [
 
 export default function SelectedWork() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const scrollContainerRef = useRef(null);
 
   const orderedCards = useMemo(() => {
     if (projects.length <= 1) return projects;
@@ -50,10 +51,56 @@ export default function SelectedWork() {
 
   const activeProject = projects[activeIndex];
 
+  // IntersectionObserver equivalent for mobile scroll snapping
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    
+    // Quick check to avoid conflict on desktop
+    const mediaQuery = window.matchMedia("(max-width: 639px)");
+    if (!mediaQuery.matches) return;
+
+    let timeout;
+    const handleScroll = () => {
+      clearTimeout(timeout);
+      timeout = window.setTimeout(() => {
+        const containerCenter = container.offsetWidth / 2;
+        const scrollLeft = container.scrollLeft;
+        
+        let closestIndex = 0;
+        let minDistance = Infinity;
+
+        Array.from(container.children).forEach((child, index) => {
+          const childCenter = child.offsetLeft - container.offsetLeft + child.offsetWidth / 2;
+          const distance = Math.abs(childCenter - (scrollLeft + containerCenter));
+          if (distance < minDistance) {
+            minDistance = distance;
+            closestIndex = index;
+          }
+        });
+
+        setActiveIndex(closestIndex);
+      }, 100);
+    };
+
+    container.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      container.removeEventListener("scroll", handleScroll);
+      if (timeout) window.clearTimeout(timeout);
+    };
+  }, []);
+
+  const handleMobileClick = (index, target) => {
+    setActiveIndex(index);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+  };
+
   return (
     <section
       id="work"
-      className="relative overflow-hidden border-t border-[#1B1714]/10 bg-[#FAF7F2] text-[#1A1613]"
+      className="relative border-t border-[#1B1714]/10 bg-[#FAF7F2] text-[#1A1613] py-24 lg:py-36"
       style={{
         backgroundImage:
           "radial-gradient(circle at 1px 1px, rgba(26,22,19,0.04) 1px, transparent 0)",
@@ -61,31 +108,92 @@ export default function SelectedWork() {
       }}
       aria-label="Selected Work"
     >
-      <div className="relative mx-auto max-w-[1240px] px-4 pb-20 pt-24 sm:px-6 lg:px-8 lg:pb-28 lg:pt-28">
-        <div className="portfolio-kicker mb-5 text-[#EB5002]">
-          SELECTED WORK
+      <style>{`
+        .fan-stage {
+          perspective: 1200px;
+          transform-style: preserve-3d;
+        }
+
+        .fan-card {
+          transform-origin: center center;
+          transform-style: preserve-3d;
+          backface-visibility: hidden;
+          transition: transform 0.5s cubic-bezier(0.22,1,0.36,1), opacity 0.5s ease, filter 0.5s ease;
+        }
+
+        /* Tablet / mid-width (sm–lg): reduced-angle fan */
+        .fan-card.is-center {
+          transform: translate(-50%, -50%) translateX(0) rotateY(0deg) scale(1) !important;
+          z-index: 30;
+          opacity: 1;
+          filter: none;
+          width: min(62vw, 480px);
+          height: 300px;
+        }
+        .fan-card.is-left {
+          transform: translate(-50%, -50%) translateX(-210px) rotateY(14deg) scale(0.88) !important;
+          z-index: 20;
+          opacity: 0.8;
+          filter: saturate(0.85);
+          width: min(52vw, 380px);
+          height: 250px;
+        }
+        .fan-card.is-right {
+          transform: translate(-50%, -50%) translateX(210px) rotateY(-14deg) scale(0.88) !important;
+          z-index: 20;
+          opacity: 0.8;
+          filter: saturate(0.85);
+          width: min(52vw, 380px);
+          height: 250px;
+        }
+
+        /* Desktop (lg+): full 20deg fan */
+        @media (min-width: 1024px) {
+          .fan-card.is-center {
+            width: min(70vw, 700px);
+            height: 420px;
+            transform: translate(-50%, -50%) translateX(0) rotateY(0deg) scale(1) !important;
+          }
+          .fan-card.is-left {
+            transform: translate(-50%, -50%) translateX(-320px) rotateY(20deg) scale(0.9) !important;
+            width: min(58vw, 560px);
+            height: 350px;
+          }
+          .fan-card.is-right {
+            transform: translate(-50%, -50%) translateX(320px) rotateY(-20deg) scale(0.9) !important;
+            width: min(58vw, 560px);
+            height: 350px;
+          }
+        }
+      `}</style>
+      
+      <div className="relative mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8">
+        <div className="mb-[100px]">
+          <div className="portfolio-kicker mb-5 text-[#EB5002]">
+            SELECTED WORK
+          </div>
+
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+            <h2 className="portfolio-display max-w-[13ch] text-[2.6rem] font-bold leading-[0.9] tracking-[-0.08em] text-[#111111] sm:text-[3.2rem] md:text-[4rem] lg:text-[4.8rem]">
+              Things I&apos;ve <span className="text-[#EB5002]">Built.</span>
+            </h2>
+
+            <p className="portfolio-copy max-w-[34rem] text-[#6B625D]">
+              A selection of digital products, web experiences, and software
+              systems I&apos;ve worked on.
+            </p>
+          </div>
         </div>
 
-        <div className="mb-10 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-          <h2 className="portfolio-display max-w-[13ch] text-[2.6rem] font-bold leading-[0.9] tracking-[-0.08em] text-[#111111] sm:text-[3.2rem] md:text-[4rem] lg:text-[4.8rem]">
-            Things I&apos;ve <span className="text-[#EB5002]">Built.</span>
-          </h2>
-
-          <p className="portfolio-copy max-w-[34rem] text-[#6B625D]">
-            A selection of digital products, web experiences, and software
-            systems I&apos;ve worked on.
-          </p>
-        </div>
-
-        <div className="hidden lg:block">
+        {/* Desktop and Tablet 3D Fan */}
+        <div className="hidden sm:block overflow-x-clip">
           <div
-            className="relative mx-auto flex h-[560px] items-center justify-center overflow-visible"
-            style={{ perspective: "1200px" }}
+            className="fan-stage relative mx-auto flex h-[480px] lg:h-[560px] max-w-6xl items-center justify-center"
+            style={{ perspective: "1200px", transformStyle: "preserve-3d" }}
           >
             {orderedCards.map((project, index) => {
               const isCenter = index === 1;
               const isLeft = index === 0;
-              const isRight = index === 2;
 
               return (
                 <button
@@ -97,18 +205,10 @@ export default function SelectedWork() {
                     );
                     setActiveIndex(clickedIndex);
                   }}
-                  className="group absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 cursor-pointer appearance-none overflow-visible border-0 bg-transparent p-0 text-left transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
+                  className={`fan-card group absolute left-1/2 top-1/2 flex cursor-pointer appearance-none overflow-visible border-0 bg-transparent p-0 text-left ${isCenter ? "is-center" : isLeft ? "is-left" : "is-right"}`}
                   style={{
-                    width: isCenter ? "min(70vw, 700px)" : "min(58vw, 560px)",
-                    height: isCenter ? "420px" : "350px",
-                    transform: isCenter
-                      ? "translate(-50%, -50%) rotateY(0deg) scale(1)"
-                      : isLeft
-                        ? "translate(-112%, -50%) rotateY(28deg) scale(0.9)"
-                        : "translate(12%, -50%) rotateY(-28deg) scale(0.9)",
-                    zIndex: isCenter ? 30 : 20,
-                    opacity: isCenter ? 1 : 0.75,
-                    filter: isCenter ? "none" : "saturate(0.8)",
+                    transformOrigin: "center center",
+                    transformStyle: "preserve-3d",
                   }}
                 >
                   <div className="relative h-full w-full overflow-hidden rounded-[28px] border border-[#1B1714]/10 bg-[#FFFDFB] shadow-[0_24px_60px_rgba(16,14,12,0.1)]">
@@ -121,12 +221,6 @@ export default function SelectedWork() {
                     />
 
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0B]/80 via-[#0B0B0B]/15 to-transparent" />
-
-                    <div className="absolute left-4 top-4 z-10 flex items-center gap-2">
-                      <span className="portfolio-meta rounded-full border border-white/15 bg-[#0B0B0B]/45 px-2.5 py-1 text-[#EB5002] backdrop-blur-sm">
-                        {project.number}
-                      </span>
-                    </div>
 
                     <div className="absolute inset-x-0 bottom-0 z-10 p-5">
                       <div className="mb-2 text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[#F4F1EE]/80">
@@ -142,11 +236,14 @@ export default function SelectedWork() {
             })}
           </div>
 
-          <div className="mx-auto mt-10 max-w-[760px] rounded-[28px] border border-[#1B1714]/10 bg-[#FFFDFB] p-6 shadow-[0_18px_40px_rgba(16,14,12,0.04)]">
-            <div className="mb-3 flex items-center justify-between gap-3">
-              <span className="portfolio-meta text-[#EB5002]">
-                {activeProject.number}
-              </span>
+          <div className="mt-8 flex justify-center lg:mt-12">
+            <span className="portfolio-meta text-[0.8rem] text-[#111111] font-semibold">
+              <span className="text-[#EB5002]">{activeProject.number}</span> / 0{projects.length}
+            </span>
+          </div>
+
+          <div className="mx-auto mt-6 max-w-[760px] rounded-[28px] border border-[#1B1714]/10 bg-[#FFFDFB] p-6 shadow-[0_18px_40px_rgba(16,14,12,0.04)]">
+            <div className="mb-3 flex items-center justify-start gap-3">
               <span className="portfolio-meta text-[#6B625D]">
                 {activeProject.category}
               </span>
@@ -185,8 +282,12 @@ export default function SelectedWork() {
           </div>
         </div>
 
-        <div className="lg:hidden">
-          <div className="flex gap-4 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {/* Mobile Swipe Carousel */}
+        <div className="sm:hidden">
+          <div 
+            ref={scrollContainerRef}
+            className="flex gap-4 overflow-x-auto pb-4 pt-2 -mx-4 px-4 snap-x snap-mandatory scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          >
             {projects.map((project, index) => {
               const isActive = index === activeIndex;
 
@@ -194,8 +295,8 @@ export default function SelectedWork() {
                 <button
                   key={project.title}
                   type="button"
-                  onClick={() => setActiveIndex(index)}
-                  className="group relative min-w-[82%] shrink-0 overflow-hidden rounded-[24px] border border-[#1B1714]/10 bg-[#FFFDFB] p-3 text-left shadow-[0_16px_40px_rgba(17,17,17,0.05)] transition-all duration-300 ease-out"
+                  onClick={(e) => handleMobileClick(index, e.currentTarget)}
+                  className="group relative w-[85%] shrink-0 snap-center overflow-hidden rounded-[24px] border border-[#1B1714]/10 bg-[#FFFDFB] p-3 text-left shadow-[0_16px_40px_rgba(17,17,17,0.05)] transition-all duration-300 ease-out"
                   style={{
                     transform: isActive ? "scale(1)" : "scale(0.96)",
                     opacity: isActive ? 1 : 0.8,
@@ -211,12 +312,6 @@ export default function SelectedWork() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0B]/80 via-[#0B0B0B]/20 to-transparent" />
 
-                    <div className="absolute left-3 top-3 z-10">
-                      <span className="portfolio-meta rounded-full border border-white/15 bg-[#0B0B0B]/45 px-2.5 py-1 text-[#EB5002] backdrop-blur-sm">
-                        {project.number}
-                      </span>
-                    </div>
-
                     <div className="absolute inset-x-0 bottom-0 z-10 p-3">
                       <div className="mb-2 text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-[#F4F1EE]/80">
                         {project.category}
@@ -231,11 +326,14 @@ export default function SelectedWork() {
             })}
           </div>
 
-          <div className="mt-6 rounded-[24px] border border-[#1B1714]/10 bg-[#FFFDFB] p-5 shadow-[0_18px_40px_rgba(16,14,12,0.04)]">
-            <div className="mb-3 flex items-center justify-between gap-3">
-              <span className="portfolio-meta text-[#EB5002]">
-                {activeProject.number}
-              </span>
+          <div className="mt-4 flex justify-center">
+            <span className="portfolio-meta text-[0.8rem] text-[#111111] font-semibold transition-all duration-300">
+              <span className="text-[#EB5002]">{activeProject.number}</span> / 0{projects.length}
+            </span>
+          </div>
+
+          <div className="mt-4 rounded-[24px] border border-[#1B1714]/10 bg-[#FFFDFB] p-5 shadow-[0_18px_40px_rgba(16,14,12,0.04)] transition-all duration-400 ease-out">
+            <div className="mb-3 flex items-center justify-start gap-3">
               <span className="portfolio-meta text-[#6B625D]">
                 {activeProject.category}
               </span>
@@ -274,7 +372,7 @@ export default function SelectedWork() {
           </div>
         </div>
 
-        <div className="mt-10 flex justify-center">
+        <div className="mt-10 lg:mt-12 flex justify-center">
           <a
             href="#work"
             className="group inline-flex items-center gap-2 rounded-full border border-[#1B1714]/10 bg-[#111111] px-6 py-3.5 text-sm font-semibold uppercase tracking-[0.14em] text-white transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-[#EB5002]/40 hover:bg-[#EB5002] hover:text-[#111111]"
