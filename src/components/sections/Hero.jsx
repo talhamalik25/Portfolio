@@ -176,14 +176,14 @@ export default function Hero() {
 
           {/* ── Bottom Content Group ── */}
           <div className="relative z-30 flex w-full max-w-[700px] flex-col items-center">
-            <h2
+            <h1
               data-hero-statement
               data-hero-animate
               className="portfolio-display w-full text-[2.2rem] font-bold leading-[0.9] tracking-[-0.06em] text-white sm:text-[3rem] md:text-[3.6rem] lg:text-[4rem]"
             >
               BUILDING <span className="text-[#EB5002]">IMPACTFUL</span> DIGITAL
               EXPERIENCES.
-            </h2>
+            </h1>
 
             <p
               data-hero-copy

@@ -8,7 +8,7 @@ import SplitType from "split-type";
 gsap.registerPlugin(ScrollTrigger);
 
 const ABOUT_TEXT =
-  "I'm not just writing code — I'm building systems that solve real problems. As a full-stack developer and AI automation specialist, I turn ideas into scalable digital products, blending clean engineering with intelligent automation to turn ideas into outcomes that matter.";
+  "I'm not just writing code — I'm building systems that solve real problems. As a full-stack developer and AI automation specialist, I turn ideas into scalable digital products, blending clean engineering with intelligent automation to deliver outcomes that matter.";
 
 export default function About() {
   const sectionRef = useRef(null);
@@ -177,9 +177,9 @@ export default function About() {
       <div className="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-8 lg:flex-row lg:justify-between lg:gap-16">
           <div className="lg:w-1/4">
-            <h3 className="text-xs font-semibold uppercase tracking-[0.2em] text-[#EB5002]">
+            <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-[#EB5002]">
               About Me
-            </h3>
+            </h2>
           </div>
 
           <div className="lg:w-3/4">
@@ -213,10 +213,10 @@ export default function About() {
           </div>
 
           <div className="flex w-full flex-col justify-center lg:w-2/5 lg:pt-24">
-            <h4 className="text-2xl font-bold leading-tight tracking-tight text-[#111111] sm:text-3xl lg:text-4xl">
+            <h3 className="text-2xl font-bold leading-tight tracking-tight text-[#111111] sm:text-3xl lg:text-4xl">
               Full-Stack Development <br className="hidden sm:block" />
               & AI Automation
-            </h4>
+            </h3>
             <div className="mt-8">
               <a
                 href="#work"

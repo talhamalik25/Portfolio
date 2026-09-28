@@ -269,6 +269,7 @@ export default function SelectedWork() {
             </div>
 
             <div className="mt-6">
+              {/* TODO: link to real case study page */}
               <a
                 href={activeProject.href}
                 className="portfolio-button-label inline-flex items-center gap-2 text-[#EB5002]"
@@ -359,6 +360,7 @@ export default function SelectedWork() {
             </div>
 
             <div className="mt-5">
+              {/* TODO: link to real case study page */}
               <a
                 href={activeProject.href}
                 className="portfolio-button-label inline-flex items-center gap-2 text-[#EB5002]"
@@ -373,6 +375,7 @@ export default function SelectedWork() {
         </div>
 
         <div className="mt-10 lg:mt-12 flex justify-center">
+          {/* TODO: link to real case study page */}
           <a
             href="#work"
             className="group inline-flex items-center gap-2 rounded-full border border-[#1B1714]/10 bg-[#111111] px-6 py-3.5 text-sm font-semibold uppercase tracking-[0.14em] text-white transition-all duration-300 ease-out hover:-translate-y-0.5 hover:border-[#EB5002]/40 hover:bg-[#EB5002] hover:text-[#111111]"

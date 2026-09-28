@@ -9,14 +9,14 @@ gsap.registerPlugin(ScrollTrigger);
 const marqueeText = "LET'S CONNECT • LET'S CONNECT • LET'S CONNECT • ";
 
 const scatterPills = [
-  { label: "MERN Development", rotate: -15, x: 5, y: 0 },
-  { label: "AI Automation", rotate: 14, x: 18, y: 14 },
-  { label: "UI/UX Design", rotate: -11, x: 30, y: 4 },
-  { label: "Landing Pages", rotate: 18, x: 55, y: 20 },
-  { label: "Dashboards", rotate: -8, x: 72, y: 8 },
-  { label: "API Integration", rotate: 15, x: 18, y: 32 },
-  { label: "Chatbots", rotate: -18, x: 48, y: 34 },
-  { label: "Workflow Automation", rotate: 10, x: 70, y: 28 },
+  { label: "MERN Development", left: "2%", top: "18%", rotate: -12 },
+  { label: "AI Automation", left: "16%", top: "8%", rotate: 8 },
+  { label: "UI/UX Design", left: "30%", top: "38%", rotate: -6 },
+  { label: "Landing Pages", left: "44%", top: "12%", rotate: 15 },
+  { label: "Dashboards", left: "56%", top: "32%", rotate: -18 },
+  { label: "API Integration", left: "68%", top: "8%", rotate: 10 },
+  { label: "Workflow Automation", left: "80%", top: "25%", rotate: -8 },
+  { label: "Chatbots", left: "90%", top: "6%", rotate: 14 },
 ];
 
 export default function FinalCta() {
@@ -146,17 +146,31 @@ export default function FinalCta() {
               Have an idea, a business problem, or a product to build? Let&apos;s talk about how I can help bring it to life.
             </p>
 
-            <div ref={scatterRef} className="scatter-pill-container relative mx-auto mt-8 h-[120px] w-full max-w-[700px] sm:h-[140px]">
-              {scatterPills.map((pill, index) => (
+            <div ref={scatterRef} className="scatter-pill-container relative mx-auto mt-8 hidden h-[180px] w-full max-w-[980px] sm:block">
+              {scatterPills.map((pill) => (
                 <span
                   key={pill.label}
-                  className="scatter-pill absolute left-1/2 top-1/2 inline-flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[#FF6B00] px-4 py-1.5 text-[0.58rem] font-black uppercase tracking-[0.12em] text-[#0A0A0A] shadow-[0_0_16px_rgba(255,107,0,0.3)] transition-transform duration-200 ease-out hover:scale-110 hover:rotate-0 sm:text-[0.64rem]"
+                  className="scatter-pill absolute inline-flex items-center justify-center rounded-full bg-[#FF6B00] px-4 py-1.5 text-[0.58rem] font-black uppercase tracking-[0.12em] text-[#0A0A0A] shadow-[0_0_16px_rgba(255,107,0,0.3)] transition-transform duration-200 ease-out hover:scale-110 hover:rotate-0 sm:text-[0.64rem]"
                   style={{
-                    transform: `translate(${pill.x}%, ${pill.y}%) rotate(${pill.rotate}deg)`,
-                    left: "50%",
-                    top: "50%",
-                    marginTop: `${(index % 3) * 8}px`,
-                    marginLeft: `${(index % 2 === 0 ? -1 : 1) * 10}px`,
+                    left: pill.left,
+                    top: pill.top,
+                    transform: `rotate(${pill.rotate}deg)`,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {pill.label}
+                </span>
+              ))}
+            </div>
+
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-2.5 sm:hidden">
+              {scatterPills.map((pill) => (
+                <span
+                  key={`${pill.label}-mobile`}
+                  className="inline-flex items-center justify-center rounded-full bg-[#FF6B00] px-3 py-1.5 text-[0.54rem] font-black uppercase tracking-[0.12em] text-[#0A0A0A] shadow-[0_0_16px_rgba(255,107,0,0.2)]"
+                  style={{
+                    transform: `rotate(${pill.rotate}deg)`,
+                    whiteSpace: "nowrap",
                   }}
                 >
                   {pill.label}

@@ -19,9 +19,9 @@ const navLinks = [
 ];
 
 const socialLinks = [
-  { label: "GitHub", href: "https://github.com/", icon: SiGithub },
+  { label: "GitHub", href: "https://github.com/[MY_GITHUB_USERNAME]", icon: SiGithub },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/muhammad-talha-malik-465957307", icon: FaLinkedinIn },
-  { label: "Email", href: "mailto:talhamalik.dev@gmail.com", icon: SiGmail },
+  { label: "Email", href: "mailto:[MY_REAL_EMAIL]", icon: SiGmail },
 ];
 
 export default function Footer() {
@@ -104,7 +104,7 @@ export default function Footer() {
 
             <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-[#EB5002]/20 bg-[#EB5002]/10 px-3 py-1.5 text-[0.64rem] font-semibold uppercase tracking-[0.18em] text-[#FF6B00]">
               <span className="inline-block h-2 w-2 rounded-full bg-[#FF6B00]" aria-hidden="true" />
-              Available for selected projects — 2025
+              Available for selected projects — 2026
             </div>
           </div>
 
@@ -162,10 +162,10 @@ export default function Footer() {
             </h3>
 
             <a
-              href="mailto:talhamalik.dev@gmail.com"
+              href="mailto:[MY_REAL_EMAIL]"
               className="inline-block text-[1.1rem] font-medium text-[#FF6B00] transition-all duration-200 hover:text-white hover:underline"
             >
-              talhamalik.dev@gmail.com
+              [MY_REAL_EMAIL]
             </a>
 
             <div className="mt-5 flex items-center gap-2 text-[0.9rem] text-[#B3ACA4]">
@@ -187,8 +187,7 @@ export default function Footer() {
           </a>
         </div>
       </div>
-
-      <div ref={watermarkRef} className="pointer-events-none absolute inset-x-0 bottom-10 z-10 select-none text-center text-[clamp(4rem,12vw,16rem)] font-black uppercase leading-none tracking-[-0.08em] text-white/10">
+      <div ref={watermarkRef} className="pointer-events-none absolute inset-x-0 bottom-10 z-10 select-none text-center text-[clamp(8rem,16vw,20rem)] font-black uppercase leading-none tracking-[-0.08em] text-[#FF6B00]">
         TALHA
       </div>
     </footer>

@@ -3,7 +3,6 @@
 import { useMemo, useRef, useEffect, useState } from "react";
 import {
   SiReact,
-  SiTypescript,
   SiJavascript,
   SiTailwindcss,
   SiGreensock,
@@ -14,7 +13,6 @@ import {
   SiGit,
   SiGithub,
   SiFigma,
-  SiDocker,
   SiPostgresql,
   SiNextdotjs,
   SiVercel,
@@ -23,7 +21,6 @@ import {
 
 const ALL_TOOLS = [
   { name: "React", Icon: SiReact, color: "#61DAFB", scale: "scale-100" },
-  { name: "TypeScript", Icon: SiTypescript, color: "#3178C6", scale: "scale-110" },
   { name: "JavaScript", Icon: SiJavascript, color: "#F7DF1E", scale: "scale-95" },
   { name: "Tailwind CSS", Icon: SiTailwindcss, color: "#06B6D4", scale: "scale-100" },
   { name: "GSAP", Icon: SiGreensock, color: "#88CE02", scale: "scale-105" },
@@ -34,7 +31,6 @@ const ALL_TOOLS = [
   { name: "Git", Icon: SiGit, color: "#F05032", scale: "scale-100" },
   { name: "GitHub", Icon: SiGithub, color: "#E6EDF3", scale: "scale-110" },
   { name: "Figma", Icon: SiFigma, color: "#F24E1E", scale: "scale-90" },
-  { name: "Docker", Icon: SiDocker, color: "#2496ED", scale: "scale-105" },
   { name: "PostgreSQL", Icon: SiPostgresql, color: "#4169E1", scale: "scale-95" },
   { name: "Next.js", Icon: SiNextdotjs, color: "#0070F3", scale: "scale-95" },
   { name: "Vercel", Icon: SiVercel, color: "#F81CE5", scale: "scale-100" },
@@ -107,67 +103,67 @@ export default function Stack() {
   const columnsData = useMemo(() => {
     const col1 = [
       ALL_TOOLS[0],
-      ALL_TOOLS[2],
-      ALL_TOOLS[4],
-      ALL_TOOLS[6],
-      ALL_TOOLS[8],
-      ALL_TOOLS[10],
-      ALL_TOOLS[12],
-      ALL_TOOLS[15],
+      ALL_TOOLS[1],
+      ALL_TOOLS[3],
+      ALL_TOOLS[5],
+      ALL_TOOLS[7],
+      ALL_TOOLS[9],
+      ALL_TOOLS[11],
+      ALL_TOOLS[13],
     ];
 
     const col2 = [
       ALL_TOOLS[1],
-      ALL_TOOLS[3],
-      ALL_TOOLS[5],
-      ALL_TOOLS[7],
-      ALL_TOOLS[9],
-      ALL_TOOLS[11],
-      ALL_TOOLS[14],
+      ALL_TOOLS[2],
+      ALL_TOOLS[4],
+      ALL_TOOLS[6],
+      ALL_TOOLS[8],
+      ALL_TOOLS[10],
+      ALL_TOOLS[12],
       ALL_TOOLS[0],
     ];
 
     const col3 = [
-      ALL_TOOLS[16],
-      ALL_TOOLS[10],
-      ALL_TOOLS[7],
-      ALL_TOOLS[4],
-      ALL_TOOLS[1],
-      ALL_TOOLS[12],
+      ALL_TOOLS[14],
       ALL_TOOLS[9],
+      ALL_TOOLS[6],
+      ALL_TOOLS[3],
+      ALL_TOOLS[1],
+      ALL_TOOLS[11],
+      ALL_TOOLS[8],
       ALL_TOOLS[2],
     ];
 
     const col4 = [
-      ALL_TOOLS[12],
-      ALL_TOOLS[9],
-      ALL_TOOLS[6],
-      ALL_TOOLS[3],
-      ALL_TOOLS[0],
-      ALL_TOOLS[11],
-      ALL_TOOLS[8],
-      ALL_TOOLS[1],
-    ];
-
-    const col5 = [
       ALL_TOOLS[11],
       ALL_TOOLS[8],
       ALL_TOOLS[5],
       ALL_TOOLS[2],
-      ALL_TOOLS[16],
+      ALL_TOOLS[0],
       ALL_TOOLS[10],
       ALL_TOOLS[7],
-      ALL_TOOLS[0],
+      ALL_TOOLS[1],
     ];
 
-    const col6 = [
+    const col5 = [
       ALL_TOOLS[10],
       ALL_TOOLS[7],
       ALL_TOOLS[4],
       ALL_TOOLS[1],
-      ALL_TOOLS[12],
+      ALL_TOOLS[14],
       ALL_TOOLS[9],
       ALL_TOOLS[6],
+      ALL_TOOLS[0],
+    ];
+
+    const col6 = [
+      ALL_TOOLS[9],
+      ALL_TOOLS[6],
+      ALL_TOOLS[3],
+      ALL_TOOLS[1],
+      ALL_TOOLS[11],
+      ALL_TOOLS[8],
+      ALL_TOOLS[5],
       ALL_TOOLS[2],
     ];
 
