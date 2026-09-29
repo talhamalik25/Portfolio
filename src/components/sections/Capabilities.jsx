@@ -39,6 +39,8 @@ export default function Capabilities() {
   const listRef = useRef(null);
   const rowRefs = useRef([]);
   const panelRefs = useRef([]);
+  const numberRefs = useRef([]);
+  const ghostIconRefs = useRef([]);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isDesktop, setIsDesktop] = useState(false);
 
@@ -188,6 +190,40 @@ export default function Capabilities() {
     }
   };
 
+  // Subtle hover micro-interactions: the index drifts and the ghost
+  // visual fades up behind the row. All GSAP, nothing structural.
+  const handleRowHover = (index, isEntering) => {
+    if (
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+
+    const number = numberRefs.current[index];
+    const ghost = ghostIconRefs.current[index];
+
+    if (number) {
+      gsap.to(number, {
+        x: isEntering ? 6 : 0,
+        duration: 0.45,
+        ease: "power3.out",
+        overwrite: true,
+      });
+    }
+
+    if (ghost) {
+      gsap.to(ghost, {
+        y: isEntering ? -8 : 0,
+        scale: isEntering ? 1.06 : 1,
+        opacity: isEntering ? 0.09 : 0.04,
+        duration: 0.55,
+        ease: "power3.out",
+        overwrite: true,
+      });
+    }
+  };
+
   return (
     <section
       id="services"
@@ -247,9 +283,13 @@ export default function Capabilities() {
                 }}
                 className={[
                   "group relative border-b border-white/10 overflow-hidden transition-colors duration-300 ease-out",
-                  isActive ? "bg-[#EB5002]/[0.04]" : "bg-transparent",
+                  isActive ? "bg-[#EB5002]/[0.06]" : "bg-transparent",
                 ].join(" ")}
-                onMouseEnter={() => handleRowEnter(index)}
+                onMouseEnter={() => {
+                  handleRowEnter(index);
+                  handleRowHover(index, true);
+                }}
+                onMouseLeave={() => handleRowHover(index, false)}
                 onClick={() => handleRowTap(index)}
                 role="button"
                 tabIndex={0}
@@ -261,7 +301,12 @@ export default function Capabilities() {
                   }
                 }}
               >
-                <div className="pointer-events-none absolute right-4 top-4 opacity-[0.04] text-[#EB5002] select-none lg:right-8 lg:top-6">
+                <div
+                  ref={(element) => {
+                    ghostIconRefs.current[index] = element;
+                  }}
+                  className="pointer-events-none absolute right-4 top-4 opacity-[0.04] text-[#EB5002] select-none lg:right-8 lg:top-6"
+                >
                   <Icon
                     className="h-24 w-24 lg:h-36 lg:w-36"
                     aria-hidden="true"
@@ -269,7 +314,12 @@ export default function Capabilities() {
                 </div>
 
                 <div className="relative flex items-center gap-4 px-2 py-5 sm:px-4 sm:py-7 lg:gap-6 lg:px-6 lg:py-8">
-                  <div className="shrink-0 text-[0.7rem] font-semibold tracking-[0.18em] text-[#EB5002] sm:text-[0.78rem]">
+                  <div
+                    ref={(element) => {
+                      numberRefs.current[index] = element;
+                    }}
+                    className="shrink-0 text-[0.7rem] font-semibold tracking-[0.18em] text-[#EB5002] sm:text-[0.78rem]"
+                  >
                     {item.number}
                   </div>
 

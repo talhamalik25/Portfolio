@@ -15,6 +15,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 12);
@@ -24,9 +25,30 @@ export default function Navbar() {
 
     const timer = window.setTimeout(() => setIsMounted(true), 80);
 
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: "-20% 0px -75% 0px" }
+    );
+
+    const observerTimer = setTimeout(() => {
+      navItems.forEach((item) => {
+        const id = item.href.replace("#", "");
+        const el = document.getElementById(id);
+        if (el) observer.observe(el);
+      });
+    }, 500);
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.clearTimeout(timer);
+      clearTimeout(observerTimer);
+      observer.disconnect();
     };
   }, []);
 
@@ -59,8 +81,8 @@ export default function Navbar() {
         <nav
           aria-label="Main navigation"
           className={[
-            "relative flex items-center justify-between gap-3 rounded-[22px] border border-white/10 bg-[#111111]/40 px-4 py-2.5 backdrop-blur-xl transition-all duration-400 ease-out sm:px-5 lg:px-6",
-            isScrolled ? "border-white/15 bg-[#111111]/85 shadow-lg backdrop-blur-2xl" : "",
+            "relative flex items-center justify-between gap-4 rounded-[22px] border border-white/10 bg-[#111111]/40 px-4 backdrop-blur-xl transition-all duration-400 ease-out sm:px-5 lg:px-6",
+            isScrolled ? "border-white/15 bg-[#111111]/85 shadow-lg backdrop-blur-2xl py-1.5" : "py-2.5",
           ].join(" ")}
         >
           <a
@@ -73,31 +95,34 @@ export default function Navbar() {
 
           <div className="hidden flex-1 items-center justify-center lg:flex">
             <ul className="flex items-center gap-7 xl:gap-10">
-              {navItems.map((item) => (
-                <li key={item.label}>
-                  <a
-                    href={item.href}
-                    className="group relative inline-flex items-center pb-[2px] text-[0.68rem] font-medium uppercase tracking-[0.2em] text-white/70 transition-colors duration-200 hover:text-[#EB5002] after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-full after:origin-left after:scale-x-0 after:bg-[#EB5002] after:transition-transform after:duration-500 after:ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:after:scale-x-100"
-                  >
-                    <span className="relative flex overflow-hidden">
-                      <span className="flex">
-                        {item.label.split("").map((char, i) => (
-                          <span key={i} className="inline-block transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-[110%]" style={{ transitionDelay: `${i * 30}ms` }}>
-                            {char === " " ? "\u00A0" : char}
-                          </span>
-                        ))}
+              {navItems.map((item) => {
+                const isActive = activeSection === item.href.replace("#", "");
+                return (
+                  <li key={item.label}>
+                    <a
+                      href={item.href}
+                      className={`group relative inline-flex items-center pb-[2px] text-[0.68rem] font-medium uppercase tracking-[0.2em] transition-colors duration-300 hover:text-[#EB5002] ${isActive ? "text-[#EB5002]" : "text-white/70"} after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-full after:origin-left after:bg-[#EB5002] after:transition-transform after:duration-500 after:ease-[cubic-bezier(0.22,1,0.36,1)] hover:after:scale-x-100 ${isActive ? "after:scale-x-100" : "after:scale-x-0"}`}
+                    >
+                      <span className="relative flex overflow-hidden">
+                        <span className="flex">
+                          {item.label.split("").map((char, i) => (
+                            <span key={i} className={`inline-block transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-[110%] ${isActive ? "-translate-y-[110%]" : ""}`} style={{ transitionDelay: `${i * 30}ms` }}>
+                              {char === " " ? "\u00A0" : char}
+                            </span>
+                          ))}
+                        </span>
+                        <span className="absolute inset-0 flex text-[#EB5002]" aria-hidden="true">
+                          {item.label.split("").map((char, i) => (
+                            <span key={i} className={`inline-block transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0 ${isActive ? "translate-y-0" : "translate-y-[110%]"}`} style={{ transitionDelay: `${i * 30}ms` }}>
+                              {char === " " ? "\u00A0" : char}
+                            </span>
+                          ))}
+                        </span>
                       </span>
-                      <span className="absolute inset-0 flex text-[#EB5002]" aria-hidden="true">
-                        {item.label.split("").map((char, i) => (
-                          <span key={i} className="inline-block translate-y-[110%] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0" style={{ transitionDelay: `${i * 30}ms` }}>
-                            {char === " " ? "\u00A0" : char}
-                          </span>
-                        ))}
-                      </span>
-                    </span>
-                  </a>
-                </li>
-              ))}
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
           </div>
 

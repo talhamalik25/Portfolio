@@ -23,51 +23,46 @@ export default function Hero() {
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
       tl.fromTo(
-        "[data-hero-kicker]",
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.5 },
+        "[data-hero-position]",
+        { opacity: 0, filter: "blur(4px)", y: 15 },
+        { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.6 },
+        0.2
       )
         .fromTo(
-          "[data-hero-position]",
-          { opacity: 0, y: 14 },
-          { opacity: 1, y: 0, duration: 0.5 },
-          "-=0.3",
-        )
-        .fromTo(
           "[data-hero-word]",
-          { opacity: 0 },
-          { opacity: 1, duration: 1.2 },
-          "-=0.2",
+          { opacity: 0, filter: "blur(10px)", scale: 0.98 },
+          { opacity: 1, filter: "blur(0px)", scale: 1, duration: 1.4, ease: "power2.out" },
+          "-=0.4"
         )
         .fromTo(
           "[data-hero-visual]",
-          { opacity: 0, scale: 0.96 },
-          { opacity: 1, scale: 1, duration: 1 },
-          "-=1",
+          { opacity: 0, scale: 0.94, filter: "contrast(0.8)" },
+          { opacity: 1, scale: 1, filter: "contrast(1)", duration: 1.2 },
+          "-=1.1"
         )
         .fromTo(
           "[data-hero-statement]",
-          { opacity: 0, y: 14 },
-          { opacity: 1, y: 0, duration: 0.75 },
-          "-=0.5",
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.8 },
+          "-=0.6"
         )
         .fromTo(
           "[data-hero-copy]",
-          { opacity: 0, y: 14 },
+          { opacity: 0, y: 15 },
           { opacity: 1, y: 0, duration: 0.7 },
-          "-=0.4",
+          "-=0.5"
         )
         .fromTo(
           "[data-hero-cta]",
-          { opacity: 0, y: 12 },
-          { opacity: 1, y: 0, duration: 0.7, stagger: 0.08 },
-          "-=0.4",
+          { opacity: 0, y: 15 },
+          { opacity: 1, y: 0, duration: 0.7, stagger: 0.1 },
+          "-=0.6"
         )
         .fromTo(
-          "[data-hero-float]",
-          { opacity: 0, y: 16 },
-          { opacity: 1, y: 0, duration: 0.7 },
-          "-=0.3",
+          "[data-hero-scroll]",
+          { opacity: 0 },
+          { opacity: 1, duration: 1 },
+          "-=0.2"
         );
 
       ScrollTrigger.create({
@@ -76,11 +71,21 @@ export default function Hero() {
         end: "bottom top",
         scrub: 1,
         onUpdate: (self) => {
-          const offset = self.progress * 80;
-          gsap.set("[data-hero-word]", { y: offset * 0.5 });
-          gsap.set("[data-hero-visual]", { y: offset * 0.3 });
+          const offset = self.progress * 150;
+          gsap.to("[data-hero-word]", { y: offset * 0.4, ease: "power1.out", overwrite: "auto" });
+          gsap.to("[data-hero-visual]", { y: offset * 0.2, ease: "power1.out", overwrite: "auto" });
+          gsap.to("[data-hero-position]", { y: offset * 0.1, ease: "power1.out", overwrite: "auto" });
         },
       });
+      
+      gsap.to("[data-scroll-dot]", {
+        y: 8,
+        yoyo: true,
+        repeat: -1,
+        duration: 1.2,
+        ease: "power2.inOut"
+      });
+
     }, rootRef);
 
     return () => {
@@ -95,72 +100,68 @@ export default function Hero() {
       className="relative overflow-hidden bg-[#050302] text-white"
       aria-label="Introduction"
     >
-      {/* Subtle background radial */}
       <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(235,80,2,0.10),transparent_40%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(235,80,2,0.06),transparent_45%)]"
         aria-hidden="true"
       />
 
-      <div className="relative mx-auto flex min-h-dvh max-w-[1240px] flex-col items-center justify-center px-4 py-16 sm:px-6 lg:px-8">
+      <div className="relative mx-auto flex min-h-dvh max-w-[1240px] flex-col items-center justify-center px-4 py-20 pb-16 sm:px-6 lg:px-8">
         <div
-          className="relative flex w-full max-w-[1180px] flex-col items-center text-center"
+          className="relative flex w-full max-w-[1180px] flex-col items-center text-center mt-8 md:mt-2"
           style={{ isolation: "isolate" }}
         >
-          {/* Kicker Tag */}
-          <div
-            data-hero-kicker
-            data-hero-animate
-            className="portfolio-kicker relative z-30 mb-4 flex items-center justify-center gap-3 text-white sm:text-[0.64rem] mt-8"
-          >
-            <span
-              className="inline-block h-2 w-2 rounded-full bg-[#EB5002] shadow-[0_0_0_5px_rgba(235,80,2,0.16)]"
-              aria-hidden="true"
-            />
-            <span>Hi, I&apos;m</span>
-            <span className="text-[#EB5002]">TALHA</span>
-          </div>
-
-          {/* Eyebrow */}
+          {/* Status + Eyebrow */}
           <div
             data-hero-position
             data-hero-animate
-            className="portfolio-kicker relative z-30 mb-10 text-center text-[#EB5002] sm:text-[0.65rem] tracking-[0.2em] uppercase font-bold"
+            className="portfolio-kicker relative z-30 mb-8 flex flex-col items-center gap-4 text-center sm:text-[0.65rem] tracking-[0.2em] uppercase font-bold"
           >
-            FULL-STACK DEVELOPER • AI AUTOMATION
+            <div className="flex items-center gap-2.5 rounded-full border border-white/5 bg-white/[0.02] px-3.5 py-1.5 backdrop-blur-md">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+              </span>
+              <span className="text-[0.55rem] tracking-[0.1em] text-white/70">Available for new projects</span>
+            </div>
+            
+            <div className="flex flex-col md:flex-row items-center gap-1.5 md:gap-3 text-[#EB5002]">
+              <span>FULL-STACK DEVELOPER</span>
+              <span className="hidden md:inline text-white/30">•</span>
+              <span>AI AUTOMATION</span>
+            </div>
           </div>
 
           {/* ── Main Visual Block (TALHA text + Photo overlap) ── */}
           <div
-            className="relative z-10 mb-12 flex w-full flex-col items-center justify-center"
-            style={{ height: "clamp(320px, 50vh, 560px)" }}
+            className="relative z-10 mb-8 md:mb-12 flex w-full flex-col items-center justify-center"
+            style={{ height: "clamp(260px, 45vh, 520px)" }}
           >
-            {/* Single background TALHA text — one continuous element */}
+            {/* Single background TALHA text */}
             <div
               data-hero-word
               data-hero-animate
               aria-hidden="true"
               className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center select-none"
             >
-              <span className="portfolio-display whitespace-nowrap text-[clamp(8rem,22vw,20rem)] font-bold leading-[0.8] tracking-[-0.04em] text-[#EB5002] opacity-[0.80]">
+              <span className="portfolio-display whitespace-nowrap text-[clamp(6.5rem,18vw,20rem)] font-bold leading-[0.8] tracking-[-0.04em] text-[#EB5002] opacity-[0.9]">
                 TALHA
               </span>
             </div>
 
-            {/* Photo — sits on top of text, soft edge fade via mask-image */}
-            {/* TODO: awaiting updated source photo without badge artifact */}
+            {/* Photo — sits on top of text */}
             <div
               data-hero-visual
               data-hero-animate
-              className="pointer-events-none absolute left-1/2 top-1/2 z-10 aspect-[4/5] w-[280px] -translate-x-1/2 -translate-y-1/2 sm:w-[340px] lg:w-[400px]"
+              className="pointer-events-none absolute left-1/2 top-1/2 z-10 aspect-[4/5] w-[220px] -translate-x-1/2 -translate-y-1/2 sm:w-[300px] lg:w-[380px]"
             >
               <div
                 className="h-full w-full overflow-hidden"
                 style={{
                   maskImage:
-                    "linear-gradient(to bottom, black 50%, transparent 100%), linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)",
+                    "linear-gradient(to bottom, black 40%, transparent 100%), linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)",
                   maskComposite: "intersect",
                   WebkitMaskImage:
-                    "linear-gradient(to bottom, black 50%, transparent 100%), linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)",
+                    "linear-gradient(to bottom, black 40%, transparent 100%), linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)",
                   WebkitMaskComposite: "source-in",
                 }}
               >
@@ -175,11 +176,11 @@ export default function Hero() {
           </div>
 
           {/* ── Bottom Content Group ── */}
-          <div className="relative z-30 flex w-full max-w-[700px] flex-col items-center">
+          <div className="relative z-30 flex w-full max-w-[800px] flex-col items-center mt-2 md:mt-0">
             <h1
               data-hero-statement
               data-hero-animate
-              className="portfolio-display w-full text-[2.2rem] font-bold leading-[0.9] tracking-[-0.06em] text-white sm:text-[3rem] md:text-[3.6rem] lg:text-[4rem]"
+              className="portfolio-display w-full text-[1.8rem] font-bold leading-[1] tracking-[-0.04em] text-white sm:text-[2.6rem] md:text-[3.2rem] lg:text-[3.8rem]"
             >
               BUILDING <span className="text-[#EB5002]">IMPACTFUL</span> DIGITAL
               EXPERIENCES.
@@ -188,28 +189,22 @@ export default function Hero() {
             <p
               data-hero-copy
               data-hero-animate
-              className="portfolio-copy mt-7 w-full max-w-[32rem] text-center text-[1.05rem] text-[#8A8A8A]"
+              className="portfolio-copy mt-5 w-full max-w-[32rem] text-center text-[0.95rem] md:text-[1.1rem] text-white/50"
             >
               I build modern web applications, SaaS products and AI-powered
-              automation systems.
+              automation systems that deliver results.
             </p>
 
-            <div className="mt-9 flex w-full flex-col items-center justify-center gap-4 sm:flex-row">
+            <div className="mt-8 md:mt-10 flex w-full flex-col items-center justify-center gap-3.5 sm:flex-row">
               <a
                 href="#work"
                 data-hero-cta
                 data-hero-animate
-                className="portfolio-button-label group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full border border-[#EB5002] bg-[#EB5002] px-7 py-3.5 font-semibold text-[#0b0b0b] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#EB5002]"
+                className="portfolio-button-label group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-bold border border-[#EB5002] bg-[#EB5002] px-8 py-4 text-[#0b0b0b] transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#EB5002]"
               >
-                <span className="absolute inset-0 -translate-x-[105%] bg-[#000000] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
-                <span className="relative font-bold text-[#0b0b0b] transition-colors duration-400 ease-out group-hover:text-white">
+                <span className="absolute inset-0 -translate-x-[105%] bg-white transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
+                <span className="relative text-[#0b0b0b]">
                   VIEW MY WORK
-                </span>
-                <span
-                  aria-hidden="true"
-                  className="relative text-lg leading-none text-[#0b0b0b] transition-all duration-400 ease-out group-hover:translate-x-1 group-hover:text-white"
-                >
-                  ↗
                 </span>
               </a>
 
@@ -217,15 +212,25 @@ export default function Hero() {
                 href="#contact"
                 data-hero-cta
                 data-hero-animate
-                className="portfolio-button-label group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full border border-white/20 bg-transparent px-7 py-3.5 font-semibold text-white transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-white/40 focus:outline-none focus:ring-2 focus:ring-[#EB5002]"
+                className="portfolio-button-label group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-bold border border-white/15 bg-transparent px-8 py-4 text-white transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-white/5 hover:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#EB5002]"
               >
-                <span className="absolute inset-0 -translate-x-[105%] bg-white/10 transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
-                <span className="relative font-bold text-white transition-colors duration-400 ease-out group-hover:text-[#EB5002]">
+                <span className="relative">
                   LET&apos;S WORK TOGETHER
                 </span>
               </a>
             </div>
           </div>
+        </div>
+      </div>
+      
+      {/* Global Scroll Indicator for Hero */}
+      <div 
+        data-hero-scroll 
+        className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-60"
+      >
+        <span className="text-[9px] md:text-[10px] tracking-[0.2em] font-medium uppercase text-white/40">Scroll</span>
+        <div className="h-[20px] md:h-[24px] w-[1px] bg-white/20 relative overflow-hidden">
+          <div data-scroll-dot className="absolute top-0 left-1/2 -translate-x-1/2 w-[3px] h-[3px] rounded-full bg-[#EB5002]" />
         </div>
       </div>
     </section>
