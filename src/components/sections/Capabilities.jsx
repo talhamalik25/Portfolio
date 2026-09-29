@@ -228,7 +228,7 @@ export default function Capabilities() {
     <section
       id="services"
       ref={rootRef}
-      className="relative overflow-hidden bg-[#0A0A0A] text-white"
+      className="relative overflow-hidden bg-[#0A0A0A] pt-32 text-white"
       style={{
         backgroundImage:
           "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0)",
@@ -236,7 +236,7 @@ export default function Capabilities() {
       }}
       aria-label="Services"
     >
-      <div className="relative mx-auto max-w-[1240px] px-4 pt-32 pb-24 sm:px-6 lg:px-8 lg:pt-44 lg:pb-36">
+      <div className="relative mx-auto max-w-[1240px] px-4 pb-24 sm:px-6 lg:px-8 lg:pb-36">
         <div className="mb-6 max-w-[760px]">
           <div
             data-svc-eyebrow

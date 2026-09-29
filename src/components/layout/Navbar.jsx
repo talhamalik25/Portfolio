@@ -36,9 +36,6 @@ export default function Navbar() {
             second.getBoundingClientRect().top - first.getBoundingClientRect().top,
         )[0]?.id ?? "";
 
-      console.log(
-        `[navbar scroll-spy] y=${window.scrollY} active=${currentSection || "none"}`,
-      );
       setActiveSection(currentSection);
     };
 

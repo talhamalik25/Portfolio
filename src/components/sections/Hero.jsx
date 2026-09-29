@@ -141,7 +141,7 @@ export default function Hero() {
               aria-hidden="true"
               className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center select-none"
             >
-              <span className="portfolio-display whitespace-nowrap text-[clamp(6rem,19vw,22rem)] font-bold leading-[0.8] tracking-[-0.03em] text-[#FF6B00]">
+              <span className="portfolio-display whitespace-nowrap text-[clamp(6rem,19vw,22rem)] font-bold leading-[0.8] tracking-[-0.03em] text-[#EB5002]">
                 TALHA
               </span>
             </div>
@@ -200,8 +200,8 @@ export default function Hero() {
                 data-hero-animate
                 className="portfolio-button-label group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-bold border border-[#EB5002] bg-[#EB5002] px-8 py-3.5 text-[0.8rem] md:text-[0.85rem] text-[#0b0b0b] transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.03] focus:outline-none focus:ring-2 focus:ring-[#EB5002]"
               >
-                <span className="absolute inset-0 -translate-x-[105%] bg-white transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
-                <span className="relative text-[#0b0b0b] whitespace-nowrap">
+                <span className="absolute inset-0 -translate-x-[100%] bg-black transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
+                <span className="relative text-[#ffffff] whitespace-nowrap">
                   VIEW MY WORK
                 </span>
               </a>
@@ -217,26 +217,7 @@ export default function Hero() {
                 </span>
               </a>
             </div>
-
-            <div className="mt-7 flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 text-[0.6rem] font-bold uppercase tracking-[0.12em] text-white/70 backdrop-blur-md">
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500 opacity-90" />
-              </span>
-              <span>Available for new projects</span>
-            </div>
           </div>
-        </div>
-      </div>
-      
-      {/* Global Scroll Indicator for Hero */}
-      <div 
-        data-hero-scroll 
-        className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-60"
-      >
-        <span className="text-[9px] md:text-[10px] tracking-[0.2em] font-medium uppercase text-white/40">Scroll</span>
-        <div className="h-[20px] md:h-[24px] w-[1px] bg-white/20 relative overflow-hidden">
-          <div data-scroll-dot className="absolute top-0 left-1/2 -translate-x-1/2 w-[3px] h-[3px] rounded-full bg-[#EB5002]" />
         </div>
       </div>
     </section>
