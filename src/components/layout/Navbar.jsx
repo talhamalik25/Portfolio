@@ -20,35 +20,43 @@ export default function Navbar() {
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 12);
 
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    const updateActiveSection = () => {
+      // Activate only the section that contains the tracking line. This keeps
+      // the Hero neutral and avoids navItems ordering choosing an older section.
+      const activationLine = Math.min(160, window.innerHeight * 0.3);
+      const currentSection = navItems
+        .map((item) => document.getElementById(item.href.slice(1)))
+        .filter((section) => {
+          if (!section) return false;
+          const bounds = section.getBoundingClientRect();
+          return bounds.top <= activationLine && bounds.bottom > activationLine;
+        })
+        .sort(
+          (first, second) =>
+            second.getBoundingClientRect().top - first.getBoundingClientRect().top,
+        )[0]?.id ?? "";
+
+      console.log(
+        `[navbar scroll-spy] y=${window.scrollY} active=${currentSection || "none"}`,
+      );
+      setActiveSection(currentSection);
+    };
+
+    const handleWindowUpdate = () => {
+      handleScroll();
+      updateActiveSection();
+    };
+
+    handleWindowUpdate();
+    window.addEventListener("scroll", handleWindowUpdate, { passive: true });
+    window.addEventListener("resize", updateActiveSection);
 
     const timer = window.setTimeout(() => setIsMounted(true), 80);
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: "-20% 0px -75% 0px" }
-    );
-
-    const observerTimer = setTimeout(() => {
-      navItems.forEach((item) => {
-        const id = item.href.replace("#", "");
-        const el = document.getElementById(id);
-        if (el) observer.observe(el);
-      });
-    }, 500);
-
     return () => {
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", handleWindowUpdate);
+      window.removeEventListener("resize", updateActiveSection);
       window.clearTimeout(timer);
-      clearTimeout(observerTimer);
-      observer.disconnect();
     };
   }, []);
 
@@ -81,8 +89,8 @@ export default function Navbar() {
         <nav
           aria-label="Main navigation"
           className={[
-            "relative flex items-center justify-between gap-4 rounded-[22px] border border-white/10 bg-[#111111]/40 px-4 backdrop-blur-xl transition-all duration-400 ease-out sm:px-5 lg:px-6",
-            isScrolled ? "border-white/15 bg-[#111111]/85 shadow-lg backdrop-blur-2xl py-1.5" : "py-2.5",
+            "relative flex items-center justify-between gap-4 rounded-full border border-white/5 bg-[#111111]/40 px-4 backdrop-blur-md transition-all duration-400 ease-out sm:px-5 lg:px-6",
+            isScrolled ? "bg-[#111111]/80 py-2 shadow-lg backdrop-blur-xl border-white/10" : "py-3",
           ].join(" ")}
         >
           <a
@@ -101,24 +109,46 @@ export default function Navbar() {
                   <li key={item.label}>
                     <a
                       href={item.href}
-                      className={`group relative inline-flex items-center pb-[2px] text-[0.68rem] font-medium uppercase tracking-[0.2em] transition-colors duration-300 hover:text-[#EB5002] ${isActive ? "text-[#EB5002]" : "text-white/70"} after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-full after:origin-left after:bg-[#EB5002] after:transition-transform after:duration-500 after:ease-[cubic-bezier(0.22,1,0.36,1)] hover:after:scale-x-100 ${isActive ? "after:scale-x-100" : "after:scale-x-0"}`}
+                      aria-label={item.label}
+                      className={`group relative inline-flex items-center overflow-hidden text-[0.7rem] font-medium uppercase tracking-[0.12em] transition-all duration-300 ${
+                        isActive
+                          ? "text-white"
+                          : "text-white/50 hover:text-[#EB5002]"
+                      }`}
                     >
                       <span className="relative flex overflow-hidden">
-                        <span className="flex">
-                          {item.label.split("").map((char, i) => (
-                            <span key={i} className={`inline-block transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-[110%] ${isActive ? "-translate-y-[110%]" : ""}`} style={{ transitionDelay: `${i * 30}ms` }}>
-                              {char === " " ? "\u00A0" : char}
+                        <span className="flex" aria-hidden="true">
+                          {item.label.toUpperCase().split("").map((char, index) => (
+                            <span
+                              key={`label-${index}`}
+                              className="inline-block transition-transform duration-300 ease-out group-hover:-translate-y-full group-focus-visible:-translate-y-full"
+                              style={{ transitionDelay: `${index * 20}ms` }}
+                            >
+                              {char}
                             </span>
                           ))}
                         </span>
-                        <span className="absolute inset-0 flex text-[#EB5002]" aria-hidden="true">
-                          {item.label.split("").map((char, i) => (
-                            <span key={i} className={`inline-block transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0 ${isActive ? "translate-y-0" : "translate-y-[110%]"}`} style={{ transitionDelay: `${i * 30}ms` }}>
-                              {char === " " ? "\u00A0" : char}
+                        <span
+                          aria-hidden="true"
+                          className="absolute inset-0 flex"
+                        >
+                          {item.label.toUpperCase().split("").map((char, index) => (
+                            <span
+                              key={`roll-${index}`}
+                              className="inline-block translate-y-full transition-transform duration-300 ease-out group-hover:translate-y-0 group-focus-visible:translate-y-0"
+                              style={{ transitionDelay: `${index * 20}ms` }}
+                            >
+                              {char}
                             </span>
                           ))}
                         </span>
                       </span>
+                      <span
+                        aria-hidden="true"
+                        className={`absolute bottom-0 left-1/2 h-[3px] w-[3px] -translate-x-1/2 rounded-full bg-[#EB5002] transition-opacity duration-300 ${
+                          isActive ? "opacity-100" : "opacity-0"
+                        }`}
+                      />
                     </a>
                   </li>
                 );

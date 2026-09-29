@@ -50,9 +50,9 @@ export default function GlobalLoader() {
             val: 100,
             duration: 1.2,
             ease: "power2.inOut",
-            onUpdate(thisTween) {
+            onUpdate() {
               if (percentRef.current) {
-                const value = Math.round(thisTween.targets()[0].val);
+                const value = Math.round(this.targets()[0].val);
                 percentRef.current.innerText = `${value}%`;
               }
             },

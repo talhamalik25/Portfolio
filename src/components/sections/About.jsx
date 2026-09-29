@@ -1,132 +1,74 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { Bot, Code2, MapPin, Palette } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import SplitType from "split-type";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const INTRO_TEXT =
-  "I'm Talha — a full-stack developer and AI automation specialist based in Karachi. I build modern web applications, SaaS products and automation systems, blending clean engineering with intelligent automation to deliver outcomes that matter.";
-
-const capabilityHighlights = [
-  {
-    icon: Code2,
-    title: "Full-Stack Development",
-    description:
-      "MERN products end to end — from data model to deployed interface — architected to scale.",
-  },
-  {
-    icon: Bot,
-    title: "AI Automation",
-    description:
-      "n8n workflows and custom AI integrations that remove repetitive work and give teams hours back.",
-  },
-  {
-    icon: Palette,
-    title: "Interactive Web Experiences",
-    description:
-      "Motion-rich, high-polish interfaces built with GSAP and WebGL that people remember.",
-  },
-];
+  "I'm not just writing code — I'm building systems that solve real problems. As a full-stack developer and AI automation specialist, I turn ideas into scalable digital products, blending clean engineering with intelligent automation to deliver outcomes that matter.";
 
 export default function About() {
   const sectionRef = useRef(null);
-  const imageFrameRef = useRef(null);
+  const textRef = useRef(null);
+  const splitInstance = useRef(null);
 
   useEffect(() => {
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (prefersReducedMotion) {
+      if (textRef.current) gsap.set(textRef.current, { color: "#EB5002" });
+      return;
+    }
+
     const ctx = gsap.context(() => {
-      const prefersReducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
+      if (!textRef.current) return;
+      
+      // Use SplitType-based runtime line detection
+      const splitText = new SplitType(textRef.current, { types: "lines" });
+      splitInstance.current = splitText;
+      
+      // Ensure there are no pins, correctly revealing one line after the other.
+      gsap.set(splitText.lines, { color: "#5D5652" });
 
-      if (prefersReducedMotion) {
-        gsap.set("[data-about-reveal]", { opacity: 1, y: 0 });
-        gsap.set("[data-about-highlight]", { opacity: 1, y: 0 });
-        if (imageFrameRef.current) {
-          gsap.set(imageFrameRef.current, {
-            clipPath: "inset(0% 0% 0% 0%)",
-            opacity: 1,
-          });
-          const image = imageFrameRef.current.querySelector("img");
-          if (image) gsap.set(image, { scale: 1 });
-        }
-        return;
-      }
-
-      // Header: kicker, heading and intro rise in softly
-      gsap.fromTo(
-        "[data-about-reveal]",
-        { opacity: 0, y: 26 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.85,
-          ease: "power3.out",
-          stagger: 0.12,
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top 78%",
-          },
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: textRef.current,
+          start: "center center",
+          end: "+=120%",
+          pin: true,
+          scrub: 1,
         },
-      );
+      });
 
-      // Supporting visual: subtle clip reveal + slow settle of the image
-      if (imageFrameRef.current) {
-        const image = imageFrameRef.current.querySelector("img");
+      splitText.lines.forEach((line) => {
+        tl.to(line, {
+          color: "#EB5002",
+          ease: "none",
+          duration: 1, // timeline staggers automatically with standard durations
+        });
+      });
+      
+      // Handle resize without breaking split-type lines
+      const handleResize = () => {
+         splitText.split();
+         gsap.set(splitText.lines, { color: "#5D5652" });
+         ScrollTrigger.refresh();
+      };
+      
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
 
-        gsap.fromTo(
-          imageFrameRef.current,
-          { clipPath: "inset(8% 7% 10% 7%)", opacity: 0.4 },
-          {
-            clipPath: "inset(0% 0% 0% 0%)",
-            opacity: 1,
-            duration: 1.2,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: imageFrameRef.current,
-              start: "top 82%",
-            },
-          },
-        );
-
-        if (image) {
-          gsap.fromTo(
-            image,
-            { scale: 1.12 },
-            {
-              scale: 1,
-              duration: 1.6,
-              ease: "power3.out",
-              scrollTrigger: {
-                trigger: imageFrameRef.current,
-                start: "top 82%",
-              },
-            },
-          );
-        }
-      }
-
-      // Capability highlights: compact staggered rows
-      gsap.fromTo(
-        "[data-about-highlight]",
-        { opacity: 0, y: 22 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.7,
-          ease: "power3.out",
-          stagger: 0.12,
-          scrollTrigger: {
-            trigger: "[data-about-highlights]",
-            start: "top 85%",
-          },
-        },
-      );
     }, sectionRef);
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      if (splitInstance.current) splitInstance.current.revert();
+    };
   }, []);
 
   return (
@@ -137,99 +79,56 @@ export default function About() {
       aria-label="About"
     >
       <div className="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8">
-        {/* Header: small label + large heading + concise introduction */}
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
-          <div data-about-reveal className="lg:max-w-[620px]">
-            <p className="portfolio-kicker mb-5 flex items-center gap-3 text-[#EB5002]">
-              <span
-                className="inline-block h-2 w-2 rounded-full bg-[#EB5002] shadow-[0_0_0_5px_rgba(235,80,2,0.14)]"
-                aria-hidden="true"
-              />
-              About Me
-            </p>
+        
+        {/* Eyebrow Label */}
+        <p className="portfolio-kicker mb-8 flex items-center gap-3 text-[#EB5002] text-[0.65rem] sm:text-[0.75rem] font-bold uppercase tracking-[0.2em]">
+          <span
+            className="inline-block h-2 w-2 rounded-full bg-[#EB5002] shadow-[0_0_0_5px_rgba(235,80,2,0.14)]"
+            aria-hidden="true"
+          />
+          About Me
+        </p>
 
-            <h2 className="portfolio-display text-[2.5rem] font-bold leading-[0.92] tracking-[-0.06em] text-[#111111] sm:text-[3.2rem] md:text-[3.8rem] lg:text-[4.2rem]">
-              Full-Stack Development <span className="text-[#EB5002]">&amp;</span>{" "}
-              AI Automation.
-            </h2>
-          </div>
-
-          <p
-            data-about-reveal
-            className="portfolio-copy max-w-[26rem] text-[1.02rem] leading-relaxed text-[#5D5652] lg:pb-3"
+        {/* Large Intro Paragraph with per-line cascading reveal */}
+        <div className="mb-20 md:mb-32">
+          <h2 
+            ref={textRef} 
+            className="portfolio-display text-[2rem] font-bold leading-[1.3] text-[#5D5652] sm:text-[3rem] md:text-[3.5rem] lg:text-[4.2rem] tracking-[-0.03em]"
           >
             {INTRO_TEXT}
-          </p>
+          </h2>
         </div>
 
-        {/* Body: supporting visual + capability highlights */}
-        <div className="mt-16 grid gap-12 lg:mt-24 lg:grid-cols-2 lg:gap-16">
-          <div
-            ref={imageFrameRef}
-            className="relative aspect-[4/5] w-full overflow-hidden rounded-[28px] border border-[#1B1714]/10 bg-[#EDE7E0] shadow-[0_18px_40px_rgba(16,14,12,0.06)]"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/profile/profile.jpg"
-              alt="Talha Malik, full-stack developer and AI automation specialist"
-              className="h-full w-full object-cover"
-            />
-
-            <div className="absolute bottom-4 left-4 z-10">
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-[#0B0B0B]/55 px-3.5 py-1.5 text-[0.62rem] font-semibold uppercase tracking-[0.16em] text-white backdrop-blur-md">
-                <MapPin className="h-3.5 w-3.5 text-[#EB5002]" aria-hidden="true" />
-                Karachi, Pakistan
-              </span>
+        {/* Note: The capabilityHighlights numbered icon-feature list and the large standalone header 
+            have been completely removed from this layout per the new core structure goals. */}
+        
+        {/* Supporting Images and Call To Action */}
+        <div className="grid gap-12 lg:grid-cols-12 lg:gap-16 items-center">
+          {/* Two placeholder workspace images */}
+          <div className="lg:col-span-7 flex gap-4 md:gap-6">
+            <div className="aspect-[4/5] w-1/2 overflow-hidden rounded-[24px] bg-gradient-to-br from-[#E8E2DA] to-[#D5CFC6] border border-[#1A1613]/5 flex items-center justify-center transition-transform hover:scale-[1.03] duration-500 shadow-[0_18px_40px_rgba(16,14,12,0.06)]">
+              <span className="text-[#1A1613]/30 font-mono text-sm tracking-widest uppercase">workspace-1</span>
+            </div>
+            <div className="aspect-[4/5] w-1/2 overflow-hidden rounded-[24px] bg-gradient-to-br from-[#E8E2DA] to-[#D5CFC6] border border-[#1A1613]/5 flex items-center justify-center transition-transform hover:scale-[1.03] duration-500 shadow-[0_18px_40px_rgba(16,14,12,0.06)] translate-y-6 md:translate-y-12">
+              <span className="text-[#1A1613]/30 font-mono text-sm tracking-widest uppercase">workspace-2</span>
             </div>
           </div>
-
-          <div data-about-highlights className="flex flex-col justify-center">
-            {capabilityHighlights.map((highlight, index) => {
-              const Icon = highlight.icon;
-
-              return (
-                <div
-                  key={highlight.title}
-                  data-about-highlight
-                  className="group flex items-start gap-5 border-t border-[#1B1714]/10 py-7 last:border-b sm:gap-6 sm:py-8"
-                >
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#1B1714]/10 bg-white text-[#EB5002] transition-colors duration-300 group-hover:border-[#EB5002]/30 group-hover:bg-[#EB5002]/10 sm:h-12 sm:w-12">
-                    <Icon className="h-5 w-5" aria-hidden="true" />
-                  </span>
-
-                  <div className="min-w-0 flex-1">
-                    <h3 className="text-[1.15rem] font-bold leading-tight tracking-[-0.03em] text-[#111111] sm:text-[1.3rem]">
-                      {highlight.title}
-                    </h3>
-                    <p className="mt-2 max-w-[26rem] text-[0.95rem] leading-relaxed text-[#5D5652]">
-                      {highlight.description}
-                    </p>
-                  </div>
-
-                  <span className="shrink-0 pt-1 text-[0.7rem] font-semibold tracking-[0.18em] text-[#EB5002]">
-                    0{index + 1}
-                  </span>
-                </div>
-              );
-            })}
-
-            <div data-about-highlight className="mt-9">
-              <a
-                href="#work"
-                className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-[#EB5002] px-7 py-3.5 font-semibold text-[#0b0b0b] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#EB5002]"
-              >
-                <span className="absolute inset-0 -translate-x-[105%] bg-[#000000] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
-                <span className="relative text-[#0b0b0b] transition-colors duration-400 ease-out group-hover:text-white">
-                  View My Work
-                </span>
-                <span
-                  aria-hidden="true"
-                  className="relative text-lg leading-none text-[#0b0b0b] transition-all duration-400 ease-out group-hover:translate-x-1 group-hover:text-white"
-                >
-                  →
-                </span>
-              </a>
-            </div>
+          
+          <div className="lg:col-span-5 flex flex-col justify-center max-w-[400px]">
+             <h3 className="mb-8 text-3xl md:text-[2.2rem] lg:text-[2.6rem] font-bold leading-[1.1] tracking-[-0.03em] text-[#111111]">
+               Full-Stack Development <span className="text-[#EB5002]">&amp;</span> AI Automation
+             </h3>
+             <div className="flex">
+               <a
+                 href="#work"
+                 className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-[#EB5002] px-8 py-4 font-bold tracking-[0.05em] text-[#0b0b0b] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#EB5002]"
+               >
+                 <span className="absolute inset-0 -translate-x-[105%] bg-[#000000] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
+                 <span className="relative text-[#0b0b0b] transition-colors duration-400 ease-out group-hover:text-white whitespace-nowrap">
+                   View My Work <span aria-hidden="true" className="ml-1 inline-block transition-transform duration-400 ease-out group-hover:translate-x-1">→</span>
+                 </span>
+               </a>
+             </div>
           </div>
         </div>
       </div>

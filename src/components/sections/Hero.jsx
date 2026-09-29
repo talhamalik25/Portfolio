@@ -17,6 +17,7 @@ export default function Hero() {
 
       if (prefersReducedMotion) {
         gsap.set("[data-hero-animate]", { opacity: 1, y: 0, scale: 1 });
+        gsap.set("[data-hero-word]", { opacity: 0.18 });
         return;
       }
 
@@ -31,7 +32,7 @@ export default function Hero() {
         .fromTo(
           "[data-hero-word]",
           { opacity: 0, filter: "blur(10px)", scale: 0.98 },
-          { opacity: 1, filter: "blur(0px)", scale: 1, duration: 1.4, ease: "power2.out" },
+          { opacity: 0.18, filter: "blur(0px)", scale: 1, duration: 1.4, ease: "power2.out" },
           "-=0.4"
         )
         .fromTo(
@@ -114,16 +115,13 @@ export default function Hero() {
           <div
             data-hero-position
             data-hero-animate
-            className="portfolio-kicker relative z-30 mb-8 flex flex-col items-center gap-4 text-center sm:text-[0.65rem] tracking-[0.2em] uppercase font-bold"
+            className="portfolio-kicker relative z-30 mb-6 flex flex-col items-center gap-3.5 text-center text-[0.55rem] sm:text-[0.6rem] tracking-[0.15em] uppercase font-bold"
           >
-            <div className="flex items-center gap-2.5 rounded-full border border-white/5 bg-white/[0.02] px-3.5 py-1.5 backdrop-blur-md">
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
-              </span>
-              <span className="text-[0.55rem] tracking-[0.1em] text-white/70">Available for new projects</span>
+            <div className="flex items-center gap-2 text-white/70">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#EB5002]" />
+              <span>HI, I&apos;M TALHA</span>
             </div>
-            
+
             <div className="flex flex-col md:flex-row items-center gap-1.5 md:gap-3 text-[#EB5002]">
               <span>FULL-STACK DEVELOPER</span>
               <span className="hidden md:inline text-white/30">•</span>
@@ -133,35 +131,35 @@ export default function Hero() {
 
           {/* ── Main Visual Block (TALHA text + Photo overlap) ── */}
           <div
-            className="relative z-10 mb-8 md:mb-12 flex w-full flex-col items-center justify-center"
-            style={{ height: "clamp(260px, 45vh, 520px)" }}
+            className="relative z-10 mb-8 md:mb-10 flex w-full flex-col items-center justify-center"
+            style={{ height: "clamp(450px, 52vh, 500px)" }}
           >
             {/* Single background TALHA text */}
             <div
               data-hero-word
               data-hero-animate
               aria-hidden="true"
-              className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center select-none"
+              className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center select-none"
             >
-              <span className="portfolio-display whitespace-nowrap text-[clamp(6.5rem,18vw,20rem)] font-bold leading-[0.8] tracking-[-0.04em] text-[#EB5002] opacity-[0.9]">
+              <span className="portfolio-display whitespace-nowrap text-[clamp(6rem,19vw,22rem)] font-bold leading-[0.8] tracking-[-0.03em] text-[#FF6B00]">
                 TALHA
               </span>
             </div>
 
-            {/* Photo — sits on top of text */}
+            {/* Photo — softly blended in front of the background name */}
             <div
               data-hero-visual
               data-hero-animate
-              className="pointer-events-none absolute left-1/2 top-1/2 z-10 aspect-[4/5] w-[220px] -translate-x-1/2 -translate-y-1/2 sm:w-[300px] lg:w-[380px]"
+              className="pointer-events-none absolute left-1/2 top-0 z-20 aspect-[4/5] w-[min(84vw,400px)] -translate-x-1/2"
             >
               <div
                 className="h-full w-full overflow-hidden"
                 style={{
                   maskImage:
-                    "linear-gradient(to bottom, black 40%, transparent 100%), linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)",
+                    "linear-gradient(to bottom, transparent 0%, black 14%, black 48%, transparent 100%), linear-gradient(to right, transparent 0%, black 16%, black 84%, transparent 100%)",
                   maskComposite: "intersect",
                   WebkitMaskImage:
-                    "linear-gradient(to bottom, black 40%, transparent 100%), linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)",
+                    "linear-gradient(to bottom, transparent 0%, black 14%, black 48%, transparent 100%), linear-gradient(to right, transparent 0%, black 16%, black 84%, transparent 100%)",
                   WebkitMaskComposite: "source-in",
                 }}
               >
@@ -176,11 +174,11 @@ export default function Hero() {
           </div>
 
           {/* ── Bottom Content Group ── */}
-          <div className="relative z-30 flex w-full max-w-[800px] flex-col items-center mt-2 md:mt-0">
+          <div className="relative z-30 flex w-full max-w-[800px] flex-col items-center">
             <h1
               data-hero-statement
               data-hero-animate
-              className="portfolio-display w-full text-[1.8rem] font-bold leading-[1] tracking-[-0.04em] text-white sm:text-[2.6rem] md:text-[3.2rem] lg:text-[3.8rem]"
+              className="portfolio-display w-full text-[1.9rem] font-bold leading-[1.05] tracking-[-0.03em] text-white sm:text-[2.6rem] md:text-[3.2rem] lg:text-[4rem]"
             >
               BUILDING <span className="text-[#EB5002]">IMPACTFUL</span> DIGITAL
               EXPERIENCES.
@@ -189,21 +187,21 @@ export default function Hero() {
             <p
               data-hero-copy
               data-hero-animate
-              className="portfolio-copy mt-5 w-full max-w-[32rem] text-center text-[0.95rem] md:text-[1.1rem] text-white/50"
+              className="portfolio-copy mt-4 md:mt-5 w-full max-w-[34rem] text-center text-[0.95rem] md:text-[1.15rem] leading-relaxed text-white/75"
             >
               I build modern web applications, SaaS products and AI-powered
               automation systems that deliver results.
             </p>
 
-            <div className="mt-8 md:mt-10 flex w-full flex-col items-center justify-center gap-3.5 sm:flex-row">
+            <div className="mt-8 md:mt-10 flex w-full flex-col items-center justify-center gap-4 sm:flex-row">
               <a
                 href="#work"
                 data-hero-cta
                 data-hero-animate
-                className="portfolio-button-label group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-bold border border-[#EB5002] bg-[#EB5002] px-8 py-4 text-[#0b0b0b] transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#EB5002]"
+                className="portfolio-button-label group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-bold border border-[#EB5002] bg-[#EB5002] px-8 py-3.5 text-[0.8rem] md:text-[0.85rem] text-[#0b0b0b] transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.03] focus:outline-none focus:ring-2 focus:ring-[#EB5002]"
               >
                 <span className="absolute inset-0 -translate-x-[105%] bg-white transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
-                <span className="relative text-[#0b0b0b]">
+                <span className="relative text-[#0b0b0b] whitespace-nowrap">
                   VIEW MY WORK
                 </span>
               </a>
@@ -212,12 +210,20 @@ export default function Hero() {
                 href="#contact"
                 data-hero-cta
                 data-hero-animate
-                className="portfolio-button-label group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-bold border border-white/15 bg-transparent px-8 py-4 text-white transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-white/5 hover:border-white/30 focus:outline-none focus:ring-2 focus:ring-[#EB5002]"
+                className="portfolio-button-label group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-bold border border-white/10 bg-white/[0.02] px-8 py-3.5 text-[0.8rem] md:text-[0.85rem] text-white backdrop-blur-sm transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-white/10 hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-[#EB5002]"
               >
-                <span className="relative">
+                <span className="relative whitespace-nowrap">
                   LET&apos;S WORK TOGETHER
                 </span>
               </a>
+            </div>
+
+            <div className="mt-7 flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 text-[0.6rem] font-bold uppercase tracking-[0.12em] text-white/70 backdrop-blur-md">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500 opacity-90" />
+              </span>
+              <span>Available for new projects</span>
             </div>
           </div>
         </div>
