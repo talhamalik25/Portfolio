@@ -130,48 +130,72 @@ export default function Hero() {
           </div>
 
           {/* ── Main Visual Block (TALHA text + Photo overlap) ── */}
-          <div
-            className="relative z-10 mb-8 md:mb-10 flex w-full flex-col items-center justify-center"
-            style={{ height: "clamp(450px, 52vh, 500px)" }}
-          >
-            {/* Single background TALHA text */}
-            <div
-              data-hero-word
-              data-hero-animate
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center select-none"
-            >
-              <span className="portfolio-display whitespace-nowrap text-[clamp(4.5rem,24vw,16rem)] font-bold leading-[0.8] tracking-[-0.03em] text-[#4A2A15]">
-                TALHA
-              </span>
-            </div>
+<div
+  className="relative z-10 mb-8 flex w-full items-center justify-center
+             sm:mb-10
+             md:mb-12"
+  style={{
+    height: "clamp(360px, 58vw, 520px)",
+    minHeight: "360px",
+  }}
+>
+  {/* Background TALHA text */}
+  <div
+    data-hero-word
+    data-hero-animate
+    aria-hidden="true"
+    className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center select-none overflow-hidden"
+  >
+    <span
+      className="
+        portfolio-display whitespace-nowrap font-bold leading-[0.8]
+        tracking-[-0.04em] text-[#EB5002]
+        text-[clamp(4rem,22vw,16rem)]
+        sm:text-[clamp(6rem,17vw,17rem)]
+        md:text-[clamp(6rem,17vw,15rem)]
+        lg:text-[clamp(8rem,15vw,16rem)]
+      "
+    >
+      TALHA
+    </span>
+  </div>
 
-            {/* Photo — softly blended in front of the background name */}
-            <div
-              data-hero-visual
-              data-hero-animate
-              className="pointer-events-none absolute left-1/2 top-0 z-20 aspect-[4/5] w-[min(84vw,400px)] -translate-x-1/2"
-            >
-              <div
-                className="h-full w-full overflow-hidden"
-                style={{
-                  maskImage:
-                    "linear-gradient(to bottom, transparent 0%, black 14%, black 48%, transparent 100%), linear-gradient(to right, transparent 0%, black 16%, black 84%, transparent 100%)",
-                  maskComposite: "intersect",
-                  WebkitMaskImage:
-                    "linear-gradient(to bottom, transparent 0%, black 14%, black 48%, transparent 100%), linear-gradient(to right, transparent 0%, black 16%, black 84%, transparent 100%)",
-                  WebkitMaskComposite: "source-in",
-                }}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/images/profile/heroimg.png"
-                  alt="Talha Portrait"
-                  className="h-full w-full object-cover"
-                />
-              </div>
-            </div>
-          </div>
+  {/* Portrait */}
+  <div
+    data-hero-visual
+    data-hero-animate
+    className="
+      pointer-events-none absolute left-1/2 top-0 z-20
+      aspect-[4/5] -translate-x-1/2
+      w-[min(76vw,340px)]
+      sm:w-[min(68vw,360px)]
+      md:w-[min(52vw,390px)]
+      lg:w-[min(42vw,420px)]
+      xl:w-[420px]
+    "
+  >
+    <div
+      className="h-full w-full overflow-hidden"
+      style={{
+        maskImage:
+          "linear-gradient(to bottom, transparent 0%, black 14%, black 48%, transparent 100%), linear-gradient(to right, transparent 0%, black 16%, black 84%, transparent 100%)",
+        maskComposite: "intersect",
+        WebkitMaskImage:
+          "linear-gradient(to bottom, transparent 0%, black 14%, black 48%, transparent 100%), linear-gradient(to right, transparent 0%, black 16%, black 84%, transparent 100%)",
+        WebkitMaskComposite: "source-in",
+      }}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/images/profile/heroimg.png"
+        alt="Talha Portrait"
+        className="h-full w-full object-cover object-top"
+      />
+    </div>
+  </div>
+</div>
+```
+
 
           {/* ── Bottom Content Group ── */}
           <div className="relative z-30 flex w-full max-w-[800px] flex-col items-center">

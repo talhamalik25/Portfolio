@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
+import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SplitType from "split-type";
 
@@ -15,72 +15,74 @@ export default function About() {
   const textRef = useRef(null);
 
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReducedMotion) {
-      if (textRef.current) gsap.set(textRef.current, { color: "#EB5002" });
-      return undefined;
+    const paragraph = textRef.current;
+    if (!paragraph) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      paragraph.style.color = "#FF6B00";
+      return;
     }
 
-    let splitInstance = null;
-    let lineTweens = [];
-    let resizeTimer = null;
-    let disposed = false;
-
-    const clearLineReveal = () => {
-      lineTweens.forEach((tween) => {
-        tween.scrollTrigger?.kill();
-        tween.kill();
-      });
-      lineTweens = [];
-      splitInstance?.revert();
-      splitInstance = null;
-    };
-
-    const buildLineReveal = () => {
-      if (disposed || !textRef.current) return;
-
-      clearLineReveal();
-      splitInstance = new SplitType(textRef.current, {
-        types: "lines",
-        lineClass: "about-line",
-      });
-
-      const lines = splitInstance.lines ?? [];
-      gsap.set(lines, { color: "#5D5652" });
-
-      // Each line gets its own trigger. One line's reveal distance matches
-      // its line-height, so the next line begins as the previous one finishes.
-      lines.forEach((line) => {
-        const tween = gsap.to(line, {
-          color: "#EB5002",
-          ease: "none",
-          scrollTrigger: {
-            trigger: line,
-            start: "top 90%",
-            end: "top 10%",
-            scrub: 0.6,
-            invalidateOnRefresh: true,
-          },
+    let splitText;
+    
+    // Minor delay guarantees DOM has fully painted on Next.js client renders
+    // avoiding the silent width-calculation issues with SplitType
+    const timeout = setTimeout(() => {
+      const ctx = gsap.context(() => {
+        splitText = new SplitType(paragraph, {
+          types: "lines",
+          lineClass: "about-line",
         });
-        lineTweens.push(tween);
-      });
 
-      ScrollTrigger.refresh();
-    };
+        splitText.lines.forEach((line) => {
+          line.style.position = "relative";
+          line.style.color = "#B8B0A6"; // muted gray base color
 
-    const handleResize = () => {
-      window.clearTimeout(resizeTimer);
-      resizeTimer = window.setTimeout(buildLineReveal, 180);
-    };
+          const overlay = document.createElement("span");
+          overlay.textContent = line.textContent;
+          overlay.className = "reveal-overlay";
+          overlay.setAttribute("aria-hidden", "true");
+          overlay.style.position = "absolute";
+          overlay.style.inset = "0";
+          overlay.style.color = "#FF6B00"; // orange accent
+          overlay.style.clipPath = "inset(0 100% 0 0)";
+          // Ensure it doesn't wrap or misalign if padding/margins exist
+          overlay.style.whiteSpace = "nowrap"; 
+          line.appendChild(overlay);
+        });
 
-    document.fonts?.ready.then(buildLineReveal);
-    window.addEventListener("resize", handleResize);
+        const overlays = gsap.utils.toArray(".reveal-overlay");
+        if (overlays.length > 0) {
+          gsap.to(overlays, {
+            clipPath: "inset(0 0% 0 0)",
+            ease: "none",
+            duration: 1, // Normalized duration
+            stagger: 1,  // Wait for 100% of duration before starting the next line (pure sequential)
+            scrollTrigger: {
+              trigger: paragraph,
+              start: "top 80%",
+              end: "bottom 30%", // Completes when the bottom of paragraph is 30% down the screen
+              scrub: 0.5,
+            },
+          });
+        }
+      }, sectionRef.current);
+
+      // Save ctx to global scope inside useEffect so we can revert it on unmount
+      paragraph._gsapCtx = ctx;
+    }, 100);
 
     return () => {
-      disposed = true;
-      window.clearTimeout(resizeTimer);
-      window.removeEventListener("resize", handleResize);
-      clearLineReveal();
+      clearTimeout(timeout);
+      // Remove any artificially appended DOM nodes so SplitType can revert cleanly
+      document.querySelectorAll(".reveal-overlay").forEach((el) => el.remove());
+      
+      if (paragraph._gsapCtx) {
+        paragraph._gsapCtx.revert();
+      }
+      if (splitText) {
+        splitText.revert();
+      }
     };
   }, []);
 
