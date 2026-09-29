@@ -20,21 +20,21 @@ import {
 } from "react-icons/si";
 
 const ALL_TOOLS = [
-  { name: "React", Icon: SiReact, color: "#61DAFB", scale: "scale-100" },
-  { name: "JavaScript", Icon: SiJavascript, color: "#F7DF1E", scale: "scale-95" },
-  { name: "Tailwind CSS", Icon: SiTailwindcss, color: "#06B6D4", scale: "scale-100" },
-  { name: "GSAP", Icon: SiGreensock, color: "#88CE02", scale: "scale-105" },
-  { name: "Node.js", Icon: SiNodedotjs, color: "#339933", scale: "scale-95" },
-  { name: "Express", Icon: SiExpress, color: "#68A063", scale: "scale-100" },
-  { name: "MongoDB", Icon: SiMongodb, color: "#47A248", scale: "scale-110" },
-  { name: "n8n", Icon: SiN8N, color: "#EA4B71", scale: "scale-95" },
-  { name: "Git", Icon: SiGit, color: "#F05032", scale: "scale-100" },
-  { name: "GitHub", Icon: SiGithub, color: "#E6EDF3", scale: "scale-110" },
-  { name: "Figma", Icon: SiFigma, color: "#F24E1E", scale: "scale-90" },
-  { name: "PostgreSQL", Icon: SiPostgresql, color: "#4169E1", scale: "scale-95" },
-  { name: "Next.js", Icon: SiNextdotjs, color: "#0070F3", scale: "scale-95" },
-  { name: "Vercel", Icon: SiVercel, color: "#F81CE5", scale: "scale-100" },
-  { name: "Three.js", Icon: SiThreedotjs, color: "#049EF4", scale: "scale-100" },
+  { name: "React", Icon: SiReact, color: "#61DAFB" },
+  { name: "JavaScript", Icon: SiJavascript, color: "#F7DF1E" },
+  { name: "Tailwind CSS", Icon: SiTailwindcss, color: "#06B6D4" },
+  { name: "GSAP", Icon: SiGreensock, color: "#88CE02" },
+  { name: "Node.js", Icon: SiNodedotjs, color: "#339933" },
+  { name: "Express", Icon: SiExpress, color: "#68A063" },
+  { name: "MongoDB", Icon: SiMongodb, color: "#47A248" },
+  { name: "n8n", Icon: SiN8N, color: "#EA4B71" },
+  { name: "Git", Icon: SiGit, color: "#F05032" },
+  { name: "GitHub", Icon: SiGithub, color: "#E6EDF3" },
+  { name: "Figma", Icon: SiFigma, color: "#F24E1E" },
+  { name: "PostgreSQL", Icon: SiPostgresql, color: "#4169E1" },
+  { name: "Next.js", Icon: SiNextdotjs, color: "#0070F3" },
+  { name: "Vercel", Icon: SiVercel, color: "#F81CE5" },
+  { name: "Three.js", Icon: SiThreedotjs, color: "#049EF4" },
 ];
 
 export default function Stack() {
@@ -172,43 +172,43 @@ export default function Stack() {
         id: "col1",
         items: col1,
         direction: "Up",
-        duration: "26s",
+        duration: "32s",
         displayClass: "flex",
       },
       {
         id: "col2",
         items: col2,
         direction: "Down",
-        duration: "32s",
+        duration: "36s",
         displayClass: "flex",
       },
       {
         id: "col3",
         items: col3,
         direction: "Up",
-        duration: "24s",
+        duration: "30s",
         displayClass: "flex",
       },
       {
         id: "col4",
         items: col4,
         direction: "Down",
-        duration: "29s",
-        displayClass: "hidden sm:flex",
+        duration: "34s",
+        displayClass: "hidden lg:flex",
       },
       {
         id: "col5",
         items: col5,
         direction: "Up",
-        duration: "27s",
-        displayClass: "hidden lg:flex",
+        duration: "32s",
+        displayClass: "hidden xl:flex",
       },
       {
         id: "col6",
         items: col6,
         direction: "Down",
-        duration: "31s",
-        displayClass: "hidden lg:flex",
+        duration: "38s",
+        displayClass: "hidden xl:flex",
       },
     ];
   }, []);
@@ -227,7 +227,7 @@ export default function Stack() {
           px-4 sm:px-6 lg:px-8
           ${
             isSpotlight
-              ? "absolute inset-x-0 h-full"
+              ? "pointer-events-none absolute inset-x-0 h-full"
               : "relative z-10"
           }
         `}
@@ -235,12 +235,13 @@ export default function Stack() {
           isSpotlight
             ? {
                 maskImage:
-                  "radial-gradient(320px circle at var(--mouse-x) var(--mouse-y), black 0%, transparent 100%)",
+                  "radial-gradient(380px circle at var(--mouse-x) var(--mouse-y), black 0%, rgba(0,0,0,0.7) 58%, transparent 100%)",
 
                 WebkitMaskImage:
-                  "radial-gradient(320px circle at var(--mouse-x) var(--mouse-y), black 0%, transparent 100%)",
+                  "radial-gradient(380px circle at var(--mouse-x) var(--mouse-y), black 0%, rgba(0,0,0,0.7) 58%, transparent 100%)",
 
                 zIndex: 15,
+                opacity: 0.32,
               }
             : {}
         }
@@ -249,10 +250,10 @@ export default function Stack() {
           className="
             relative flex h-[560px] w-full
             justify-center
-            gap-0
+            gap-3
             sm:h-[600px]
-            sm:gap-1
-            lg:gap-2
+            sm:gap-4
+            lg:gap-6
           "
           style={{
             maskImage:
@@ -273,9 +274,9 @@ export default function Stack() {
                 flex-col
                 overflow-visible
 
-                w-[72px]
-                sm:w-[88px]
-                lg:w-[104px]
+                w-[60px]
+                sm:w-[72px]
+                lg:w-[88px]
 
                 ${col.displayClass}
 
@@ -294,10 +295,10 @@ export default function Stack() {
                   flex
                   w-full
                   flex-col
-                  gap-4
+                  gap-3
                   will-change-transform
-                  sm:gap-5
-                  lg:gap-6
+                  sm:gap-4
+                  lg:gap-5
                 "
                 style={{
                   animation: `scroll${col.direction} ${col.duration} linear infinite`,
@@ -307,16 +308,7 @@ export default function Stack() {
                   const toolId = `${col.id}-${tool.name}-${index}`;
 
                   const isHovered = hoveredTool === toolId;
-
-                  const hasAnyHover = hoveredTool !== null;
-
-                  const isBackLayer = !isSpotlight;
-
-                  const baseOpacity = isSpotlight
-                    ? 0.95
-                    : hasAnyHover
-                    ? 0.25
-                    : 0.78;
+                  const baseOpacity = isSpotlight ? 0.94 : 0.82;
 
                   return (
                     <li
@@ -341,118 +333,57 @@ export default function Stack() {
                         items-center
                         justify-center
 
-                        rounded-[1.4rem]
+                        rounded-[1.1rem]
 
                         border
 
-                        transition-all
+                        transition-[transform,background-color,border-color,box-shadow,opacity]
                         duration-300
                         ease-out
 
                         ${
                           isHovered
-                            ? "z-[100] scale-[1.16] border-white/30 bg-[#181818]"
-                            : "border-white/[0.05] bg-[#0d0d0d]/80"
+                            ? "z-[100] scale-[1.05] border-white/20 bg-[#171717]"
+                            : "border-white/[0.08] bg-[#0d0d0d]/80"
                         }
                       `}
                       style={{
                         opacity: isHovered ? 1 : baseOpacity,
-
+                        borderColor: isHovered
+                          ? `${tool.color}55`
+                          : "rgba(255,255,255,0.08)",
                         boxShadow: isHovered
-                          ? `
-                              0 0 0 1px ${tool.color}55,
-                              0 0 30px ${tool.color}66,
-                              0 0 70px ${tool.color}33
-                            `
-                          : `0 0 18px ${tool.color}18`,
-
-                        transform: isHovered
-                          ? "scale(0.8)"
-                          : isBackLayer
-                          ? "scale(1)"
-                          : "scale(1)",
+                          ? `0 0 0 1px ${tool.color}22, 0 6px 20px ${tool.color}30`
+                          : "0 4px 16px rgba(0,0,0,0.18)",
+                        scale: isHovered ? 1.05 : 1,
                       }}
                     >
-                      {/* INNER GLOW */}
-                      <div
-                        className="
-                          pointer-events-none
-                          absolute
-                          inset-[8%]
-                          rounded-[1.2rem]
-                          opacity-70
-                          transition-all
-                          duration-300
-                          group-hover/card:opacity-100
-                        "
-                        style={{
-                          background: `
-                            radial-gradient(
-                              circle,
-                              ${tool.color}45 0%,
-                              ${tool.color}15 35%,
-                              transparent 72%
-                            )
-                          `,
-                        }}
-                      />
-
-                      {/* HOVER RING */}
-                      <div
-                        className="
-                          pointer-events-none
-                          absolute
-                          inset-0
-                          rounded-[1.4rem]
-                          opacity-0
-                          transition-opacity
-                          duration-300
-                          group-hover/card:opacity-100
-                        "
-                        style={{
-                          boxShadow: `
-                            inset 0 0 25px ${tool.color}22
-                          `,
-                        }}
-                      />
-
                       {/* ICON */}
                       <tool.Icon
                         className={`
                           relative
                           z-10
 
-                          h-7
-                          w-7
+                          h-6
+                          w-6
 
-                          sm:h-8
-                          sm:w-8
+                          sm:h-7
+                          sm:w-7
 
-                          lg:h-10
-                          lg:w-10
+                          lg:h-8
+                          lg:w-8
 
-                          transition-all
+                          transition-transform
                           duration-300
                           ease-out
-
-                          ${tool.scale}
-
-                          ${
-                            isHovered
-                              ? "scale-125"
-                              : "scale-100"
-                          }
                         `}
                         style={{
                           color: tool.color,
                           fill: tool.color,
-
+                          scale: isHovered ? 1.1 : 1,
                           filter: isHovered
-                            ? `
-                                drop-shadow(0 0 8px ${tool.color})
-                                drop-shadow(0 0 18px ${tool.color}88)
-                              `
-                            : `drop-shadow(0 0 5px ${tool.color}22)`,
+                            ? `drop-shadow(0 0 8px ${tool.color}66)`
+                            : "none",
                         }}
                       />
 
@@ -462,7 +393,7 @@ export default function Stack() {
                           className="
                             pointer-events-none
                             absolute
-                            -bottom-10
+                            -bottom-9
                             left-1/2
                             z-[120]
                             -translate-x-1/2
@@ -484,7 +415,7 @@ export default function Stack() {
 
                             opacity-0
 
-                            shadow-[0_18px_40px_rgba(0,0,0,0.4)]
+                            shadow-[0_10px_24px_rgba(0,0,0,0.3)]
 
                             transition-all
                             duration-300
@@ -497,33 +428,6 @@ export default function Stack() {
                         </div>
                       )}
 
-                      {/* HOVER DOT */}
-                      {!isSpotlight && (
-                        <span
-                          className="
-                            pointer-events-none
-                            absolute
-                            -top-1
-                            -right-1
-                            z-[130]
-                            h-2
-                            w-2
-                            rounded-full
-                            opacity-0
-                            transition-all
-                            duration-300
-                            group-hover/card:opacity-100
-                            group-hover/card:scale-125
-                          "
-                          style={{
-                            backgroundColor: tool.color,
-                            boxShadow: `
-                              0 0 10px ${tool.color},
-                              0 0 20px ${tool.color}
-                            `,
-                          }}
-                        />
-                      )}
                     </li>
                   );
                 })}
@@ -601,7 +505,7 @@ export default function Stack() {
           flex-col
           items-center
           justify-center
-          bg-[radial-gradient(ellipse_600px_350px_at_center,rgba(0,0,0,0.62)_0%,transparent_65%)]
+          bg-[radial-gradient(ellipse_600px_350px_at_center,rgba(0,0,0,0.5)_0%,transparent_65%)]
         "
       >
         <div

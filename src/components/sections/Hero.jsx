@@ -17,7 +17,7 @@ export default function Hero() {
 
       if (prefersReducedMotion) {
         gsap.set("[data-hero-animate]", { opacity: 1, y: 0, scale: 1 });
-        gsap.set("[data-hero-word]", { opacity: 0.18 });
+        gsap.set("[data-hero-word]", { opacity: 0.35 });
         return;
       }
 
@@ -32,7 +32,7 @@ export default function Hero() {
         .fromTo(
           "[data-hero-word]",
           { opacity: 0, filter: "blur(10px)", scale: 0.98 },
-          { opacity: 0.18, filter: "blur(0px)", scale: 1, duration: 1.4, ease: "power2.out" },
+          { opacity: 0.35, filter: "blur(0px)", scale: 1, duration: 1.4, ease: "power2.out" },
           "-=0.4"
         )
         .fromTo(
@@ -141,7 +141,7 @@ export default function Hero() {
               aria-hidden="true"
               className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center select-none"
             >
-              <span className="portfolio-display whitespace-nowrap text-[clamp(6rem,19vw,22rem)] font-bold leading-[0.8] tracking-[-0.03em] text-[#EB5002]">
+              <span className="portfolio-display whitespace-nowrap text-[clamp(4.5rem,24vw,16rem)] font-bold leading-[0.8] tracking-[-0.03em] text-[#4A2A15]">
                 TALHA
               </span>
             </div>
