@@ -39,8 +39,9 @@ const ProjectPlane = memo(function ProjectPlane({ index, activeIndex, palette })
   });
 
   useEffect(() => {
+    const material = materialRef.current;
     return () => {
-      materialRef.current?.dispose();
+      material?.dispose();
     };
   }, []);
 
@@ -70,7 +71,7 @@ const ProjectPlane = memo(function ProjectPlane({ index, activeIndex, palette })
 
 const DustField = memo(function DustField() {
   const pointsRef = useRef(null);
-  const positions = useMemo(() => {
+  const [positions] = useState(() => {
     const count = 36;
     const arr = new Float32Array(count * 3);
     for (let i = 0; i < count; i += 1) {
@@ -79,7 +80,7 @@ const DustField = memo(function DustField() {
       arr[i * 3 + 2] = (Math.random() - 0.5) * 3;
     }
     return arr;
-  }, []);
+  });
 
   useFrame((state) => {
     if (!pointsRef.current) return;

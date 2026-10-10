@@ -14,9 +14,9 @@ export default function Home() {
     <>
       <Navbar />
       <Hero />
+      <SelectedWork />
       <About />
       <Capabilities />
-      <SelectedWork />
       <Stack />
       <Journey />
       <FinalCta />

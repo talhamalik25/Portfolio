@@ -8,53 +8,46 @@ gsap.registerPlugin(ScrollTrigger);
 
 const milestones = [
   {
-    year: "2023",
-    label: "Started the Journey",
-    title: "Started the Journey",
-    description:
-      "Began learning web development — HTML, CSS, and JavaScript fundamentals, building my first static projects.",
+    year: "TODO: year",
+    label: "First Projects",
+    title: "Started with HTML, CSS and JavaScript",
+    description: "Built my first static projects.",
   },
   {
-    year: "2023",
-    label: "CS Student",
-    title: "CS Student at Iqra University",
-    description:
-      "Enrolled in Computer Science, building a formal foundation alongside self-taught frontend skills.",
+    year: "TODO: year",
+    label: "Computer Science",
+    title: "Began BS Computer Science at Iqra University",
+    description: "Currently in my 2nd semester (October 2026).",
   },
   {
-    year: "2024",
-    label: "Frontend Mastery",
-    title: "Frontend Mastery",
-    description:
-      "Leveled up with React, Next.js, and Tailwind CSS — started building full production-ready UIs with AI-assisted workflows.",
+    year: "TODO: year",
+    label: "Frontend",
+    title: "Learned React, Next.js and Tailwind CSS",
+    description: "",
   },
   {
-    year: "2024",
-    label: "Paid Projects",
-    title: "First Paid Client Projects",
-    description:
-      "Delivered 2 paid freelance projects, taking real client requirements from brief to deployed product.",
-  },
-  {
-    year: "2025",
-    label: "Founded CoreCraft",
-    title: "Founded CoreCraft",
-    description:
-      "Launched CoreCraft, a web development and AI automation agency, to serve small and medium businesses with modern digital products.",
+    year: "TODO: year",
+    label: "Full-Stack Projects",
+    title: "Built full-stack projects",
+    description: "Worked with Node.js, Express and MongoDB.",
   },
   {
     year: "Now",
-    label: "Learning Backend + AI",
-    title: "Learning Backend + AI Automation",
-    description:
-      "Currently deepening backend development skills, with n8n-based AI automation workflows, heading toward DevOps next.",
+    label: "Current Focus",
+    title: "Strengthening my JavaScript fundamentals",
+    description: "Focused on backend development and AI automation.",
   },
   {
     year: "Next",
-    label: "What’s Ahead",
-    title: "What’s Ahead",
-    description:
-      "Expanding CoreCraft, building SaaS products, and moving deeper into AI engineering and automation systems.",
+    label: "Next",
+    title: "SaaS products",
+    description: "Build SaaS products.",
+  },
+  {
+    year: "Later",
+    label: "Long-Term Focus",
+    title: "Deeper AI engineering",
+    description: "Go deeper into AI engineering.",
   },
 ];
 

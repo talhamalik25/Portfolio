@@ -13,7 +13,6 @@ import {
   SiGit,
   SiGithub,
   SiFigma,
-  SiPostgresql,
   SiNextdotjs,
   SiVercel,
   SiThreedotjs,
@@ -31,7 +30,6 @@ const ALL_TOOLS = [
   { name: "Git", Icon: SiGit, color: "#F05032" },
   { name: "GitHub", Icon: SiGithub, color: "#E6EDF3" },
   { name: "Figma", Icon: SiFigma, color: "#F24E1E" },
-  { name: "PostgreSQL", Icon: SiPostgresql, color: "#4169E1" },
   { name: "Next.js", Icon: SiNextdotjs, color: "#0070F3" },
   { name: "Vercel", Icon: SiVercel, color: "#F81CE5" },
   { name: "Three.js", Icon: SiThreedotjs, color: "#049EF4" },
@@ -49,11 +47,18 @@ export default function Stack() {
   useEffect(() => {
     const match = window.matchMedia("(hover: hover) and (pointer: fine)");
 
-    setHasMouse(match.matches);
+    let mediaFrame = requestAnimationFrame(() => setHasMouse(match.matches));
+    const handleMediaChange = (event) => setHasMouse(event.matches);
+    match.addEventListener("change", handleMediaChange);
 
     const section = sectionRef.current;
 
-    if (!section || !match.matches) return undefined;
+    if (!section || !match.matches) {
+      return () => {
+        cancelAnimationFrame(mediaFrame);
+        match.removeEventListener("change", handleMediaChange);
+      };
+    }
 
     let rafId;
 
@@ -93,6 +98,8 @@ export default function Stack() {
       section.removeEventListener("mouseleave", handleMouseLeave);
 
       cancelAnimationFrame(rafId);
+      cancelAnimationFrame(mediaFrame);
+      match.removeEventListener("change", handleMediaChange);
     };
   }, []);
 
@@ -108,8 +115,7 @@ export default function Stack() {
       ALL_TOOLS[5],
       ALL_TOOLS[7],
       ALL_TOOLS[9],
-      ALL_TOOLS[11],
-      ALL_TOOLS[13],
+      ALL_TOOLS[12],
     ];
 
     const col2 = [
@@ -119,23 +125,21 @@ export default function Stack() {
       ALL_TOOLS[6],
       ALL_TOOLS[8],
       ALL_TOOLS[10],
-      ALL_TOOLS[12],
+      ALL_TOOLS[11],
       ALL_TOOLS[0],
     ];
 
     const col3 = [
-      ALL_TOOLS[14],
+      ALL_TOOLS[13],
       ALL_TOOLS[9],
       ALL_TOOLS[6],
       ALL_TOOLS[3],
       ALL_TOOLS[1],
-      ALL_TOOLS[11],
       ALL_TOOLS[8],
       ALL_TOOLS[2],
     ];
 
     const col4 = [
-      ALL_TOOLS[11],
       ALL_TOOLS[8],
       ALL_TOOLS[5],
       ALL_TOOLS[2],
@@ -150,7 +154,7 @@ export default function Stack() {
       ALL_TOOLS[7],
       ALL_TOOLS[4],
       ALL_TOOLS[1],
-      ALL_TOOLS[14],
+      ALL_TOOLS[13],
       ALL_TOOLS[9],
       ALL_TOOLS[6],
       ALL_TOOLS[0],
@@ -161,7 +165,6 @@ export default function Stack() {
       ALL_TOOLS[6],
       ALL_TOOLS[3],
       ALL_TOOLS[1],
-      ALL_TOOLS[11],
       ALL_TOOLS[8],
       ALL_TOOLS[5],
       ALL_TOOLS[2],
@@ -217,7 +220,7 @@ export default function Stack() {
      MARQUEE WALL
   ------------------------------------------------------- */
 
-  const MarqueeWall = ({ layerType }) => {
+  const MarqueeWall = ({ layerType, hoveredTool, setHoveredTool }) => {
     const isSpotlight = layerType === "spotlight";
 
     return (
@@ -445,6 +448,7 @@ export default function Stack() {
 
   return (
     <section
+      id="stack"
       ref={sectionRef}
       className="
         relative
@@ -559,13 +563,11 @@ export default function Stack() {
 
       {/* BACKGROUND MARQUEE */}
 
-      <MarqueeWall layerType="dim" />
+      {MarqueeWall({ layerType: "dim", hoveredTool, setHoveredTool })}
 
       {/* MOUSE FOLLOWING SPOTLIGHT */}
 
-      {hasMouse && (
-        <MarqueeWall layerType="spotlight" />
-      )}
+      {hasMouse && MarqueeWall({ layerType: "spotlight", hoveredTool, setHoveredTool })}
     </section>
   );
 }

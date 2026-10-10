@@ -199,6 +199,7 @@ export default function Navbar() {
       <div
         id="mobile-navigation"
         aria-hidden={!isMobileMenuOpen}
+        inert={!isMobileMenuOpen}
         className={[
           "fixed inset-x-0 top-[84px] z-40 px-4 lg:hidden",
           isMobileMenuOpen ? "pointer-events-auto" : "pointer-events-none",

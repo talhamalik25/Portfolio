@@ -14,21 +14,23 @@ export default function GlobalLoader() {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     
     if (prefersReducedMotion) {
-      setTimeout(() => setShowLoader(false), 0);
-      return;
+      const reducedMotionTimeout = window.setTimeout(() => setShowLoader(false), 0);
+      return () => window.clearTimeout(reducedMotionTimeout);
     }
 
     // Lock scroll behavior while loading
     document.body.style.overflow = "hidden";
 
     // Small delay to ensure styles apply evenly before animating
-    const timeoutId = setTimeout(() => {
-      const ctx = gsap.context(() => {
-        const tl = gsap.timeline({
+    let ctx;
+    let exitTween;
+    const timeoutId = window.setTimeout(() => {
+      ctx = gsap.context(() => {
+        gsap.timeline({
           onComplete: () => {
             // Unlock scroll
             document.body.style.overflow = "";
-            gsap.to(containerRef.current, {
+            exitTween = gsap.to(containerRef.current, {
               yPercent: -100,
               duration: 0.8,
               ease: "power3.inOut",
@@ -61,13 +63,14 @@ export default function GlobalLoader() {
         );
       }, containerRef);
       
-      return () => {
-        document.body.style.overflow = "";
-        ctx.revert();
-      };
     }, 100);
 
-    return () => clearTimeout(timeoutId);
+    return () => {
+      window.clearTimeout(timeoutId);
+      exitTween?.kill();
+      ctx?.revert();
+      document.body.style.overflow = "";
+    };
   }, []);
 
   if (!showLoader) return null;
@@ -79,7 +82,7 @@ export default function GlobalLoader() {
     >
       <div className="flex flex-col items-center">
         <h1 className="portfolio-display text-5xl md:text-7xl mb-2 text-[#f5f5f5]">TALHA</h1>
-        <p className="portfolio-kicker text-[#f5f5f5]/70">
+        <p className="portfolio-kicker max-w-[calc(100vw-2rem)] px-4 text-center text-[#f5f5f5]/70">
           FULL-STACK DEVELOPER / AI AUTOMATION
         </p>
       </div>

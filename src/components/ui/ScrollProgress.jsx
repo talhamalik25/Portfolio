@@ -14,9 +14,10 @@ export default function ScrollProgress() {
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) return;
 
-    const ctx = gsap.context(() => {
-      // Small timeout to allow DOM to settle and scroll height to adjust correctly
-      setTimeout(() => {
+    let ctx;
+    // Small timeout to allow DOM to settle and scroll height to adjust correctly
+    const timeoutId = window.setTimeout(() => {
+      ctx = gsap.context(() => {
         gsap.to(progressRef.current, {
           scaleX: 1,
           ease: "none",
@@ -27,10 +28,13 @@ export default function ScrollProgress() {
             scrub: true,
           },
         });
-      }, 100);
-    });
+      });
+    }, 100);
 
-    return () => ctx.revert();
+    return () => {
+      window.clearTimeout(timeoutId);
+      ctx?.revert();
+    };
   }, []);
 
   return (

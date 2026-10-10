@@ -19,9 +19,9 @@ const navLinks = [
 ];
 
 const socialLinks = [
-  { label: "GitHub", href: "https://github.com/[MY_GITHUB_USERNAME]", icon: SiGithub },
+  { label: "GitHub", href: "https://github.com/talhamalik25", icon: SiGithub },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/muhammad-talha-malik-465957307", icon: FaLinkedinIn },
-  { label: "Email", href: "mailto:[MY_REAL_EMAIL]", icon: SiGmail },
+  { label: "Email", href: "mailto:mtmaliktalha2005@gmail.com", icon: SiGmail },
 ];
 
 export default function Footer() {
@@ -30,6 +30,7 @@ export default function Footer() {
   const magneticRefs = useRef([]);
 
   useEffect(() => {
+    const removePointerListeners = [];
     const ctx = gsap.context(() => {
       if (watermarkRef.current) {
         gsap.fromTo(
@@ -71,14 +72,17 @@ export default function Footer() {
         item.addEventListener("pointermove", handleMove);
         item.addEventListener("pointerleave", handleLeave);
 
-        return () => {
+        removePointerListeners.push(() => {
           item.removeEventListener("pointermove", handleMove);
           item.removeEventListener("pointerleave", handleLeave);
-        };
+        });
       });
     }, footerRef);
 
-    return () => ctx.revert();
+    return () => {
+      removePointerListeners.forEach((removeListeners) => removeListeners());
+      ctx.revert();
+    };
   }, []);
 
   return (
@@ -104,7 +108,7 @@ export default function Footer() {
 
             <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-[#EB5002]/20 bg-[#EB5002]/10 px-3 py-1.5 text-[0.64rem] font-semibold uppercase tracking-[0.18em] text-[#FF6B00]">
               <span className="inline-block h-2 w-2 rounded-full bg-[#FF6B00]" aria-hidden="true" />
-              Available for selected projects — 2026
+              Open to internships and selected projects
             </div>
           </div>
 
@@ -130,7 +134,7 @@ export default function Footer() {
             </h3>
 
             <ul className="space-y-3">
-              {socialLinks.map(({ label, href, icon: Icon }) => (
+              {socialLinks.map(({ label, href, icon: Icon }, index) => (
                 <li key={label}>
                   <a
                     href={href}
@@ -140,7 +144,7 @@ export default function Footer() {
                   >
                     <span
                       ref={(el) => {
-                        magneticRefs.current.push(el);
+                        magneticRefs.current[index] = el;
                       }}
                       className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 transition-all duration-200 group-hover:border-[#FF6B00]/40 group-hover:bg-[#FF6B00]/10"
                     >
@@ -162,10 +166,10 @@ export default function Footer() {
             </h3>
 
             <a
-              href="mailto:[MY_REAL_EMAIL]"
+              href="mailto:mtmaliktalha2005@gmail.com"
               className="inline-block text-[1.1rem] font-medium text-[#FF6B00] transition-all duration-200 hover:text-white hover:underline"
             >
-              [MY_REAL_EMAIL]
+              mtmaliktalha2005@gmail.com
             </a>
 
             <div className="mt-5 flex items-center gap-2 text-[0.9rem] text-[#B3ACA4]">

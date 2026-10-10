@@ -3,6 +3,7 @@
 import { useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Image from "next/image";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -89,14 +90,12 @@ export default function Hero() {
 
     }, rootRef);
 
-    return () => {
-      ctx.revert();
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    };
+    return () => ctx.revert();
   }, []);
 
   return (
     <section
+      id="top"
       ref={rootRef}
       className="relative overflow-hidden bg-[#050302] text-white"
       aria-label="Introduction"
@@ -122,9 +121,9 @@ export default function Hero() {
               <span>HI, I&apos;M TALHA</span>
             </div>
 
-            <div className="flex flex-col md:flex-row items-center gap-1.5 md:gap-3 text-[#EB5002]">
+            <div className="flex items-center gap-2 text-[#EB5002]">
               <span>FULL-STACK DEVELOPER</span>
-              <span className="hidden md:inline text-white/30">•</span>
+              <span className="text-white/30" aria-hidden="true">·</span>
               <span>AI AUTOMATION</span>
             </div>
           </div>
@@ -185,18 +184,17 @@ export default function Hero() {
         WebkitMaskComposite: "source-in",
       }}
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         src="/images/profile/heroimg.png"
-        alt="Talha Portrait"
-        className="h-full w-full object-cover object-top"
+        alt="Portrait of Talha Malik"
+        fill
+        sizes="(max-width: 640px) 76vw, (max-width: 768px) 68vw, (max-width: 1024px) 52vw, 420px"
+        preload
+        className="object-cover object-top"
       />
     </div>
   </div>
 </div>
-```
-
-
           {/* ── Bottom Content Group ── */}
           <div className="relative z-30 flex w-full max-w-[800px] flex-col items-center">
             <h1
@@ -204,8 +202,7 @@ export default function Hero() {
               data-hero-animate
               className="portfolio-display w-full text-[1.9rem] font-bold leading-[1.05] tracking-[-0.03em] text-white sm:text-[2.6rem] md:text-[3.2rem] lg:text-[4rem]"
             >
-              BUILDING <span className="text-[#EB5002]">IMPACTFUL</span> DIGITAL
-              EXPERIENCES.
+              I build full-stack web apps and automations that work end to end.
             </h1>
 
             <p
@@ -213,31 +210,32 @@ export default function Hero() {
               data-hero-animate
               className="portfolio-copy mt-4 md:mt-5 w-full max-w-[34rem] text-center text-[0.95rem] md:text-[1.15rem] leading-relaxed text-white/75"
             >
-              I build modern web applications, SaaS products and AI-powered
-              automation systems that deliver results.
+              CS student at Iqra University in Karachi. I build with Next.js,
+              Node.js and MongoDB, and I&apos;m focused on making interfaces feel
+              polished and premium.
             </p>
 
             <div className="mt-8 md:mt-10 flex w-full flex-col items-center justify-center gap-4 sm:flex-row">
               <a
-                href="#work"
+                href="#contact"
                 data-hero-cta
                 data-hero-animate
-                className="portfolio-button-label group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-bold border border-[#EB5002] bg-[#EB5002] px-8 py-3.5 text-[0.8rem] md:text-[0.85rem] text-[#0b0b0b] transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.03] focus:outline-none focus:ring-2 focus:ring-[#EB5002]"
+                className="portfolio-button-label group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-bold border border-[#EB5002] bg-[#EB5002] px-8 py-3.5 text-[0.8rem] md:text-[0.85rem] text-[#0b0b0b] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.03] focus:outline-none focus:ring-2 focus:ring-[#EB5002]"
               >
                 <span className="absolute inset-0 -translate-x-[100%] bg-black transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
                 <span className="relative text-[#ffffff] whitespace-nowrap">
-                  VIEW MY WORK
+                  Contact Me
                 </span>
               </a>
 
               <a
-                href="#contact"
+                href="#work"
                 data-hero-cta
                 data-hero-animate
                 className="portfolio-button-label group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-bold border border-white/10 bg-white/[0.02] px-8 py-3.5 text-[0.8rem] md:text-[0.85rem] text-white backdrop-blur-sm transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-white/10 hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-[#EB5002]"
               >
                 <span className="relative whitespace-nowrap">
-                  LET&apos;S WORK TOGETHER
+                  View Work
                 </span>
               </a>
             </div>
