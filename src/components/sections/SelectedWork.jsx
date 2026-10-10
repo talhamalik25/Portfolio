@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { projects } from "./workData";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,33 +13,91 @@ const WorkStageCanvas = dynamic(() => import("./WorkStageCanvas"), {
   loading: () => <div className="h-[460px] rounded-3xl bg-[#0E0C0A]" />,
 });
 
-const detailLabels = [
-  ["problem", "Problem"],
-  ["built", "What I built"],
-  ["stack", "Stack"],
-  ["learned", "What I learned"],
+// TODO: Add each project's role, stack, and approved site description when available.
+const projects = [
+  {
+    number: "01",
+    title: "Sooti Mehal",
+    category: "Fashion / clothing brand website",
+    description: "Live website",
+    details: "",
+    tags: [], // TODO: Add the confirmed stack.
+    liveUrl: "https://sootimehal.com",
+    githubUrl: "",
+    image: "/images/projects/sooti-mehal.jpg",
+    mobileImage: "/images/projects/sooti-mehal-mobile.jpg",
+    alt: "Homepage of Sooti Mehal website",
+    status: "",
+  },
+  {
+    number: "02",
+    title: "Malik Enterprices",
+    category: "",
+    description: "Live website",
+    details: "",
+    tags: [], // TODO: Add the confirmed stack.
+    liveUrl: "https://malikenterprices.com",
+    githubUrl: "",
+    image: "/images/projects/malik-enterprices.jpg",
+    mobileImage: "/images/projects/malik-enterprices-mobile.jpg",
+    alt: "Homepage of Malik Enterprices website",
+    status: "",
+  },
+  {
+    number: "03",
+    title: "New Project",
+    category: "",
+    description: "Coming Soon",
+    details: "",
+    tags: [], // TODO: Fill this project in later.
+    liveUrl: "",
+    githubUrl: "",
+    image: "",
+    mobileImage: "",
+    alt: "",
+    status: "Coming Soon",
+  },
+  {
+    number: "04",
+    title: "New Project",
+    category: "",
+    description: "Coming Soon",
+    details: "",
+    tags: [], // TODO: Fill this project in later.
+    liveUrl: "",
+    githubUrl: "",
+    image: "",
+    mobileImage: "",
+    alt: "",
+    status: "Coming Soon",
+  },
 ];
 
 function ProjectCard({ project }) {
-  const links = [
-    ["Live Demo", project.links.liveDemo],
-    ["GitHub", project.links.github],
-  ].filter(([, href]) => href);
+  const liveUrl = project.liveUrl || "";
+  const githubUrl = project.githubUrl || "";
 
   return (
-    <article className="portfolio-project-card flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#11100F] transition-colors duration-300 hover:border-[#EB5002]/50">
-      <div className="relative flex aspect-[16/10] items-center justify-center overflow-hidden bg-[radial-gradient(ellipse_at_70%_10%,rgba(235,80,2,0.18),transparent_55%),linear-gradient(145deg,#171311,#0B0A09)]">
+    <article className="portfolio-project-card group flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#11100F] transition-colors duration-300 hover:border-[#EB5002]/50">
+      <div className={`relative flex aspect-[16/10] items-center justify-center overflow-hidden ${project.image ? "bg-[#0E0C0A]" : "border border-dashed border-white/15 bg-[radial-gradient(ellipse_at_70%_10%,rgba(235,80,2,0.14),transparent_55%),linear-gradient(145deg,#171311,#0B0A09)]"}`}>
+        {project.image ? (
+          <Image
+            src={project.image}
+            alt={project.alt}
+            width={1440}
+            height={900}
+            sizes="(max-width: 768px) 100vw, (max-width: 1279px) 50vw, 33vw"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+          />
+        ) : null}
         <span className="absolute left-5 top-5 text-xs font-semibold tracking-[0.2em] text-white/55">
           {project.number}
         </span>
-        {project.status === "In Progress" && (
+        {project.status && (
           <span className="absolute right-4 top-4 rounded-full border border-[#EB5002]/40 bg-[#EB5002]/10 px-3 py-1 text-xs font-semibold text-[#FF7A36]">
             {project.status}
           </span>
         )}
-        <p className="rounded-full border border-white/15 bg-black/20 px-4 py-2 text-xs font-medium text-white/60">
-          TODO: add screenshot
-        </p>
       </div>
 
       <div className="flex flex-1 flex-col p-5 sm:p-6">
@@ -47,50 +105,56 @@ function ProjectCard({ project }) {
           <h3 className="portfolio-display text-2xl font-bold leading-tight tracking-[-0.04em] text-white">
             {project.title}
           </h3>
-          {project.status && project.status !== "In Progress" && (
-            <span className="shrink-0 text-xs text-white/45">{project.status}</span>
+          {project.category && (
+            <span className="shrink-0 text-right text-xs text-white/45">{project.category}</span>
           )}
         </div>
         <p className="portfolio-copy min-h-[3.2rem] text-[0.96rem] leading-relaxed text-white/65">
           {project.description}
         </p>
 
-        <ul className="mt-5 flex flex-wrap gap-2" aria-label={`${project.title} technologies`}>
-          {(project.tags.length ? project.tags : ["TODO: confirm stack"]).map((tag) => (
-            <li key={tag} className="rounded-full border border-white/10 px-3 py-1.5 text-xs text-white/60">
-              {tag}
-            </li>
-          ))}
-        </ul>
-
-        <details className="group mt-5 border-t border-white/10 pt-4">
-          <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between text-sm font-semibold text-white/80 transition-colors hover:text-[#FF7A36] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#EB5002]">
-            Details
-            <span aria-hidden="true" className="text-[#EB5002] transition-transform group-open:rotate-45">+</span>
-          </summary>
-          <dl className="space-y-4 pb-2 pt-3">
-            {detailLabels.map(([key, label]) => (
-              <div key={key}>
-                <dt className="mb-1 text-xs font-semibold uppercase tracking-[0.14em] text-white/45">{label}</dt>
-                <dd className="text-sm leading-relaxed text-white/75">{project.details[key]}</dd>
-              </div>
+        {project.tags.length > 0 && (
+          <ul className="mt-5 flex flex-wrap gap-2" aria-label={`${project.title} technologies`}>
+            {project.tags.map((tag) => (
+              <li key={tag} className="rounded-full border border-white/10 px-3 py-1.5 text-xs text-white/60">
+                {tag}
+              </li>
             ))}
-          </dl>
-        </details>
+          </ul>
+        )}
 
-        {links.length > 0 && (
+        {project.details ? (
+          <details className="group mt-5 border-t border-white/10 pt-4">
+            <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between text-sm font-semibold text-white/80 transition-colors hover:text-[#FF7A36] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#EB5002]">
+              Details
+              <span aria-hidden="true" className="text-[#EB5002] transition-transform group-open:rotate-45">+</span>
+            </summary>
+            <p className="pb-2 pt-3 text-sm leading-relaxed text-white/75">{project.details}</p>
+          </details>
+        ) : null}
+
+        {(liveUrl || githubUrl) && (
           <div className="mt-auto flex flex-wrap gap-3 pt-5">
-            {links.map(([label, href]) => (
+            {liveUrl ? (
               <a
-                key={label}
-                href={href}
+                href={liveUrl}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="inline-flex min-h-11 items-center rounded-full border border-white/15 px-4 text-sm font-semibold text-white transition-colors hover:border-[#EB5002] hover:text-[#FF7A36] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EB5002]"
               >
-                {label}
+                Live Site
               </a>
-            ))}
+            ) : null}
+            {githubUrl ? (
+              <a
+                href={githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-11 items-center rounded-full border border-white/15 px-4 text-sm font-semibold text-white transition-colors hover:border-[#EB5002] hover:text-[#FF7A36] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EB5002]"
+              >
+                GitHub
+              </a>
+            ) : null}
           </div>
         )}
       </div>

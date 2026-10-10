@@ -1,5 +1,5 @@
 import {
-  SiCss3,
+  SiCss,
   SiExpress,
   SiFigma,
   SiGit,
@@ -22,7 +22,7 @@ const groups = [
     title: "Frontend",
     technologies: [
       { name: "HTML", Icon: SiHtml5 },
-      { name: "CSS", Icon: SiCss3 },
+      { name: "CSS", Icon: SiCss },
       { name: "JavaScript", Icon: SiJavascript },
       { name: "React", Icon: SiReact },
       { name: "Next.js", Icon: SiNextdotjs },
