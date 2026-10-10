@@ -5,22 +5,28 @@ import Capabilities from "@/src/components/sections/Capabilities";
 import SelectedWork from "@/src/components/sections/SelectedWork";
 import Stack from "@/src/components/sections/Stack";
 import Journey from "@/src/components/sections/Journey";
-import FinalCta from "@/src/components/sections/FinalCta";
 import Contact from "@/src/components/sections/Contact";
 import Footer from "@/src/components/sections/Footer";
 
 export default function Home() {
   return (
     <>
+      <a
+        href="#main-content"
+        className="skip-link"
+      >
+        Skip to content
+      </a>
       <Navbar />
-      <Hero />
-      <SelectedWork />
-      <About />
-      <Capabilities />
-      <Stack />
-      <Journey />
-      <FinalCta />
-      <Contact />
+      <main id="main-content" tabIndex={-1}>
+        <Hero />
+        <SelectedWork />
+        <About />
+        <Capabilities />
+        <Stack />
+        <Journey />
+        <Contact />
+      </main>
       <Footer />
     </>
   );

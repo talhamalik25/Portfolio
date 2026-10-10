@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -10,7 +10,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const WorkStageCanvas = dynamic(() => import("./WorkStageCanvas"), {
   ssr: false,
-  loading: () => <div className="h-[340px] rounded-3xl bg-[#0E0C0A] lg:h-[360px]" />,
+  loading: () => <div className="h-[460px] rounded-3xl bg-[#0E0C0A]" />,
 });
 
 const detailLabels = [
@@ -100,6 +100,24 @@ function ProjectCard({ project }) {
 
 export default function SelectedWork() {
   const sectionRef = useRef(null);
+  const [showCanvas, setShowCanvas] = useState(false);
+
+  useEffect(() => {
+    const desktopQuery = window.matchMedia("(min-width: 1024px)");
+    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updateCanvasVisibility = () => {
+      setShowCanvas(desktopQuery.matches && !reducedMotionQuery.matches);
+    };
+
+    updateCanvasVisibility();
+    desktopQuery.addEventListener("change", updateCanvasVisibility);
+    reducedMotionQuery.addEventListener("change", updateCanvasVisibility);
+
+    return () => {
+      desktopQuery.removeEventListener("change", updateCanvasVisibility);
+      reducedMotionQuery.removeEventListener("change", updateCanvasVisibility);
+    };
+  }, []);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -133,7 +151,11 @@ export default function SelectedWork() {
         </header>
 
         <div className="mb-10 hidden overflow-hidden rounded-3xl border border-white/10 lg:block" aria-hidden="true">
-          <WorkStageCanvas activeIndex={0} />
+          {showCanvas ? (
+            <WorkStageCanvas activeIndex={0} />
+          ) : (
+            <div className="h-[460px] bg-[#0E0C0A]" />
+          )}
         </div>
 
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">

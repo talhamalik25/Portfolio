@@ -67,6 +67,10 @@ export default function Hero() {
           "-=0.2"
         );
 
+      const setHeroWordY = gsap.quickSetter("[data-hero-word]", "y", "px");
+      const setHeroVisualY = gsap.quickSetter("[data-hero-visual]", "y", "px");
+      const setHeroPositionY = gsap.quickSetter("[data-hero-position]", "y", "px");
+
       ScrollTrigger.create({
         trigger: rootRef.current,
         start: "top top",
@@ -74,9 +78,9 @@ export default function Hero() {
         scrub: 1,
         onUpdate: (self) => {
           const offset = self.progress * 150;
-          gsap.to("[data-hero-word]", { y: offset * 0.4, ease: "power1.out", overwrite: "auto" });
-          gsap.to("[data-hero-visual]", { y: offset * 0.2, ease: "power1.out", overwrite: "auto" });
-          gsap.to("[data-hero-position]", { y: offset * 0.1, ease: "power1.out", overwrite: "auto" });
+          setHeroWordY(offset * 0.4);
+          setHeroVisualY(offset * 0.2);
+          setHeroPositionY(offset * 0.1);
         },
       });
       

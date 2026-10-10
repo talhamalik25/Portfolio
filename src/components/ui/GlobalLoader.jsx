@@ -26,7 +26,7 @@ export default function GlobalLoader() {
     let exitTween;
     const timeoutId = window.setTimeout(() => {
       ctx = gsap.context(() => {
-        gsap.timeline({
+        const tl = gsap.timeline({
           onComplete: () => {
             // Unlock scroll
             document.body.style.overflow = "";
@@ -78,10 +78,11 @@ export default function GlobalLoader() {
   return (
     <div
       ref={containerRef}
+      aria-hidden="true"
       className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#0b0b0b] text-white"
     >
       <div className="flex flex-col items-center">
-        <h1 className="portfolio-display text-5xl md:text-7xl mb-2 text-[#f5f5f5]">TALHA</h1>
+        <p className="portfolio-display text-5xl md:text-7xl mb-2 text-[#f5f5f5]">TALHA</p>
         <p className="portfolio-kicker max-w-[calc(100vw-2rem)] px-4 text-center text-[#f5f5f5]/70">
           FULL-STACK DEVELOPER / AI AUTOMATION
         </p>

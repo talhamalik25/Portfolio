@@ -8,7 +8,7 @@ import SplitType from "split-type";
 gsap.registerPlugin(ScrollTrigger);
 
 const INTRO_TEXT =
-  "I'm not just writing code — I'm building systems that solve real problems. As a full-stack developer and AI automation specialist, I turn ideas into scalable digital products, blending clean engineering with intelligent automation to deliver outcomes that matter.";
+  "I'm a Computer Science student in Karachi who learns by building. I've shipped full-stack projects with authentication, carts, orders and admin panels, and I'm now focused on writing cleaner code, understanding it deeply, and building products that feel polished. I enjoy motion-driven interfaces with GSAP and Three.js, and I'm exploring AI automation with n8n."
 
 export default function About() {
   const sectionRef = useRef(null);
@@ -24,7 +24,7 @@ export default function About() {
     }
 
     let splitText;
-    
+
     // Minor delay guarantees DOM has fully painted on Next.js client renders
     // avoiding the silent width-calculation issues with SplitType
     const timeout = setTimeout(() => {
@@ -47,7 +47,7 @@ export default function About() {
           overlay.style.color = "#FF6B00"; // orange accent
           overlay.style.clipPath = "inset(0 100% 0 0)";
           // Ensure it doesn't wrap or misalign if padding/margins exist
-          overlay.style.whiteSpace = "nowrap"; 
+          overlay.style.whiteSpace = "nowrap";
           line.appendChild(overlay);
         });
 
@@ -76,7 +76,7 @@ export default function About() {
       clearTimeout(timeout);
       // Remove any artificially appended DOM nodes so SplitType can revert cleanly
       document.querySelectorAll(".reveal-overlay").forEach((el) => el.remove());
-      
+
       if (paragraph._gsapCtx) {
         paragraph._gsapCtx.revert();
       }
@@ -94,7 +94,7 @@ export default function About() {
       aria-label="About"
     >
       <div className="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8">
-        
+
         {/* Eyebrow Label */}
         <p className="portfolio-kicker mb-8 flex items-center gap-3 text-[#EB5002] text-[0.65rem] sm:text-[0.75rem] font-bold uppercase tracking-[0.2em]">
           <span
@@ -113,7 +113,7 @@ export default function About() {
             {INTRO_TEXT}
           </p>
         </div>
-        
+
         {/* Supporting Images and Call To Action */}
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-16 items-center">
           {/* Two placeholder workspace images */}
@@ -125,22 +125,22 @@ export default function About() {
               <span className="text-[#1A1613]/30 font-mono text-sm tracking-widest uppercase">workspace-2</span>
             </div>
           </div>
-          
+
           <div className="lg:col-span-5 flex flex-col justify-center max-w-[400px]">
-             <h3 className="mb-8 text-3xl md:text-[2.2rem] lg:text-[2.6rem] font-bold leading-[1.1] tracking-[-0.03em] text-[#111111]">
-               Full-Stack Development <span className="text-[#EB5002]">&amp;</span> AI Automation
-             </h3>
-             <div className="flex">
-               <a
-                 href="#work"
-                 className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-[#EB5002] px-8 py-4 font-bold tracking-[0.05em] text-[#0b0b0b] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#EB5002]"
-               >
-                 <span className="absolute inset-0 -translate-x-[105%] bg-[#000000] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
-                 <span className="relative text-[#0b0b0b] transition-colors duration-400 ease-out group-hover:text-white whitespace-nowrap">
-                   View My Work <span aria-hidden="true" className="ml-1 inline-block transition-transform duration-400 ease-out group-hover:translate-x-1">→</span>
-                 </span>
-               </a>
-             </div>
+            <h3 className="mb-8 text-3xl md:text-[2.2rem] lg:text-[2.6rem] font-bold leading-[1.1] tracking-[-0.03em] text-[#111111]">
+              Full-Stack Development <span className="text-[#EB5002]">&amp;</span> AI Automation
+            </h3>
+            <div className="flex">
+              <a
+                href="#work"
+                className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-[#EB5002] px-8 py-4 font-bold tracking-[0.05em] text-[#0b0b0b] transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#EB5002]"
+              >
+                <span className="absolute inset-0 -translate-x-[105%] bg-[#000000] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
+                <span className="relative text-[#0b0b0b] transition-colors duration-400 ease-out group-hover:text-white whitespace-nowrap">
+                  View My Work <span aria-hidden="true" className="ml-1 inline-block transition-transform duration-400 ease-out group-hover:translate-x-1">→</span>
+                </span>
+              </a>
+            </div>
           </div>
         </div>
       </div>

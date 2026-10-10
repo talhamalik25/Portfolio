@@ -107,7 +107,7 @@ export default function Navbar() {
                     <a
                       href={item.href}
                       aria-label={item.label}
-                      className={`group relative inline-flex items-center overflow-hidden text-[0.7rem] font-medium uppercase tracking-[0.12em] transition-all duration-300 ${
+                      className={`group relative inline-flex items-center overflow-hidden text-[0.7rem] font-medium uppercase tracking-[0.12em] transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#EB5002] ${
                         isActive
                           ? "text-white"
                           : "text-white/50 hover:text-[#EB5002]"
@@ -226,7 +226,7 @@ export default function Navbar() {
                     <a
                       href={item.href}
                       onClick={handleNavClick}
-                      className="group flex items-center justify-between border-b border-white/8 py-3 text-[1.7rem] font-semibold uppercase tracking-[0.12em] text-white/90 transition-colors duration-200 hover:text-[#EB5002]"
+                      className="group flex items-center justify-between border-b border-white/8 py-3 text-[1.7rem] font-semibold uppercase tracking-[0.12em] text-white/90 transition-colors duration-200 hover:text-[#EB5002] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EB5002]"
                     >
                       <span>{item.label}</span>
                       <span className="text-[0.7rem] font-medium tracking-[0.2em] text-[#EB5002]">{item.number}</span>
@@ -238,7 +238,7 @@ export default function Navbar() {
               <a
                 href="#contact"
                 onClick={handleNavClick}
-                className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full border border-white/10 bg-[#111111] px-5 py-3.5 text-[0.7rem] font-medium uppercase tracking-[0.18em] text-white opacity-0 translate-y-[16px] transition-all duration-420 ease-[cubic-bezier(0.22,1,0.36,1)] focus:outline-none focus:ring-2 focus:ring-[#EB5002] focus:ring-offset-2 focus:ring-offset-[#0b0b0b]"
+                className={`group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full border border-white/10 bg-[#111111] px-5 py-3.5 text-[0.7rem] font-medium uppercase tracking-[0.18em] text-white transition-all duration-420 ease-[cubic-bezier(0.22,1,0.36,1)] focus:outline-none focus:ring-2 focus:ring-[#EB5002] focus:ring-offset-2 focus:ring-offset-[#0b0b0b] ${isMobileMenuOpen ? "translate-y-0 opacity-100" : "translate-y-[16px] opacity-0"}`}
                 style={{ transitionDelay: "160ms" }}
               >
                 <span className={[

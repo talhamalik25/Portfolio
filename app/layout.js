@@ -3,14 +3,23 @@ import GlobalLoader from "@/src/components/ui/GlobalLoader";
 import ScrollProgress from "@/src/components/ui/ScrollProgress";
 
 export const metadata = {
-  title: "Talha Malik — Full-Stack Developer & AI Automation",
+  title: "Talha Malik — Full-Stack Developer",
   description:
-    "I build modern web applications, SaaS products and AI-powered automation systems. Based in Karachi, Pakistan.",
+    "CS student at Iqra University in Karachi, building full-stack web apps with Next.js, Node.js and MongoDB, and focused on polished, premium interfaces.",
   openGraph: {
-    title: "Talha Malik — Full-Stack Developer & AI Automation",
+    title: "Talha Malik — Full-Stack Developer",
     description:
-      "I build modern web applications, SaaS products and AI-powered automation systems. Based in Karachi, Pakistan.",
+      "CS student at Iqra University in Karachi, building full-stack web apps with Next.js, Node.js and MongoDB, and focused on polished, premium interfaces.",
     type: "website",
+    // TODO: Add the image at public/images/og-image.png.
+    images: ["/images/og-image.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Talha Malik — Full-Stack Developer",
+    description:
+      "CS student at Iqra University in Karachi, building full-stack web apps with Next.js, Node.js and MongoDB, and focused on polished, premium interfaces.",
+    images: ["/images/og-image.png"],
   },
 };
 
