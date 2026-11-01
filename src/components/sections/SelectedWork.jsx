@@ -1,6 +1,7 @@
 "use client";
+import { useMotionEffect } from "@/src/hooks/useMotionEffect";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import gsap from "gsap";
@@ -13,72 +14,15 @@ const WorkStageCanvas = dynamic(() => import("./WorkStageCanvas"), {
   loading: () => <div className="h-[460px] rounded-3xl bg-[#0E0C0A]" />,
 });
 
-// TODO: Add each project's role, stack, and approved site description when available.
-const projects = [
-  {
-    number: "01",
-    title: "Sooti Mehal",
-    category: "Fashion / clothing brand website",
-    description: "Live website",
-    details: "",
-    tags: [], // TODO: Add the confirmed stack.
-    liveUrl: "https://sootimehal.com",
-    githubUrl: "",
-    image: "/images/projects/sooti-mehal.jpg",
-    mobileImage: "/images/projects/sooti-mehal-mobile.jpg",
-    alt: "Homepage of Sooti Mehal website",
-    status: "",
-  },
-  {
-    number: "02",
-    title: "Malik Enterprices",
-    category: "",
-    description: "Live website",
-    details: "",
-    tags: [], // TODO: Add the confirmed stack.
-    liveUrl: "https://malikenterprices.com",
-    githubUrl: "",
-    image: "/images/projects/malik-enterprices.jpg",
-    mobileImage: "/images/projects/malik-enterprices-mobile.jpg",
-    alt: "Homepage of Malik Enterprices website",
-    status: "",
-  },
-  {
-    number: "03",
-    title: "New Project",
-    category: "",
-    description: "Coming Soon",
-    details: "",
-    tags: [], // TODO: Fill this project in later.
-    liveUrl: "",
-    githubUrl: "",
-    image: "",
-    mobileImage: "",
-    alt: "",
-    status: "Coming Soon",
-  },
-  {
-    number: "04",
-    title: "New Project",
-    category: "",
-    description: "Coming Soon",
-    details: "",
-    tags: [], // TODO: Fill this project in later.
-    liveUrl: "",
-    githubUrl: "",
-    image: "",
-    mobileImage: "",
-    alt: "",
-    status: "Coming Soon",
-  },
-];
+import Link from "next/link";
+import { projects } from "@/data/projects";
 
-function ProjectCard({ project }) {
+function ProjectCard({ project, onSelect }) {
   const liveUrl = project.liveUrl || "";
   const githubUrl = project.githubUrl || "";
 
   return (
-    <article className="portfolio-project-card group flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#11100F] transition-colors duration-300 hover:border-[#EB5002]/50">
+    <article onMouseEnter={onSelect} onFocus={onSelect} className="portfolio-project-card group flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#11100F] transition-colors duration-300 hover:border-[#EB5002]/50">
       <div className={`relative flex aspect-[16/10] items-center justify-center overflow-hidden ${project.image ? "bg-[#0E0C0A]" : "border border-dashed border-white/15 bg-[radial-gradient(ellipse_at_70%_10%,rgba(235,80,2,0.14),transparent_55%),linear-gradient(145deg,#171311,#0B0A09)]"}`}>
         {project.image ? (
           <Image
@@ -103,19 +47,19 @@ function ProjectCard({ project }) {
       <div className="flex flex-1 flex-col p-5 sm:p-6">
         <div className="mb-3 flex items-center justify-between gap-3">
           <h3 className="portfolio-display text-2xl font-bold leading-tight tracking-[-0.04em] text-white">
-            {project.title}
+            <Link href={`/work/${project.slug}`}>{project.title}</Link>
           </h3>
           {project.category && (
             <span className="shrink-0 text-right text-xs text-white/45">{project.category}</span>
           )}
         </div>
         <p className="portfolio-copy min-h-[3.2rem] text-[0.96rem] leading-relaxed text-white/65">
-          {project.description}
+          {project.summary}
         </p>
 
-        {project.tags.length > 0 && (
+        {project.stack.length > 0 && (
           <ul className="mt-5 flex flex-wrap gap-2" aria-label={`${project.title} technologies`}>
-            {project.tags.map((tag) => (
+            {project.stack.map((tag) => (
               <li key={tag} className="rounded-full border border-white/10 px-3 py-1.5 text-xs text-white/60">
                 {tag}
               </li>
@@ -133,6 +77,7 @@ function ProjectCard({ project }) {
           </details>
         ) : null}
 
+        <Link href={`/work/${project.slug}`} className="mt-5 inline-flex min-h-11 items-center text-sm text-[#FF7A36]">View case study →</Link>
         {(liveUrl || githubUrl) && (
           <div className="mt-auto flex flex-wrap gap-3 pt-5">
             {liveUrl ? (
@@ -164,6 +109,7 @@ function ProjectCard({ project }) {
 
 export default function SelectedWork() {
   const sectionRef = useRef(null);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [showCanvas, setShowCanvas] = useState(false);
 
   useEffect(() => {
@@ -183,7 +129,7 @@ export default function SelectedWork() {
     };
   }, []);
 
-  useEffect(() => {
+  useMotionEffect(useCallback(() => {
     const section = sectionRef.current;
     if (!section || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
@@ -199,8 +145,7 @@ export default function SelectedWork() {
     }, section);
 
     return () => context.revert();
-  }, []);
-
+  }, []));
   return (
     <section id="work" ref={sectionRef} className="border-t border-white/10 bg-[#0A0A0A] py-20 text-white sm:py-24 lg:py-28" aria-labelledby="work-heading">
       <div className="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8">
@@ -210,20 +155,33 @@ export default function SelectedWork() {
             Projects I&apos;ve <span className="text-[#EB5002]">Built.</span>
           </h2>
           <p className="portfolio-copy mt-5 max-w-2xl text-base leading-relaxed text-white/65 sm:text-lg">
-            A few personal projects, built while learning full-stack development.
+            Selected websites and product work, with notes on my role and implementation.
           </p>
         </header>
 
-        <div className="mb-10 hidden overflow-hidden rounded-3xl border border-white/10 lg:block" aria-hidden="true">
+        <div className="mb-10 hidden overflow-hidden rounded-3xl border border-white/10 lg:block">
           {showCanvas ? (
-            <WorkStageCanvas activeIndex={0} />
+            <WorkStageCanvas activeIndex={activeIndex} onSelect={setActiveIndex} />
           ) : (
             <div className="h-[460px] bg-[#0E0C0A]" />
           )}
         </div>
 
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {projects.map((project) => <ProjectCard key={project.title} project={project} />)}
+        {showCanvas && <div className="mb-10">
+          <div className="mb-4 flex flex-wrap gap-3" aria-label="Select a project">
+            {projects.map((project, index) => <button type="button" key={project.slug} onClick={() => setActiveIndex(index)} onFocus={() => setActiveIndex(index)} aria-pressed={activeIndex === index} className="min-h-11 rounded-full border border-white/20 px-4 text-sm aria-pressed:border-[#EB5002]">{project.title}</button>)}
+          </div>
+          <div aria-live="polite"><p className="text-white/75">{projects[activeIndex].summary}</p>
+            <ul className="my-3 flex flex-wrap gap-2">{projects[activeIndex].stack.map((item) => <li key={item} className="rounded-full border border-white/15 px-3 py-1 text-xs">{item}</li>)}</ul>
+            <div className="flex gap-5 text-sm text-[#FF7A36]">
+              <Link href={`/work/${projects[activeIndex].slug}`}>View case study →</Link>
+              {projects[activeIndex].liveUrl && <a href={projects[activeIndex].liveUrl} target="_blank" rel="noopener noreferrer">Live ↗</a>}
+              {projects[activeIndex].githubUrl && <a href={projects[activeIndex].githubUrl} target="_blank" rel="noopener noreferrer">GitHub ↗</a>}
+            </div>
+          </div>
+        </div>}
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-2">
+          {projects.map((project, index) => <ProjectCard key={project.slug} project={project} onSelect={() => setActiveIndex(index)} />)}
         </div>
       </div>
     </section>

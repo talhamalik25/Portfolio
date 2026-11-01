@@ -1,6 +1,7 @@
 "use client";
+import { useMotionEffect } from "@/src/hooks/useMotionEffect";
 
-import { useEffect, useRef } from "react";
+import { useCallback, useRef } from "react";
 import { Bot, Code2, Palette } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -36,7 +37,7 @@ const capabilities = [
 export default function Capabilities() {
   const sectionRef = useRef(null);
 
-  useEffect(() => {
+  useMotionEffect(useCallback(() => {
     const section = sectionRef.current;
     if (!section || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
@@ -52,8 +53,7 @@ export default function Capabilities() {
     }, section);
 
     return () => context.revert();
-  }, []);
-
+  }, []));
   return (
     <section
       id="services"

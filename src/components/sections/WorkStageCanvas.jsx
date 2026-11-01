@@ -1,12 +1,12 @@
 "use client";
 
-import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { RoundedBox } from "@react-three/drei";
 import * as THREE from "three";
 import { projects } from "./workData";
 
-const ProjectPlane = memo(function ProjectPlane({ index, activeIndex, palette }) {
+const ProjectPlane = memo(function ProjectPlane({ index, activeIndex, palette, onSelect }) {
   const meshRef = useRef(null);
   const materialRef = useRef(null);
 
@@ -48,6 +48,8 @@ const ProjectPlane = memo(function ProjectPlane({ index, activeIndex, palette })
   return (
     <RoundedBox
       ref={meshRef}
+      onClick={(event) => { event.stopPropagation(); onSelect(index); }}
+      onPointerOver={(event) => { event.stopPropagation(); onSelect(index); }}
       args={[2.55, 1.62, 0.1]}
       radius={0.08}
       smoothness={3}
@@ -109,7 +111,7 @@ const DustField = memo(function DustField() {
   );
 });
 
-function StageScene({ activeIndex, mouse }) {
+function StageScene({ activeIndex, mouse, onSelect }) {
   const groupRef = useRef(null);
   const fillRef = useRef(null);
   const fillColor = useRef(new THREE.Color(projects[0].palette.mid));
@@ -152,6 +154,7 @@ function StageScene({ activeIndex, mouse }) {
             index={index}
             activeIndex={activeIndex}
             palette={project.palette}
+            onSelect={onSelect}
           />
         ))}
       </group>
@@ -159,7 +162,7 @@ function StageScene({ activeIndex, mouse }) {
   );
 }
 
-export default function WorkStageCanvas({ activeIndex }) {
+export default function WorkStageCanvas({ activeIndex, onSelect }) {
   const wrapRef = useRef(null);
   const mouse = useRef({ x: 0, y: 0 });
   const [enabled, setEnabled] = useState(false);
@@ -189,7 +192,7 @@ export default function WorkStageCanvas({ activeIndex }) {
       ref={wrapRef}
       onMouseMove={handleMove}
       onMouseLeave={handleLeave}
-      className="relative h-full min-h-[340px] w-full overflow-hidden rounded-[28px] bg-[#0E0C0A] lg:min-h-[460px]"
+      className="relative h-[340px] lg:h-[460px] min-h-[340px] w-full overflow-hidden rounded-[28px] bg-[#0E0C0A] lg:min-h-[460px]"
     >
       {enabled ? (
         <Canvas
@@ -206,7 +209,7 @@ export default function WorkStageCanvas({ activeIndex }) {
             gl.setClearColor("#0E0C0A", 1);
           }}
         >
-          <StageScene activeIndex={activeIndex} mouse={mouse} />
+          <StageScene activeIndex={activeIndex} mouse={mouse} onSelect={onSelect} />
         </Canvas>
       ) : null}
       <div className="pointer-events-none absolute inset-0 rounded-[28px] ring-1 ring-white/10" />

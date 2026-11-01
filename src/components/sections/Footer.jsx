@@ -1,6 +1,7 @@
 "use client";
+import { useMotionEffect } from "@/src/hooks/useMotionEffect";
 
-import { useEffect, useRef } from "react";
+import { useCallback, useRef } from "react";
 import { MapPin, ArrowUpRight } from "lucide-react";
 import { SiGithub, SiGmail } from "react-icons/si";
 import { FaLinkedinIn } from "react-icons/fa6";
@@ -29,7 +30,8 @@ export default function Footer() {
   const watermarkRef = useRef(null);
   const magneticRefs = useRef([]);
 
-  useEffect(() => {
+  useMotionEffect(useCallback(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const removePointerListeners = [];
     const ctx = gsap.context(() => {
       if (watermarkRef.current) {
@@ -83,8 +85,7 @@ export default function Footer() {
       removePointerListeners.forEach((removeListeners) => removeListeners());
       ctx.revert();
     };
-  }, []);
-
+  }, []));
   return (
     <footer
       ref={footerRef}
@@ -108,7 +109,7 @@ export default function Footer() {
 
             <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-[#EB5002]/20 bg-[#EB5002]/10 px-3 py-1.5 text-[0.64rem] font-semibold uppercase tracking-[0.18em] text-[#FF6B00]">
               <span className="inline-block h-2 w-2 rounded-full bg-[#FF6B00]" aria-hidden="true" />
-              Open to internships and selected projects
+              Frontend Developer at AKTech — open to selected projects
             </div>
           </div>
 
@@ -191,7 +192,7 @@ export default function Footer() {
           </a>
         </div>
       </div>
-      <div ref={watermarkRef} className="pointer-events-none absolute inset-x-0 bottom-10 z-10 select-none text-center text-[clamp(8rem,16vw,20rem)] font-black uppercase leading-none tracking-[-0.08em] text-[#FF6B00]">
+      <div ref={watermarkRef} className="pointer-events-none absolute inset-x-0 bottom-10 z-10 select-none text-center text-[clamp(8rem,16vw,20rem)] font-black uppercase leading-none tracking-[-0.08em] text-[#FF6B00] opacity-10">
         TALHA
       </div>
     </footer>

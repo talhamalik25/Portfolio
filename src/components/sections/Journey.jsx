@@ -1,6 +1,7 @@
 "use client";
+import { useMotionEffect } from "@/src/hooks/useMotionEffect";
 
-import { useEffect, useRef } from "react";
+import { useCallback, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -8,25 +9,25 @@ gsap.registerPlugin(ScrollTrigger);
 
 const milestones = [
   {
-    year: "TODO: year",
+    year: "[FILL: year]",
     label: "First Projects",
     title: "Started with HTML, CSS and JavaScript",
     description: "Built my first static projects.",
   },
   {
-    year: "TODO: year",
+    year: "2026",
     label: "Computer Science",
     title: "Began BS Computer Science at Iqra University",
     description: "Currently in my 2nd semester (October 2026).",
   },
   {
-    year: "TODO: year",
+    year: "",
     label: "Frontend",
     title: "Learned React, Next.js and Tailwind CSS",
     description: "",
   },
   {
-    year: "TODO: year",
+    year: "",
     label: "Full-Stack Projects",
     title: "Built full-stack projects",
     description: "Worked with Node.js, Express and MongoDB.",
@@ -36,6 +37,12 @@ const milestones = [
     label: "Current Focus",
     title: "Strengthening my JavaScript fundamentals",
     description: "Focused on backend development and AI automation.",
+  },
+  {
+    year: "Now",
+    label: "AKTech Digital Solutions",
+    title: "Frontend Developer at AKTech",
+    description: "Building web interfaces alongside my BS CS studies at Iqra University, Karachi.",
   },
   {
     year: "Next",
@@ -56,14 +63,15 @@ export default function Journey() {
   const pathRef = useRef(null);
   const nodeRefs = useRef([]);
 
-  useEffect(() => {
+  useMotionEffect(useCallback(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const ctx = gsap.context(() => {
       const path = pathRef.current;
       const nodes = nodeRefs.current.filter(Boolean);
       if (!path || nodes.length === 0) return undefined;
 
       const updatePath = () => {
-        const sectionRect = sectionRef.current.getBoundingClientRect();
+        const sectionRect = path.ownerSVGElement.getBoundingClientRect();
         const width = sectionRect.width;
         const height = sectionRect.height;
 
@@ -169,8 +177,7 @@ export default function Journey() {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
-
+  }, []));
   return (
     <section
       id="journey"
@@ -231,7 +238,7 @@ export default function Journey() {
                       className="timeline-card rounded-[1.5rem] border border-[#1B1714]/8 bg-white p-5 shadow-[0_18px_40px_rgba(17,17,17,0.05)]"
                     >
                       <div className="mb-4 flex items-center justify-between gap-3">
-                        <span className="inline-flex rounded-full border border-[#EB5002]/15 bg-[#EB5002]/10 px-2.5 py-1 text-[0.64rem] font-bold uppercase tracking-[0.18em] text-[#EB5002]">
+                        <span style={{ display: item.year ? undefined : "none" }} className="inline-flex rounded-full border border-[#EB5002]/15 bg-[#EB5002]/10 px-2.5 py-1 text-[0.64rem] font-bold uppercase tracking-[0.18em] text-[#EB5002]">
                           {item.year}
                         </span>
                         <span className="text-[0.64rem] font-semibold uppercase tracking-[0.16em] text-[#8A817B]">
@@ -263,13 +270,13 @@ export default function Journey() {
                   >
                     <div
                       className={[
-                        "timeline-card relative rounded-[1.5rem] border border-[#1B1714]/8 bg-white p-5 shadow-[0_18px_40px_rgba(17,17,17,0.05)] sm:p-6",
+                        "timeline-card relative row-start-1 rounded-[1.5rem] border border-[#1B1714]/8 bg-white p-5 shadow-[0_18px_40px_rgba(17,17,17,0.05)] sm:p-6",
                         isLeft ? "col-start-1 mr-10 justify-self-end" : "col-start-3 ml-10",
                       ].join(" ")}
                       style={{ maxWidth: "420px" }}
                     >
                       <div className="mb-4 flex items-center justify-between gap-3">
-                        <span className="inline-flex rounded-full border border-[#EB5002]/15 bg-[#EB5002]/10 px-2.5 py-1 text-[0.64rem] font-bold uppercase tracking-[0.18em] text-[#EB5002]">
+                        <span style={{ display: item.year ? undefined : "none" }} className="inline-flex rounded-full border border-[#EB5002]/15 bg-[#EB5002]/10 px-2.5 py-1 text-[0.64rem] font-bold uppercase tracking-[0.18em] text-[#EB5002]">
                           {item.year}
                         </span>
                         <span className="text-[0.64rem] font-semibold uppercase tracking-[0.16em] text-[#8A817B]">
@@ -286,7 +293,7 @@ export default function Journey() {
                       </p>
                     </div>
 
-                    <div className="relative flex items-center justify-center py-4">
+                    <div className="relative col-start-2 row-start-1 flex items-center justify-center py-4">
                       <div
                         ref={(el) => {
                           nodeRefs.current[index] = el;

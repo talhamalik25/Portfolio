@@ -1,3 +1,11 @@
+import Experience from "@/src/components/sections/Experience";
+import Education from "@/src/components/sections/Education";
+import Process from "@/src/components/sections/Process";
+import GitHub from "@/src/components/sections/GitHub";
+import FAQ from "@/src/components/sections/FAQ";
+import CTA from "@/src/components/sections/CTA";
+import Testimonials from "@/src/components/sections/Testimonials";
+import ResumeLink from "@/src/components/ui/ResumeLink";
 import Navbar from "@/src/components/layout/Navbar";
 import Hero from "@/src/components/sections/Hero";
 import About from "@/src/components/sections/About";
@@ -21,11 +29,18 @@ export default function Home() {
       <main id="main-content" tabIndex={-1}>
         <Hero />
         <SelectedWork />
-        <About />
+        <Experience />
         <Capabilities />
+        <About />
+        <Education />
+        <Process />
         <Stack />
+        <GitHub />
         <Journey />
-        <Contact />
+        <FAQ />
+        <Testimonials />
+        <CTA />
+        <Contact resumeLink={<ResumeLink />} />
       </main>
       <Footer />
     </>

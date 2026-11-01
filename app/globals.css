@@ -134,3 +134,12 @@ a {
   text-transform: uppercase;
   font-weight: 600;
 }
+
+:where(a, button, input, textarea, summary):focus-visible { outline: 2px solid #eb5002; outline-offset: 4px; }
+section[id] { scroll-margin-top: 6rem; }
+.portfolio-project-card { min-width: 0; }
+.portfolio-project-card:focus-within { border-color: #eb5002; }
+@media (prefers-reduced-motion: reduce) {
+  [data-hero-word] { opacity: .35; }
+  .timeline-node { opacity: 1; }
+}

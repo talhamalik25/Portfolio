@@ -2,14 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const navItems = [
-  { label: "Work", href: "#work", number: "01" },
-  { label: "Services", href: "#services", number: "02" },
-  { label: "About", href: "#about", number: "03" },
-  { label: "Stack", href: "#stack", number: "04" },
-  { label: "Journey", href: "#journey", number: "05" },
-  { label: "Contact", href: "#contact", number: "06" },
-];
+import { navItems } from "@/data/navigation";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -99,7 +92,7 @@ export default function Navbar() {
           </a>
 
           <div className="hidden flex-1 items-center justify-center lg:flex">
-            <ul className="flex items-center gap-7 xl:gap-10">
+            <ul className="flex items-center gap-5 xl:gap-8">
               {navItems.map((item) => {
                 const isActive = activeSection === item.href.replace("#", "");
                 return (
@@ -201,7 +194,7 @@ export default function Navbar() {
         aria-hidden={!isMobileMenuOpen}
         inert={!isMobileMenuOpen}
         className={[
-          "fixed inset-x-0 top-[84px] z-40 px-4 lg:hidden",
+          "fixed inset-x-0 top-[84px] z-40 max-h-[calc(100dvh-100px)] overflow-y-auto overscroll-contain px-4 lg:hidden",
           isMobileMenuOpen ? "pointer-events-auto" : "pointer-events-none",
         ].join(" ")}
       >

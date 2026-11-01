@@ -1,0 +1,96 @@
+[
+  {
+    "width": 375,
+    "overflow": false,
+    "todo": false,
+    "errors": []
+  },
+  {
+    "width": 375,
+    "emptyValidation": true
+  },
+  {
+    "width": 375,
+    "unconfiguredError": true
+  },
+  {
+    "width": 375,
+    "reducedCanvas": 0,
+    "aboutReadable": true
+  },
+  {
+    "width": 768,
+    "overflow": false,
+    "todo": false,
+    "errors": []
+  },
+  {
+    "width": 768,
+    "emptyValidation": true
+  },
+  {
+    "width": 768,
+    "unconfiguredError": true
+  },
+  {
+    "width": 768,
+    "reducedCanvas": 0,
+    "aboutReadable": true
+  },
+  {
+    "width": 1440,
+    "overflow": false,
+    "todo": false,
+    "errors": []
+  },
+  {
+    "width": 1440,
+    "emptyValidation": true
+  },
+  {
+    "width": 1440,
+    "unconfiguredError": true
+  },
+  {
+    "width": 1440,
+    "reducedCanvas": 0,
+    "aboutReadable": true
+  },
+  {
+    "slug": "sooti-mehal",
+    "status": 200,
+    "overflow": false
+  },
+  {
+    "slug": "malik-enterprices",
+    "status": 200,
+    "overflow": false
+  },
+  {
+    "slug": "jewellery-store",
+    "status": 200,
+    "overflow": false
+  },
+  {
+    "slug": "aktech-product-work",
+    "status": 200,
+    "overflow": false
+  },
+  {
+    "slug": "missing",
+    "status": 404,
+    "overflow": false
+  },
+  {
+    "apiStatus": 400,
+    "expected": 400
+  },
+  {
+    "apiStatus": 400,
+    "expected": 400
+  },
+  {
+    "apiStatus": 400,
+    "expected": 400
+  }
+]

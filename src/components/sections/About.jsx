@@ -1,6 +1,7 @@
 "use client";
+import { useMotionEffect } from "@/src/hooks/useMotionEffect";
 
-import { useEffect, useRef } from "react";
+import { useCallback, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SplitType from "split-type";
@@ -8,26 +9,28 @@ import SplitType from "split-type";
 gsap.registerPlugin(ScrollTrigger);
 
 const INTRO_TEXT =
-  "I'm a Computer Science student in Karachi who learns by building. I've shipped full-stack projects with authentication, carts, orders and admin panels, and I'm now focused on writing cleaner code, understanding it deeply, and building products that feel polished. I enjoy motion-driven interfaces with GSAP and Three.js, and I'm exploring AI automation with n8n."
+  "I'm a BS Computer Science student at Iqra University, Karachi, who learns by building. I also work as a Frontend Developer at AKTech Digital Solutions. My work there focuses on building web interfaces. Alongside my studies, it gives me a place to put what I learn into practice. I've shipped full-stack projects with authentication, carts, orders and admin panels, and I'm now focused on writing cleaner code, understanding it deeply, and building products that feel polished. I enjoy motion-driven interfaces with GSAP and Three.js, and I'm exploring AI automation with n8n."
 
 export default function About() {
   const sectionRef = useRef(null);
   const textRef = useRef(null);
 
-  useEffect(() => {
+  useMotionEffect(useCallback(() => {
     const paragraph = textRef.current;
     if (!paragraph) return;
 
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       paragraph.style.color = "#FF6B00";
-      return;
+      return () => { paragraph.style.color = ""; };
     }
 
     let splitText;
 
-    // Minor delay guarantees DOM has fully painted on Next.js client renders
-    // avoiding the silent width-calculation issues with SplitType
-    const timeout = setTimeout(() => {
+    // Rebuild lines after fonts load and whenever the paragraph width changes.
+    const split = () => {
+      paragraph._gsapCtx?.revert();
+      paragraph.querySelectorAll(".reveal-overlay").forEach((el) => el.remove());
+      splitText?.revert();
       const ctx = gsap.context(() => {
         splitText = new SplitType(paragraph, {
           types: "lines",
@@ -70,12 +73,20 @@ export default function About() {
 
       // Save ctx to global scope inside useEffect so we can revert it on unmount
       paragraph._gsapCtx = ctx;
-    }, 100);
+    };
+    let cancelled = false;
+    document.fonts.ready.then(() => { if (!cancelled) split(); });
+    let width = paragraph.clientWidth;
+    const observer = new ResizeObserver(() => {
+      if (paragraph.clientWidth !== width) { width = paragraph.clientWidth; split(); ScrollTrigger.refresh(); }
+    });
+    observer.observe(paragraph);
 
     return () => {
-      clearTimeout(timeout);
+      cancelled = true;
+      observer.disconnect();
       // Remove any artificially appended DOM nodes so SplitType can revert cleanly
-      document.querySelectorAll(".reveal-overlay").forEach((el) => el.remove());
+      paragraph.querySelectorAll(".reveal-overlay").forEach((el) => el.remove());
 
       if (paragraph._gsapCtx) {
         paragraph._gsapCtx.revert();
@@ -84,8 +95,7 @@ export default function About() {
         splitText.revert();
       }
     };
-  }, []);
-
+  }, []));
   return (
     <section
       id="about"

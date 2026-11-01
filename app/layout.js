@@ -3,23 +3,23 @@ import GlobalLoader from "@/src/components/ui/GlobalLoader";
 import ScrollProgress from "@/src/components/ui/ScrollProgress";
 
 export const metadata = {
-  title: "Talha Malik — Full-Stack Developer",
+  metadataBase: new URL("https://portfolio-pi-three-wmfjdk08k5.vercel.app"),
+  title: "Talha Malik — Full-Stack Developer | Frontend Developer at AKTech | AI Automation",
   description:
-    "CS student at Iqra University in Karachi, building full-stack web apps with Next.js, Node.js and MongoDB, and focused on polished, premium interfaces.",
+    "Full-Stack Developer and Frontend Developer at AKTech. BS CS student at Iqra University, Karachi, building with Next.js, Node.js and MongoDB and exploring AI automation.",
   openGraph: {
-    title: "Talha Malik — Full-Stack Developer",
+    title: "Talha Malik — Full-Stack Developer | Frontend Developer at AKTech | AI Automation",
     description:
-      "CS student at Iqra University in Karachi, building full-stack web apps with Next.js, Node.js and MongoDB, and focused on polished, premium interfaces.",
+      "Full-Stack Developer and Frontend Developer at AKTech. BS CS student at Iqra University, Karachi, building with Next.js, Node.js and MongoDB and exploring AI automation.",
     type: "website",
-    // TODO: Add the image at public/images/og-image.png.
-    images: ["/images/og-image.png"],
+    images: ["/images/profile/heroimg.png"],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Talha Malik — Full-Stack Developer",
+    title: "Talha Malik — Full-Stack Developer | Frontend Developer at AKTech | AI Automation",
     description:
-      "CS student at Iqra University in Karachi, building full-stack web apps with Next.js, Node.js and MongoDB, and focused on polished, premium interfaces.",
-    images: ["/images/og-image.png"],
+      "Full-Stack Developer and Frontend Developer at AKTech. BS CS student at Iqra University, Karachi, building with Next.js, Node.js and MongoDB and exploring AI automation.",
+    images: ["/images/profile/heroimg.png"],
   },
 };
 

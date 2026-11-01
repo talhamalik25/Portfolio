@@ -1,6 +1,7 @@
 "use client";
+import { useMotionEffect } from "@/src/hooks/useMotionEffect";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import gsap from "gsap";
 
 export default function GlobalLoader() {
@@ -9,7 +10,7 @@ export default function GlobalLoader() {
   const progressRef = useRef(null);
   const percentRef = useRef(null);
 
-  useEffect(() => {
+  useMotionEffect(useCallback(() => {
     // Only run if user prefers motion, otherwise hide immediately to respect accessibility
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     
@@ -17,6 +18,8 @@ export default function GlobalLoader() {
       const reducedMotionTimeout = window.setTimeout(() => setShowLoader(false), 0);
       return () => window.clearTimeout(reducedMotionTimeout);
     }
+
+    if (!containerRef.current) return;
 
     // Lock scroll behavior while loading
     document.body.style.overflow = "hidden";
@@ -71,7 +74,7 @@ export default function GlobalLoader() {
       ctx?.revert();
       document.body.style.overflow = "";
     };
-  }, []);
+  }, []));
 
   if (!showLoader) return null;
 

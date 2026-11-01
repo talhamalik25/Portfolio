@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useMemo, useEffect } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Icosahedron } from "@react-three/drei";
 import * as THREE from "three";
@@ -49,6 +49,14 @@ function RotatingShape() {
 }
 
 export default function HeroScene() {
+  const [enabled, setEnabled] = useState(false);
+  useEffect(() => {
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setEnabled(!query.matches);
+    update(); query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+  if (!enabled) return null;
   return (
     <div className="pointer-events-none absolute inset-0 z-0 h-full w-full opacity-60">
       <Canvas 

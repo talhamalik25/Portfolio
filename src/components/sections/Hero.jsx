@@ -1,6 +1,7 @@
 "use client";
+import { useMotionEffect } from "@/src/hooks/useMotionEffect";
 
-import { useLayoutEffect, useRef } from "react";
+import { useCallback, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
@@ -10,7 +11,7 @@ gsap.registerPlugin(ScrollTrigger);
 export default function Hero() {
   const rootRef = useRef(null);
 
-  useLayoutEffect(() => {
+  useMotionEffect(useCallback(() => {
     const ctx = gsap.context(() => {
       const prefersReducedMotion = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
@@ -95,8 +96,7 @@ export default function Hero() {
     }, rootRef);
 
     return () => ctx.revert();
-  }, []);
-
+  }, []));
   return (
     <section
       id="top"
@@ -214,10 +214,10 @@ export default function Hero() {
               data-hero-animate
               className="portfolio-copy mt-4 md:mt-5 w-full max-w-[34rem] text-center text-[0.95rem] md:text-[1.15rem] leading-relaxed text-white/75"
             >
-              CS student at Iqra University in Karachi. I build with Next.js,
-              Node.js and MongoDB, and I&apos;m focused on making interfaces feel
-              polished and premium.
+              Frontend Developer at AKTech and BS CS student at Iqra University,
+              Karachi. I build with Next.js, Node.js and MongoDB.
             </p>
+            <a href="https://aktech.tech" target="_blank" rel="noopener noreferrer" className="mt-4 rounded-full border border-[#EB5002]/20 bg-[#EB5002]/10 px-3 py-1.5 text-xs text-[#EB5002]">Currently at AKTech ↗</a>
 
             <div className="mt-8 md:mt-10 flex w-full flex-col items-center justify-center gap-4 sm:flex-row">
               <a
