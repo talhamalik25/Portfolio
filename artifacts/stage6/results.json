@@ -1,0 +1,26 @@
+[
+  {
+    "width": 375,
+    "sectionOrder": "pass",
+    "overflow": false,
+    "faqKeyboard": "pass",
+    "reducedMotion": "pass",
+    "errors": []
+  },
+  {
+    "width": 768,
+    "sectionOrder": "pass",
+    "overflow": false,
+    "faqKeyboard": "pass",
+    "reducedMotion": "pass",
+    "errors": []
+  },
+  {
+    "width": 1440,
+    "sectionOrder": "pass",
+    "overflow": false,
+    "faqKeyboard": "pass",
+    "reducedMotion": "pass",
+    "errors": []
+  }
+]

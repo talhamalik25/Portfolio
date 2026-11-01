@@ -1,0 +1,32 @@
+[
+  {
+    "width": 375,
+    "sectionOrder": "pass",
+    "aboutParts": 4,
+    "revealParagraphs": 11,
+    "timelineEntries": 2,
+    "reducedMotion": "pass",
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "width": 768,
+    "sectionOrder": "pass",
+    "aboutParts": 4,
+    "revealParagraphs": 11,
+    "timelineEntries": 2,
+    "reducedMotion": "pass",
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "width": 1440,
+    "sectionOrder": "pass",
+    "aboutParts": 4,
+    "revealParagraphs": 11,
+    "timelineEntries": 2,
+    "reducedMotion": "pass",
+    "overflow": false,
+    "errors": []
+  }
+]

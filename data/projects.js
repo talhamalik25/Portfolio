@@ -1,4 +1,4 @@
-// Add projects here; the cards, fan and case-study routes share this data.
+// One source for published projects. Unfinished fields are filtered at render time.
 export const projects = [
   {
     "slug": "sooti-mehal",
@@ -13,10 +13,6 @@ export const projects = [
     "githubUrl": "",
     "image": "/images/projects/sooti-mehal.jpg",
     "alt": "Sooti Mehal website screenshot",
-    "overview": "[FILL: Sooti Mehal overview]",
-    "built": [
-      "[FILL: Sooti Mehal what I built]"
-    ],
     "screenshots": [
       {
         "src": "/images/projects/sooti-mehal.jpg",
@@ -32,6 +28,17 @@ export const projects = [
       "mid": "#9A3F12",
       "accent": "#EB5002",
       "wash": "#3E7C86"
+    },
+    "category": "Website",
+    "status": "live",
+    "details": {
+      "overview": "[FILL: Sooti Mehal overview]",
+      "whatIBuilt": [
+        "[FILL: Sooti Mehal what I built]"
+      ],
+      "challenges": [
+        "[FILL: Sooti Mehal challenges]"
+      ]
     }
   },
   {
@@ -47,10 +54,6 @@ export const projects = [
     "githubUrl": "",
     "image": "/images/projects/malik-enterprices.jpg",
     "alt": "Malik Enterprices website screenshot",
-    "overview": "[FILL: Malik Enterprices overview]",
-    "built": [
-      "[FILL: Malik Enterprices what I built]"
-    ],
     "screenshots": [
       {
         "src": "/images/projects/malik-enterprices.jpg",
@@ -66,6 +69,17 @@ export const projects = [
       "mid": "#9A3F12",
       "accent": "#EB5002",
       "wash": "#3E7C86"
+    },
+    "category": "Website",
+    "status": "live",
+    "details": {
+      "overview": "[FILL: Malik Enterprices overview]",
+      "whatIBuilt": [
+        "[FILL: Malik Enterprices what I built]"
+      ],
+      "challenges": [
+        "[FILL: Malik Enterprices challenges]"
+      ]
     }
   },
   {
@@ -83,10 +97,48 @@ export const projects = [
     "githubUrl": "",
     "image": "",
     "alt": "Jewellery Store website screenshot",
-    "overview": "[FILL: Jewellery Store overview]",
-    "built": [
-      "Product CRUD, login and registration, cart, checkout, orders, and protected admin routes."
+    "screenshots": [],
+    "palette": {
+      "deep": "#1C1410",
+      "mid": "#9A3F12",
+      "accent": "#EB5002",
+      "wash": "#3E7C86"
+    },
+    "category": "E-commerce",
+    "status": "live",
+    "details": {
+      "overview": "[FILL: Jewellery Store overview]",
+      "whatIBuilt": [
+        "Product CRUD, login and registration, cart, checkout, orders, and protected admin routes."
+      ],
+      "challenges": [
+        "[FILL: Jewellery Store challenges]"
+      ]
+    }
+  },
+  {
+    "slug": "gym-crm",
+    "number": "04",
+    "title": "Gym CRM",
+    "category": "CRM",
+    "summary": "[FILL: Gym CRM summary]",
+    "role": "[FILL: Gym CRM role]",
+    "stack": [
+      "[FILL: Gym CRM stack]"
     ],
+    "liveUrl": "",
+    "githubUrl": "[FILL: Gym CRM GitHub URL]",
+    "image": "[FILL: Gym CRM image]",
+    "status": "in-progress",
+    "details": {
+      "overview": "[FILL: Gym CRM overview]",
+      "whatIBuilt": [
+        "[FILL: Gym CRM what I built]"
+      ],
+      "challenges": [
+        "[FILL: Gym CRM challenges]"
+      ]
+    },
     "screenshots": [],
     "palette": {
       "deep": "#1C1410",
@@ -94,7 +146,11 @@ export const projects = [
       "accent": "#EB5002",
       "wash": "#3E7C86"
     }
-  },
+  }
+];
+
+// Preserved draft; not used by public cards or routes.
+export const unpublishedProjects = [
   {
     "slug": "aktech-product-work",
     "number": "04",

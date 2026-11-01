@@ -1,4 +1,5 @@
 "use client";
+import { readyEntries } from "@/src/lib/content";
 import { useMotionEffect } from "@/src/hooks/useMotionEffect";
 
 import { useCallback, useRef } from "react";
@@ -7,7 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const milestones = [
+const milestoneData = [
   {
     year: "[FILL: year]",
     label: "First Projects",
@@ -57,6 +58,8 @@ const milestones = [
     description: "Go deeper into AI engineering.",
   },
 ];
+
+const milestones = readyEntries(milestoneData, "Journey");
 
 export default function Journey() {
   const sectionRef = useRef(null);

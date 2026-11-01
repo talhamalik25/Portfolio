@@ -1,7 +1,9 @@
+import { readyEntries } from "@/src/lib/content";
 import { education } from "@/data/sections";
 import RevealSection from "@/src/components/ui/RevealSection";
 
 export default function Education() {
+  if (!readyEntries([education], "Education").length) return null;
   return <RevealSection id="education" light compact>
     <div data-reveal-group className="flex flex-col justify-between gap-6 md:flex-row md:items-center">
       <div><p data-reveal className="portfolio-kicker mb-4 text-[#EB5002]">EDUCATION</p>

@@ -1,5 +1,4 @@
 import Experience from "@/src/components/sections/Experience";
-import Education from "@/src/components/sections/Education";
 import Process from "@/src/components/sections/Process";
 import GitHub from "@/src/components/sections/GitHub";
 import FAQ from "@/src/components/sections/FAQ";
@@ -29,10 +28,9 @@ export default function Home() {
       <main id="main-content" tabIndex={-1}>
         <Hero />
         <SelectedWork />
+        <About />
         <Experience />
         <Capabilities />
-        <About />
-        <Education />
         <Process />
         <Stack />
         <GitHub />
