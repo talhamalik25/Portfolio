@@ -3,7 +3,7 @@ import { useMotionEffect } from "@/src/hooks/useMotionEffect";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import Image from "next/image";
+import ProjectCard from "@/src/components/ui/ProjectCard";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -15,97 +15,7 @@ const WorkStageCanvas = dynamic(() => import("./WorkStageCanvas"), {
 });
 
 import Link from "next/link";
-import { projects } from "@/data/projects";
-
-function ProjectCard({ project, onSelect }) {
-  const liveUrl = project.liveUrl || "";
-  const githubUrl = project.githubUrl || "";
-
-  return (
-    <article onMouseEnter={onSelect} onFocus={onSelect} className="portfolio-project-card group flex h-full flex-col overflow-hidden rounded-3xl border border-white/10 bg-[#11100F] transition-colors duration-300 hover:border-[#EB5002]/50">
-      <div className={`relative flex aspect-[16/10] items-center justify-center overflow-hidden ${project.image ? "bg-[#0E0C0A]" : "border border-dashed border-white/15 bg-[radial-gradient(ellipse_at_70%_10%,rgba(235,80,2,0.14),transparent_55%),linear-gradient(145deg,#171311,#0B0A09)]"}`}>
-        {project.image ? (
-          <Image
-            src={project.image}
-            alt={project.alt}
-            width={1440}
-            height={900}
-            sizes="(max-width: 768px) 100vw, (max-width: 1279px) 50vw, 33vw"
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-          />
-        ) : null}
-        <span className="absolute left-5 top-5 text-xs font-semibold tracking-[0.2em] text-white/55">
-          {project.number}
-        </span>
-        {project.status && (
-          <span className="absolute right-4 top-4 rounded-full border border-[#EB5002]/40 bg-[#EB5002]/10 px-3 py-1 text-xs font-semibold text-[#FF7A36]">
-            {project.status}
-          </span>
-        )}
-      </div>
-
-      <div className="flex flex-1 flex-col p-5 sm:p-6">
-        <div className="mb-3 flex items-center justify-between gap-3">
-          <h3 className="portfolio-display text-2xl font-bold leading-tight tracking-[-0.04em] text-white">
-            <Link href={`/work/${project.slug}`}>{project.title}</Link>
-          </h3>
-          {project.category && (
-            <span className="shrink-0 text-right text-xs text-white/45">{project.category}</span>
-          )}
-        </div>
-        <p className="portfolio-copy min-h-[3.2rem] text-[0.96rem] leading-relaxed text-white/65">
-          {project.summary}
-        </p>
-
-        {project.stack.length > 0 && (
-          <ul className="mt-5 flex flex-wrap gap-2" aria-label={`${project.title} technologies`}>
-            {project.stack.map((tag) => (
-              <li key={tag} className="rounded-full border border-white/10 px-3 py-1.5 text-xs text-white/60">
-                {tag}
-              </li>
-            ))}
-          </ul>
-        )}
-
-        {project.details ? (
-          <details className="group mt-5 border-t border-white/10 pt-4">
-            <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between text-sm font-semibold text-white/80 transition-colors hover:text-[#FF7A36] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#EB5002]">
-              Details
-              <span aria-hidden="true" className="text-[#EB5002] transition-transform group-open:rotate-45">+</span>
-            </summary>
-            <p className="pb-2 pt-3 text-sm leading-relaxed text-white/75">{project.details}</p>
-          </details>
-        ) : null}
-
-        <Link href={`/work/${project.slug}`} className="mt-5 inline-flex min-h-11 items-center text-sm text-[#FF7A36]">View case study →</Link>
-        {(liveUrl || githubUrl) && (
-          <div className="mt-auto flex flex-wrap gap-3 pt-5">
-            {liveUrl ? (
-              <a
-                href={liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-11 items-center rounded-full border border-white/15 px-4 text-sm font-semibold text-white transition-colors hover:border-[#EB5002] hover:text-[#FF7A36] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EB5002]"
-              >
-                Live Site
-              </a>
-            ) : null}
-            {githubUrl ? (
-              <a
-                href={githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-11 items-center rounded-full border border-white/15 px-4 text-sm font-semibold text-white transition-colors hover:border-[#EB5002] hover:text-[#FF7A36] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EB5002]"
-              >
-                GitHub
-              </a>
-            ) : null}
-          </div>
-        )}
-      </div>
-    </article>
-  );
-}
+import { homeProjects as projects } from "@/src/lib/projects";
 
 export default function SelectedWork() {
   const sectionRef = useRef(null);
@@ -157,6 +67,7 @@ export default function SelectedWork() {
           <p className="portfolio-copy mt-5 max-w-2xl text-base leading-relaxed text-white/65 sm:text-lg">
             Selected websites and product work, with notes on my role and implementation.
           </p>
+          <Link href="/work" className="mt-6 inline-flex min-h-11 items-center rounded-full border border-white/20 px-5 text-sm hover:border-[#EB5002]">View all works →</Link>
         </header>
 
         <div className="mb-10 hidden overflow-hidden rounded-3xl border border-white/10 lg:block">

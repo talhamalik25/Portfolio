@@ -10,7 +10,7 @@ export const projects = [
       "[FILL: Sooti Mehal stack]"
     ],
     "liveUrl": "https://sootimehal.com",
-    "githubUrl": "",
+    "githubUrl": "[FILL: Sooti Mehal GitHub URL]",
     "image": "/images/projects/sooti-mehal.jpg",
     "alt": "Sooti Mehal website screenshot",
     "screenshots": [
@@ -51,7 +51,7 @@ export const projects = [
       "[FILL: Malik Enterprices stack]"
     ],
     "liveUrl": "https://malikenterprices.com",
-    "githubUrl": "",
+    "githubUrl": "[FILL: Malik Enterprices GitHub URL]",
     "image": "/images/projects/malik-enterprices.jpg",
     "alt": "Malik Enterprices website screenshot",
     "screenshots": [
@@ -94,8 +94,8 @@ export const projects = [
       "Mongoose"
     ],
     "liveUrl": "https://jewellery-store-eight-theta.vercel.app/",
-    "githubUrl": "",
-    "image": "",
+    "githubUrl": "[FILL: Jewellery Store GitHub URL]",
+    "image": "[FILL: Jewellery Store image]",
     "alt": "Jewellery Store website screenshot",
     "screenshots": [],
     "palette": {

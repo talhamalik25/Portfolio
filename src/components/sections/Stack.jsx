@@ -1,3 +1,4 @@
+import { readyEntries } from "@/src/lib/content";
 import {
   SiCss,
   SiExpress,
@@ -61,7 +62,7 @@ const learning = ["Backend depth", "DevOps basics", "AI integrations"];
 function TechnologyList({ technologies, label }) {
   return (
     <ul className="mt-5 space-y-2" aria-label={`${label} technologies`}>
-      {technologies.map(({ name, Icon }) => (
+      {readyEntries(technologies, "technologies").map(({ name, Icon }) => (
         <li
           key={name}
           className="group flex min-h-11 items-center gap-3 rounded-xl border border-white/[0.06] bg-white/[0.02] px-3 transition-colors hover:border-[#EB5002]/35 hover:bg-white/[0.04]"
@@ -105,7 +106,7 @@ export default function Stack() {
         </header>
 
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {groups.map((group) => (
+          {readyEntries(groups, "groups").map((group) => (
             <article key={group.title} className="rounded-3xl border border-white/10 bg-[#11100F] p-5 sm:p-6">
               <h3 className="portfolio-display border-b border-white/10 pb-4 text-xl font-semibold tracking-[-0.03em] text-white">
                 {group.title}
@@ -120,7 +121,7 @@ export default function Stack() {
             Currently learning
           </h3>
           <ul className="mt-4 flex flex-wrap gap-2" aria-label="Currently learning">
-            {learning.map((item) => (
+            {readyEntries(learning, "learning").map((item) => (
               <li key={item} className="rounded-full border border-white/10 px-4 py-2 text-sm text-white/70">
                 {item}
               </li>

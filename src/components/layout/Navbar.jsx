@@ -2,9 +2,16 @@
 
 import { useEffect, useState } from "react";
 
-import { navItems } from "@/data/navigation";
+import { navItems as configuredNavItems } from "@/data/navigation";
+import { timelineEntries } from "@/src/lib/timeline";
+import { readyEntries } from "@/src/lib/content";
+import { usePathname } from "next/navigation";
+const navItems = readyEntries(configuredNavItems, "Navigation").filter(item => item.href !== "#experience" || timelineEntries.length > 0);
 
 export default function Navbar() {
+  const pathname = usePathname();
+  const isWorkRoute = pathname === "/work" || pathname.startsWith("/work/");
+  const homeHref = (hash) => pathname === "/" ? hash : "/" + hash;
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
@@ -84,7 +91,7 @@ export default function Navbar() {
           ].join(" ")}
         >
           <a
-            href="#top"
+            href={homeHref("#top")}
             aria-label="Talha home"
             className="relative z-10 flex shrink-0 items-center text-[0.82rem] font-black uppercase tracking-[0.42em] text-white transition-colors duration-200 hover:text-[#EB5002] sm:text-[0.9rem]"
           >
@@ -94,12 +101,13 @@ export default function Navbar() {
           <div className="hidden flex-1 items-center justify-center lg:flex">
             <ul className="flex items-center gap-5 xl:gap-8">
               {navItems.map((item) => {
-                const isActive = activeSection === item.href.replace("#", "");
+                const isActive = isWorkRoute ? item.href === "#work" : activeSection === item.href.replace("#", "");
                 return (
                   <li key={item.label}>
                     <a
-                      href={item.href}
+                      href={homeHref(item.href)}
                       aria-label={item.label}
+                      aria-current={isActive ? (isWorkRoute ? "page" : "location") : undefined}
                       className={`group relative inline-flex items-center overflow-hidden text-[0.7rem] font-medium uppercase tracking-[0.12em] transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#EB5002] ${
                         isActive
                           ? "text-white"
@@ -148,7 +156,7 @@ export default function Navbar() {
 
           <div className="ml-auto flex items-center gap-3">
             <a
-              href="#contact"
+              href={homeHref("#contact")}
               className="group relative hidden items-center justify-center gap-2 overflow-hidden rounded-full border border-white/10 bg-[#111111] px-4 py-2.5 text-[0.7rem] font-medium uppercase tracking-[0.18em] text-white transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#EB5002] focus:ring-offset-2 focus:ring-offset-[#0b0b0b] md:inline-flex"
             >
               <span className="absolute inset-0 -translate-x-[105%] bg-[#EB5002] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0 group-focus-visible:translate-x-0" />
@@ -217,9 +225,11 @@ export default function Navbar() {
                     style={{ transitionDelay: `${index * 80}ms` }}
                   >
                     <a
-                      href={item.href}
+                      href={homeHref(item.href)}
+                      aria-label={item.label}
                       onClick={handleNavClick}
-                      className="group flex items-center justify-between border-b border-white/8 py-3 text-[1.7rem] font-semibold uppercase tracking-[0.12em] text-white/90 transition-colors duration-200 hover:text-[#EB5002] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EB5002]"
+                      aria-current={isWorkRoute && item.href === "#work" ? "page" : undefined}
+                      className="group flex items-center justify-between aria-[current=page]:text-[#EB5002] border-b border-white/8 py-3 text-[1.7rem] font-semibold uppercase tracking-[0.12em] text-white/90 transition-colors duration-200 hover:text-[#EB5002] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EB5002]"
                     >
                       <span>{item.label}</span>
                       <span className="text-[0.7rem] font-medium tracking-[0.2em] text-[#EB5002]">{item.number}</span>
@@ -229,7 +239,7 @@ export default function Navbar() {
               </ul>
 
               <a
-                href="#contact"
+                href={homeHref("#contact")}
                 onClick={handleNavClick}
                 className={`group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full border border-white/10 bg-[#111111] px-5 py-3.5 text-[0.7rem] font-medium uppercase tracking-[0.18em] text-white transition-all duration-420 ease-[cubic-bezier(0.22,1,0.36,1)] focus:outline-none focus:ring-2 focus:ring-[#EB5002] focus:ring-offset-2 focus:ring-offset-[#0b0b0b] ${isMobileMenuOpen ? "translate-y-0 opacity-100" : "translate-y-[16px] opacity-0"}`}
                 style={{ transitionDelay: "160ms" }}

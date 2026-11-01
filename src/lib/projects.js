@@ -20,3 +20,5 @@ export const publicProjects = projects.filter((project) => readyText(project.tit
   screenshots: readyEntries(project.screenshots, project.title + " screenshots"),
   palette: project.palette || { deep: "#1C1410", mid: "#9A3F12", accent: "#EB5002", wash: "#3E7C86" },
 }));
+
+export const homeProjects = publicProjects.slice(0, 4);

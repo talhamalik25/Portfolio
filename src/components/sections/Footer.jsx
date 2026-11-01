@@ -1,4 +1,5 @@
 "use client";
+import { readyEntries } from "@/src/lib/content";
 import { useMotionEffect } from "@/src/hooks/useMotionEffect";
 
 import { useCallback, useRef } from "react";
@@ -119,7 +120,7 @@ export default function Footer() {
             </h3>
 
             <ul className="space-y-3 text-[0.92rem] text-white/80">
-              {navLinks.map((item) => (
+              {readyEntries(navLinks, "navLinks").map((item) => (
                 <li key={item.label}>
                   <a href={item.href} className="transition-colors duration-200 hover:text-[#FF6B00]">
                     {item.label}
@@ -135,7 +136,7 @@ export default function Footer() {
             </h3>
 
             <ul className="space-y-3">
-              {socialLinks.map(({ label, href, icon: Icon }, index) => (
+              {readyEntries(socialLinks, "socialLinks").map(({ label, href, icon: Icon }, index) => (
                 <li key={label}>
                   <a
                     href={href}

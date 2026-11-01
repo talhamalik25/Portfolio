@@ -1,4 +1,5 @@
 "use client";
+import { readyEntries } from "@/src/lib/content";
 import { useMotionEffect } from "@/src/hooks/useMotionEffect";
 
 import { useCallback, useRef } from "react";
@@ -78,7 +79,7 @@ export default function Capabilities() {
         </header>
 
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {capabilities.map(({ number, title, description, tags, icon: Icon }) => (
+          {readyEntries(capabilities, "capabilities").map(({ number, title, description, tags, icon: Icon }) => (
             <article
               key={title}
               data-capability-card

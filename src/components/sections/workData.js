@@ -1,1 +1,1 @@
-export { publicProjects as projects } from "@/src/lib/projects";
+export { homeProjects as projects } from "@/src/lib/projects";
