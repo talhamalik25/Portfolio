@@ -15,7 +15,7 @@ function warnSkipped(label, entries) {
 }
 export function readyEntries(entries = [], label = "Content") {
   warnSkipped(label, entries.filter(hasPlaceholder));
-  return entries.filter((entry) => entry != null && entry !== "" && !hasPlaceholder(entry));
+  return entries.filter((entry) => entry != null && (typeof entry !== "string" || entry.trim().length > 0) && !hasPlaceholder(entry));
 }
 export function readyText(text, label = "Text") {
   if (hasPlaceholder(text)) { warnSkipped(label, [text]); return ""; }

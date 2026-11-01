@@ -14,6 +14,7 @@ const { execFileSync } = require('node:child_process');
  try {
    process.env.NODE_ENV = 'production';
    assert.equal(hasPlaceholder(values[1]), true);
+   assert.deepEqual(readyEntries(["", "  ", "[FILL: pending]", "Complete"]), ["Complete"]);
    assert.equal(readyEntries(values, 'Unit test').length, 1);
    assert.equal(readyText('[FILL: secret]'), '');
    assert.equal(warnings.length, 0);
