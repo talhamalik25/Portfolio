@@ -30,6 +30,7 @@ export default function Process() {
       const accessibleCopy = section.querySelector("[data-process-accessible]");
       const originalStyles = [...panels, panelList].map(node => [node, node.style.cssText]);
       const restoreStyles = () => originalStyles.forEach(([node, cssText]) => { node.style.cssText = cssText; });
+      stage.dataset.processPinned = "true";
       const context = gsap.context(() => {
         // Overlay panels only after enhancement; SSR and no-motion views stay stacked.
         gsap.set(panels, { gridArea: "1 / 1", autoAlpha: 0, y: 0 });
@@ -42,6 +43,7 @@ export default function Process() {
         controls.hidden = true;
         context.revert();
         restoreStyles();
+        delete stage.dataset.processPinned;
         return;
       }
       stage.dataset.processPinned = "true";
@@ -100,7 +102,7 @@ export default function Process() {
   if (!items.length) return null;
   return (
     <section id="process" ref={sectionRef} aria-labelledby="process-heading" className="border-t border-white/10 bg-[#0A0A0A] py-20 text-white sm:py-24 lg:py-28">
-      <div ref={stageRef} className="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8">
+      <div ref={stageRef} data-process-stage className="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8">
         <header className="mb-8">
           <p className="portfolio-kicker mb-4 text-[#EB5002]">THE PROCESS</p>
           <h2 id="process-heading" className="portfolio-display text-4xl leading-[0.95] sm:text-5xl lg:text-6xl">How I <span className="text-[#EB5002]">Work.</span></h2>

@@ -139,6 +139,13 @@ a {
 section[id] { scroll-margin-top: 6rem; }
 .portfolio-project-card { min-width: 0; }
 .portfolio-project-card:focus-within { border-color: #eb5002; }
+/* Static Process phases must remain readable after animation teardown. */
+#process [data-process-stage]:not([data-process-pinned]) [data-process-phase] {
+  visibility: visible !important;
+  opacity: 1 !important;
+  transform: none !important;
+  grid-area: auto !important;
+}
 @media (prefers-reduced-motion: reduce) {
   [data-hero-word] { opacity: .35; }
   .timeline-node { opacity: 1; }

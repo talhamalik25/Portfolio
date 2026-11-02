@@ -1,0 +1,23 @@
+[
+  {
+    "width": 375,
+    "pin": "static flow",
+    "tags": "3 per phase",
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "width": 768,
+    "pin": "static flow",
+    "tags": "3 per phase",
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "width": 1440,
+    "pin": "pass: four phases, reverse, keyboard and teardown",
+    "tags": "3 per phase",
+    "overflow": false,
+    "errors": []
+  }
+]

@@ -8,6 +8,7 @@ Only Part 3 is implemented. Stop here for review before the project-brief form a
 - `src/components/sections/ProcessVisual.jsx` (new): four original inline SVG sketches drawn using the portfolio colors and inherited typography. No photos, external assets or libraries.
 - `data/sections.js`: adds `visual` and three `tags` to each existing `processSteps` entry. Existing descriptions and all FILL values are unchanged.
 - `app/page.js`: moves Process after Stack, matching the target order.
+- `app/globals.css`: ensures unpinned phases remain visible even if GSAP refresh restores stale inline styles during teardown.
 - `scripts/verify-stage7-part3.cjs` (new): checks all four phases, keyboard controls, responsive layout and cleanup.
 - `artifacts/stage7-part3/`: screenshots and browser-check output.
 - `STAGE7-PART3-HANDOFF.md`: this guide.
@@ -48,3 +49,10 @@ Repeatable browser check: build, start with `npm run start -- --port 3100`, then
 ## FILL placeholders
 
 No new FILL placeholders were introduced. All existing values remain unchanged and continue to be filtered from public rendering. See REMAINING-PLACEHOLDERS.md for the existing inventory.
+
+## Validation completed
+
+- `npm run lint` and `npm run build`: passed.
+- Production browser checks at 375, 768 and 1440px: passed with no horizontal overflow or JavaScript errors.
+- All four phase controls, reverse navigation, pin bounds, reduced-motion toggle, re-enabling motion, mobile resize and short desktop fallback: passed.
+- Screenshots and machine-readable results are in `artifacts/stage7-part3/`.
