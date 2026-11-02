@@ -72,3 +72,7 @@ All values remain in source; unfinished content is omitted from public rendering
 ## src/lib/contactDelivery.js
 
 - `[FILL: email service I choose]`
+
+## data/contact.js
+
+- `[FILL: budget range options and currency]` — hidden until completed; the form currently accepts an optional free-text budget.

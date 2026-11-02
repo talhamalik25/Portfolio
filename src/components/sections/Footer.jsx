@@ -1,5 +1,7 @@
 "use client";
-import { readyEntries } from "@/src/lib/content";
+import Link from "next/link";
+import { availability } from "@/data/contact";
+import { readyEntries, readyText } from "@/src/lib/content";
 import { useMotionEffect } from "@/src/hooks/useMotionEffect";
 
 import { useCallback, useRef } from "react";
@@ -12,12 +14,12 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 const navLinks = [
-  { label: "Work", href: "#work" },
-  { label: "Services", href: "#services" },
-  { label: "About", href: "#about" },
-  { label: "Stack", href: "#stack" },
-  { label: "Journey", href: "#journey" },
-  { label: "Contact", href: "#contact" },
+  { label: "Work", href: "/#work" },
+  { label: "Services", href: "/#services" },
+  { label: "About", href: "/#about" },
+  { label: "Stack", href: "/#stack" },
+  { label: "Journey", href: "/#journey" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 const socialLinks = [
@@ -108,10 +110,11 @@ export default function Footer() {
               Full-stack developer and AI automation specialist, building digital products that turn ideas into outcomes that matter.
             </p>
 
-            <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-[#EB5002]/20 bg-[#EB5002]/10 px-3 py-1.5 text-[0.64rem] font-semibold uppercase tracking-[0.18em] text-[#FF6B00]">
+            <p className="mt-5 text-sm text-white/70">Frontend Developer at AKTech</p>
+            {readyText(availability, "Availability") && <div className="mt-3 inline-flex max-w-full items-center gap-2 rounded-full border border-[#EB5002]/20 bg-[#EB5002]/10 px-3 py-1.5 text-[0.64rem] font-semibold uppercase tracking-[0.18em] text-[#FF6B00]">
               <span className="inline-block h-2 w-2 rounded-full bg-[#FF6B00]" aria-hidden="true" />
-              Frontend Developer at AKTech — open to selected projects
-            </div>
+              {readyText(availability, "Availability")}
+            </div>}
           </div>
 
           <div>
@@ -122,9 +125,9 @@ export default function Footer() {
             <ul className="space-y-3 text-[0.92rem] text-white/80">
               {readyEntries(navLinks, "navLinks").map((item) => (
                 <li key={item.label}>
-                  <a href={item.href} className="transition-colors duration-200 hover:text-[#FF6B00]">
+                  <Link href={item.href} className="transition-colors duration-200 hover:text-[#FF6B00]">
                     {item.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -169,7 +172,7 @@ export default function Footer() {
 
             <a
               href="mailto:mtmaliktalha2005@gmail.com"
-              className="inline-block text-[1.1rem] font-medium text-[#FF6B00] transition-all duration-200 hover:text-white hover:underline"
+              className="inline-block max-w-full break-all text-[1.1rem] font-medium text-[#FF6B00] transition-all duration-200 hover:text-white hover:underline"
             >
               mtmaliktalha2005@gmail.com
             </a>
@@ -188,9 +191,9 @@ export default function Footer() {
 
         <div className="relative mt-8 flex flex-col gap-4 text-[0.72rem] text-[#7A756F] sm:flex-row sm:items-center sm:justify-between">
           <p>© 2026 Talha Malik. All rights reserved.</p>
-          <a href="#top" className="transition-colors duration-200 hover:text-[#FF6B00]">
+          <Link href="/#top" className="transition-colors duration-200 hover:text-[#FF6B00]">
             Built with Next.js &amp; GSAP
-          </a>
+          </Link>
         </div>
       </div>
       <div ref={watermarkRef} className="pointer-events-none absolute inset-x-0 bottom-10 z-10 select-none text-center text-[clamp(8rem,16vw,20rem)] font-black uppercase leading-none tracking-[-0.08em] text-[#FF6B00] opacity-10">

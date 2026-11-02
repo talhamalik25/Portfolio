@@ -21,7 +21,7 @@ export async function POST(request) {
     const values = JSON.parse(raw);
     const errors = validateContact(values);
     if (Object.keys(errors).length) return Response.json({ errors }, { status: 400 });
-    await deliverContactMessage({ name: values.name.trim(), email: values.email.trim(), message: values.message.trim() });
+    await deliverContactMessage({ name: values.name.trim(), email: values.email.trim(), projectType: values.projectType, budget: values.budget?.trim() || "Not specified", message: values.message.trim() });
     return Response.json({ ok: true });
   } catch (error) {
     if (error instanceof SyntaxError) return Response.json({ error: "Invalid JSON." }, { status: 400 });

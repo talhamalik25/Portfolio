@@ -1,0 +1,29 @@
+[
+  {
+    "width": 375,
+    "validation": "passed",
+    "retainedValues": true,
+    "realDelivery": "503: intentionally unconfigured",
+    "simulatedSuccess": "passed",
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "width": 768,
+    "validation": "passed",
+    "retainedValues": true,
+    "realDelivery": "503: intentionally unconfigured",
+    "simulatedSuccess": "passed",
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "width": 1440,
+    "validation": "passed",
+    "retainedValues": true,
+    "realDelivery": "503: intentionally unconfigured",
+    "simulatedSuccess": "passed",
+    "overflow": false,
+    "errors": []
+  }
+]

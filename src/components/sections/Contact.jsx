@@ -1,7 +1,7 @@
 "use client";
 import { useMotionEffect } from "@/src/hooks/useMotionEffect";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef } from "react";
 import { MapPin } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -11,20 +11,11 @@ gsap.registerPlugin(ScrollTrigger);
 const CONTACT_EMAIL = "mtmaliktalha2005@gmail.com";
 const LINKEDIN_URL = "https://www.linkedin.com/in/muhammad-talha-malik-465957307";
 const GITHUB_URL = "https://github.com/talhamalik25";
-import { validateContact as validate } from "@/src/lib/contact";
-const INITIAL_VALUES = { name: "", email: "", message: "" };
-
-const inputBaseClass =
-  "w-full rounded-xl border bg-white/[0.04] px-4 py-3 text-base leading-relaxed text-white placeholder-[#8A817B] outline-none transition-colors duration-200 focus:border-[#EB5002] focus:ring-2 focus:ring-[#EB5002]/30";
+import ProjectBrief from "./ProjectBrief";
 
 export default function Contact({ resumeLink }) {
   const sectionRef = useRef(null);
   const contentRef = useRef(null);
-  const submitting = useRef(false);
-  const [values, setValues] = useState(INITIAL_VALUES);
-  const [errors, setErrors] = useState({});
-  const [formState, setFormState] = useState("idle");
-
   useMotionEffect(useCallback(() => {
     const section = sectionRef.current;
     if (!section || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -51,53 +42,6 @@ export default function Contact({ resumeLink }) {
 
     };
   }, []));
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setValues((previous) => ({ ...previous, [name]: value }));
-    setFormState("idle");
-
-    if (errors[name]) {
-      setErrors((previous) => {
-        const next = { ...previous };
-        delete next[name];
-        return next;
-      });
-    }
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    if (submitting.current) return;
-
-    const nextErrors = validate(values);
-    if (Object.keys(nextErrors).length > 0) {
-      setErrors(nextErrors);
-      setFormState("error");
-      return;
-    }
-
-    setErrors({});
-    setFormState("loading");
-
-    submitting.current = true;
-    try {
-      const response = await fetch("/api/contact", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(values), signal: AbortSignal.timeout(15000) });
-      const result = await response.json();
-      if (!response.ok) { setErrors(result.errors || {}); throw new Error("Delivery failed"); }
-      setValues(INITIAL_VALUES);
-      setFormState("success");
-    } catch { setFormState("error"); }
-    finally { submitting.current = false; }
-  };
-
-  const formMessage = {
-    loading: "Sending your message…",
-    success: "Your message has been sent. Thanks for getting in touch.",
-    error: Object.keys(errors).length
-      ? "Please fix the highlighted fields."
-      : "Your message could not be sent. Please use the direct email link below.",
-  }[formState];
-
   return (
     <section
       id="contact"
@@ -122,99 +66,7 @@ export default function Contact({ resumeLink }) {
         </header>
 
         <div className="mx-auto grid max-w-[1000px] gap-10 lg:grid-cols-[1fr_0.7fr] lg:gap-16">
-          <form
-            onSubmit={handleSubmit}
-            noValidate
-            className="flex flex-col gap-5"
-            aria-label="Contact form"
-          >
-            <div>
-              <label htmlFor="contact-name" className="mb-2 block text-sm font-medium text-white/75">
-                Name <span className="text-[#EB5002]">*</span>
-              </label>
-              <input
-                id="contact-name"
-                name="name"
-                maxLength={100}
-                disabled={formState === "loading"}
-                type="text"
-                autoComplete="name"
-                required
-                value={values.name}
-                onChange={handleChange}
-                aria-invalid={Boolean(errors.name)}
-                aria-describedby={errors.name ? "contact-name-error" : undefined}
-                className={`${inputBaseClass} ${errors.name ? "border-[#EB5002]" : "border-white/10"}`}
-              />
-              {errors.name && <p id="contact-name-error" className="mt-2 text-sm text-[#FF9A68]">{errors.name}</p>}
-            </div>
-
-            <div>
-              <label htmlFor="contact-email" className="mb-2 block text-sm font-medium text-white/75">
-                Email <span className="text-[#EB5002]">*</span>
-              </label>
-              <input
-                id="contact-email"
-                name="email"
-                maxLength={254}
-                disabled={formState === "loading"}
-                type="email"
-                autoComplete="email"
-                required
-                value={values.email}
-                onChange={handleChange}
-                aria-invalid={Boolean(errors.email)}
-                aria-describedby={errors.email ? "contact-email-error" : undefined}
-                className={`${inputBaseClass} ${errors.email ? "border-[#EB5002]" : "border-white/10"}`}
-              />
-              {errors.email && <p id="contact-email-error" className="mt-2 text-sm text-[#FF9A68]">{errors.email}</p>}
-            </div>
-
-            <div>
-              <label htmlFor="contact-message" className="mb-2 block text-sm font-medium text-white/75">
-                Message <span className="text-[#EB5002]">*</span>
-              </label>
-              <textarea
-                id="contact-message"
-                name="message"
-                maxLength={5000}
-                disabled={formState === "loading"}
-                rows={5}
-                required
-                value={values.message}
-                onChange={handleChange}
-                aria-invalid={Boolean(errors.message)}
-                aria-describedby={errors.message ? "contact-message-error" : undefined}
-                className={`${inputBaseClass} resize-y ${errors.message ? "border-[#EB5002]" : "border-white/10"}`}
-              />
-              {errors.message && <p id="contact-message-error" className="mt-2 text-sm text-[#FF9A68]">{errors.message}</p>}
-            </div>
-
-            {formMessage && (
-              <p
-                role={formState === "error" ? "alert" : "status"}
-                aria-live={formState === "error" ? "assertive" : "polite"}
-                className={`text-sm leading-relaxed ${formState === "error" ? "text-[#FF9A68]" : "text-white/70"}`}
-              >
-                {formMessage}
-              </p>
-            )}
-
-            <button
-              type="submit"
-              disabled={formState === "loading"}
-              className="inline-flex min-h-12 w-fit items-center justify-center rounded-full border border-[#EB5002] bg-[#EB5002] px-6 text-sm font-semibold text-[#0A0A0A] transition-colors hover:bg-transparent hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EB5002] disabled:cursor-wait disabled:opacity-70"
-            >
-              {formState === "loading" ? "Sending…" : "Send message"}
-            </button>
-
-            <p className="text-sm leading-relaxed text-white/55">
-              Prefer email?{" "}
-              <a className="text-white underline decoration-[#EB5002] underline-offset-4 hover:text-[#FF9A68]" href={`mailto:${CONTACT_EMAIL}`}>
-                {CONTACT_EMAIL}
-              </a>
-            </p>
-          </form>
+          <ProjectBrief />
 
           <aside className="border-t border-white/10 pt-7 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
             {resumeLink}
