@@ -44,7 +44,9 @@ export default function Process() {
       stage.dataset.processPinned = "true";
       panelList.setAttribute("aria-hidden", "true");
       accessibleCopy.hidden = false;
-      const sequence = gsap.timeline({
+      let sequence;
+      context.add(() => {
+      sequence = gsap.timeline({
         scrollTrigger: {
           id: "process-story", trigger: stage, start: "top 110px",
           end: () => "+=" + items.length * window.innerHeight * 0.75,
@@ -59,6 +61,7 @@ export default function Process() {
         sequence.to(panels[index - 1], { autoAlpha: 0, y: -12, duration: 0.18 }, index);
         sequence.fromTo(panel, { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.24 }, index);
       });
+      });
       triggerRef.current = sequence.scrollTrigger;
       let cancelled = false;
       document.fonts.ready.then(() => { if (!cancelled) ScrollTrigger.refresh(); });
@@ -66,7 +69,6 @@ export default function Process() {
         cancelled = true;
         triggerRef.current = null;
         sequence.scrollTrigger?.kill();
-        sequence.revert();
         context.revert();
         delete stage.dataset.processPinned;
         panelList.removeAttribute("aria-hidden");
