@@ -23,10 +23,10 @@ export const education = {
 
 // Proposed process copy: edit these descriptions to match your working preferences.
 export const processSteps = [
-  { title: "Understand", description: "Start with the purpose, audience and requirements. Agree on what the project needs to do." },
-  { title: "Design", description: "Plan the structure and interface. Work through the key screens before moving into code." },
-  { title: "Build", description: "Build the interface and functionality, then review how they work together across screen sizes." },
-  { title: "Launch", description: "Check the details, prepare deployment and agree on the handover." },
+  { title: "Understand", visual: "understand", tags: ["Purpose","Audience","Scope"], description: "Start with the purpose, audience and requirements. Agree on what the project needs to do." },
+  { title: "Design", visual: "design", tags: ["Structure","Key screens","Interaction"], description: "Plan the structure and interface. Work through the key screens before moving into code." },
+  { title: "Build", visual: "build", tags: ["Interface","Functionality","Responsive checks"], description: "Build the interface and functionality, then review how they work together across screen sizes." },
+  { title: "Launch", visual: "launch", tags: ["Review","Deployment","Handover"], description: "Check the details, prepare deployment and agree on the handover." },
 ];
 
 export const github = {

@@ -31,8 +31,8 @@ export default function Home() {
         <About />
         <Experience />
         <Capabilities />
-        <Process />
         <Stack />
+        <Process />
         <GitHub />
         <Journey />
         <FAQ />
