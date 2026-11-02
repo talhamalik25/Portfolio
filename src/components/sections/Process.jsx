@@ -22,15 +22,17 @@ export default function Process() {
     const stage = stageRef.current;
     if (!section || !stage || items.length < 2 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    const media = gsap.matchMedia();
-    media.add("(min-width: 1024px) and (min-height: 760px)", () => {
+    const media = window.matchMedia("(min-width: 1024px) and (min-height: 760px)");
+    const setup = () => {
       const panels = Array.from(section.querySelectorAll("[data-process-phase]"));
       const panelList = section.querySelector("[data-process-panels]");
       const controls = section.querySelector("[data-process-controls]");
       const accessibleCopy = section.querySelector("[data-process-accessible]");
+      const originalStyles = [...panels, panelList].map(node => [node, node.style.cssText]);
+      const restoreStyles = () => originalStyles.forEach(([node, cssText]) => { node.style.cssText = cssText; });
       const context = gsap.context(() => {
         // Overlay panels only after enhancement; SSR and no-motion views stay stacked.
-        gsap.set(panels, { gridArea: "1 / 1", autoAlpha: 0 });
+        gsap.set(panels, { gridArea: "1 / 1", autoAlpha: 0, y: 0 });
         gsap.set(panels[0], { autoAlpha: 1 });
         gsap.set(panelList, { gap: 0 });
       }, section);
@@ -39,6 +41,7 @@ export default function Process() {
       if (stage.getBoundingClientRect().height > window.innerHeight - 140) {
         controls.hidden = true;
         context.revert();
+        restoreStyles();
         return;
       }
       stage.dataset.processPinned = "true";
@@ -46,21 +49,21 @@ export default function Process() {
       accessibleCopy.hidden = false;
       let sequence;
       context.add(() => {
-      sequence = gsap.timeline({
-        scrollTrigger: {
-          id: "process-story", trigger: stage, start: "top 110px",
-          end: () => "+=" + items.length * window.innerHeight * 0.75,
-          pin: true, scrub: 0.35, anticipatePin: 1, invalidateOnRefresh: true,
-          onUpdate: (self) => setActiveIndex(Math.min(items.length - 1, Math.floor(self.progress * items.length))),
-        },
-      });
-      // Each phase has a dwell interval; only the boundary crossfades.
-      sequence.to({}, { duration: items.length });
-      panels.slice(1).forEach((panel, offset) => {
-        const index = offset + 1;
-        sequence.to(panels[index - 1], { autoAlpha: 0, y: -12, duration: 0.18 }, index);
-        sequence.fromTo(panel, { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.24 }, index);
-      });
+        sequence = gsap.timeline({
+          scrollTrigger: {
+            id: "process-story", trigger: stage, start: "top 110px",
+            end: () => "+=" + items.length * window.innerHeight * 0.75,
+            pin: true, scrub: 0.35, anticipatePin: 1, invalidateOnRefresh: true,
+            onUpdate: (self) => setActiveIndex(Math.min(items.length - 1, Math.floor(self.progress * items.length))),
+          },
+        });
+        // Each phase has a dwell interval; only the boundary crossfades.
+        sequence.to({}, { duration: items.length });
+        panels.slice(1).forEach((panel, offset) => {
+          const index = offset + 1;
+          sequence.to(panels[index - 1], { autoAlpha: 0, y: -12, duration: 0.18 }, index);
+          sequence.fromTo(panel, { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.24 }, index);
+        });
       });
       triggerRef.current = sequence.scrollTrigger;
       let cancelled = false;
@@ -74,9 +77,17 @@ export default function Process() {
         panelList.removeAttribute("aria-hidden");
         controls.hidden = true;
         accessibleCopy.hidden = true;
+        restoreStyles();
       };
-    });
-    return () => media.revert();
+    };
+    let cleanup;
+    const update = () => {
+      cleanup?.();
+      cleanup = media.matches ? setup() : undefined;
+    };
+    update();
+    media.addEventListener("change", update);
+    return () => { media.removeEventListener("change", update); cleanup?.(); };
   }, []));
 
   const selectPhase = (index) => {
