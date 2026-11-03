@@ -22,6 +22,16 @@ const fs = require('node:fs');
    assert.equal(await page.locator('#experience').count(),0);
    assert.equal(await page.locator('#github').count(),0);
    assert.equal(await page.locator('#faq details').count(),2);
+   await page.locator('#work').scrollIntoViewIfNeeded();
+   await page.evaluate(() => window.scrollTo(0, document.querySelector('#work').offsetTop));
+   await page.waitForTimeout(250);
+   if(width<1024){
+    await page.getByRole('button',{name:'Open menu'}).click();
+    const homeWork=page.getByRole('navigation',{name:'Mobile menu'}).getByRole('link',{name:'Work',exact:true});
+    assert.equal(await homeWork.getAttribute('href'),'#work');
+    assert.equal(await homeWork.getAttribute('aria-current'),'location');
+    await page.keyboard.press('Escape');
+   }
    await page.getByRole('link',{name:'View all works'}).click();
    await page.waitForURL('**/work');await page.waitForTimeout(1000);
    assert.equal(await page.locator('[data-project-card]').count(),4);

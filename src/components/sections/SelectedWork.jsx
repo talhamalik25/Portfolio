@@ -56,6 +56,10 @@ export default function SelectedWork() {
 
     return () => context.revert();
   }, []));
+  // Filtering unfinished project identities can leave the feed empty.
+  // Keep the fan implementation untouched and mount it only with valid data.
+  if (!projects.length) return null;
+
   return (
     <section id="work" ref={sectionRef} className="border-t border-white/10 bg-[#0A0A0A] py-20 text-white sm:py-24 lg:py-28" aria-labelledby="work-heading">
       <div className="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8">

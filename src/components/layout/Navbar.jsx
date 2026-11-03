@@ -55,7 +55,7 @@ export default function Navbar() {
       window.removeEventListener("resize", updateActiveSection);
       window.clearTimeout(timer);
     };
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     const handleEscape = (event) => {
@@ -228,8 +228,8 @@ export default function Navbar() {
                       href={homeHref(item.href)}
                       aria-label={item.label}
                       onClick={handleNavClick}
-                      aria-current={isWorkRoute && item.href === "#work" ? "page" : undefined}
-                      className="group flex items-center justify-between aria-[current=page]:text-[#EB5002] border-b border-white/8 py-3 text-[1.7rem] font-semibold uppercase tracking-[0.12em] text-white/90 transition-colors duration-200 hover:text-[#EB5002] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EB5002]"
+                      aria-current={isWorkRoute ? (item.href === "#work" ? "page" : undefined) : (activeSection === item.href.slice(1) ? "location" : undefined)}
+                      className="group flex items-center justify-between aria-[current=page]:text-[#EB5002] aria-[current=location]:text-[#EB5002] border-b border-white/8 py-3 text-[1.7rem] font-semibold uppercase tracking-[0.12em] text-white/90 transition-colors duration-200 hover:text-[#EB5002] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EB5002]"
                     >
                       <span>{item.label}</span>
                       <span className="text-[0.7rem] font-medium tracking-[0.2em] text-[#EB5002]">{item.number}</span>

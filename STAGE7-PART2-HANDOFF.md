@@ -1,5 +1,13 @@
 # Stage 7 — Part 2 handoff
 
+## Review follow-up — 2026-11-03
+
+The requested Part 2 implementation was already present in this checkout. This pass verified it and changed only `src/components/layout/Navbar.jsx`, `src/components/sections/SelectedWork.jsx`, `scripts/verify-stage7-part2.cjs`, this handoff and refreshed browser artifacts. No data files or placeholder values were changed.
+
+Mobile navigation now marks the active homepage section with `aria-current="location"`, and section tracking refreshes when the route changes. SelectedWork now omits itself if placeholder filtering removes every project identity, preventing the unchanged fan from receiving an empty list. The browser test now checks the mobile homepage Work anchor and highlight.
+
+Fresh validation passed: `npm run lint`, `npm run build`, `node scripts/verify-content.cjs`, and the production browser suite at 375/768/1440px. The suite covers filters, all four detail routes, unknown/unpublished 404s, metadata, next-project links, reduced motion, navigation, overflow, visible placeholders and production warnings. A normal mobile navigation screenshot is saved as `artifacts/stage7-part2/work-navigation-375.png`. No subsequent part was modified in this pass.
+
 Part 2 is complete. Stop here for review before implementing the pinned Process section or the project-brief/footer changes. No deployment was performed and no dependencies were added.
 
 ## What changed
