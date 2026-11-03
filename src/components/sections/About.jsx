@@ -2,9 +2,9 @@ import { readyEntries, readyText } from "@/src/lib/content";
 import { about } from "@/data/about";
 import LineReveal from "@/src/components/ui/LineReveal";
 
-const partClass = "grid gap-7 border-t border-outline py-10 sm:py-14 lg:grid-cols-[240px_1fr] lg:gap-12";
+const partClass = "grid gap-7 border-t border-[#1A1613]/10 py-10 sm:py-14 lg:grid-cols-[240px_1fr] lg:gap-12";
 const headingClass = "text-xl font-semibold tracking-[-0.03em] sm:text-2xl";
-const copyClass = "text-xl font-medium leading-[1.5] tracking-[-0.025em] text-muted sm:text-2xl";
+const copyClass = "text-xl font-medium leading-[1.5] tracking-[-0.025em] text-[#5D5652] sm:text-2xl";
 
 export default function About() {
   const who = readyText(about.who, "About introduction");
@@ -12,16 +12,16 @@ export default function About() {
   const learning = readyEntries(about.learning, "Learning topics");
   const principles = readyEntries(about.principles, "About principles");
   return (
-    <section id="about" aria-labelledby="about-heading" className="relative scroll-mt-24 bg-surface-b py-20 text-content sm:py-24 lg:py-28">
+    <section id="about" aria-labelledby="about-heading" className="relative scroll-mt-24 bg-[#FAF7F2] py-20 text-[#1A1613] sm:py-24 lg:py-28">
       <div className="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8">
-        <h2 id="about-heading" className="portfolio-kicker mb-8 flex items-center gap-3 text-accent-ink">
+        <h2 id="about-heading" className="portfolio-kicker mb-8 flex items-center gap-3 text-[#EB5002]">
           <span aria-hidden="true" className="h-2 w-2 rounded-full bg-[#EB5002] shadow-[0_0_0_5px_rgba(235,80,2,0.14)]" />
           About Me
         </h2>
 
         {who && <div data-about-part="who" className={partClass}>
           <h3 className={headingClass}>Who I am</h3>
-          <LineReveal className="text-2xl font-medium leading-[1.4] tracking-[-0.03em] text-muted sm:text-3xl lg:text-4xl">{who}</LineReveal>
+          <LineReveal className="text-2xl font-medium leading-[1.4] tracking-[-0.03em] text-[#5D5652] sm:text-3xl lg:text-4xl">{who}</LineReveal>
         </div>}
 
         {work.length > 0 && <div data-about-part="work" className={partClass}>
@@ -40,8 +40,8 @@ export default function About() {
           <h3 className={headingClass}>Currently learning</h3>
           <ul className="grid gap-4 sm:grid-cols-2">
             {learning.map((topic, index) => (
-              <li key={index} className="min-w-0 rounded-2xl border border-outline bg-card p-5 sm:p-6">
-                <LineReveal className="text-lg font-medium leading-relaxed text-muted">{topic}</LineReveal>
+              <li key={index} className="min-w-0 rounded-2xl border border-[#1A1613]/10 bg-white/50 p-5 sm:p-6">
+                <LineReveal className="text-lg font-medium leading-relaxed text-[#5D5652]">{topic}</LineReveal>
               </li>
             ))}
           </ul>

@@ -7,9 +7,9 @@ export default function Testimonials() {
   if (!items.length) return null;
   if (!testimonials.enabled || !testimonials.items.length) return null;
   return <RevealSection id="testimonials" light>
-    <header className="mb-10"><p className="portfolio-kicker mb-4 text-accent-ink">TESTIMONIALS</p><h2 id="testimonials-heading" className="portfolio-display text-4xl sm:text-5xl">In Their Words.</h2></header>
-    <div data-reveal-group className="grid gap-5 md:grid-cols-2">{items.map((item) => <figure data-reveal key={item.name + item.quote} className="rounded-3xl border border-outline bg-card p-7">
-      <blockquote className="text-xl leading-relaxed">{item.quote}</blockquote><figcaption className="mt-6 text-sm text-muted">{item.name}{item.attribution ? " — " + item.attribution : ""}</figcaption>
+    <header className="mb-10"><p className="portfolio-kicker mb-4 text-[#EB5002]">TESTIMONIALS</p><h2 id="testimonials-heading" className="portfolio-display text-4xl sm:text-5xl">In Their Words.</h2></header>
+    <div data-reveal-group className="grid gap-5 md:grid-cols-2">{items.map((item) => <figure data-reveal key={item.name + item.quote} className="rounded-3xl border border-[#1A1613]/10 bg-white p-7">
+      <blockquote className="text-xl leading-relaxed">{item.quote}</blockquote><figcaption className="mt-6 text-sm text-[#5D5652]">{item.name}{item.attribution ? " — " + item.attribution : ""}</figcaption>
     </figure>)}</div>
   </RevealSection>;
 }

@@ -1,7 +1,6 @@
 import "./globals.css";
 import GlobalLoader from "@/src/components/ui/GlobalLoader";
 import ScrollProgress from "@/src/components/ui/ScrollProgress";
-import { themeScript } from "@/src/lib/theme";
 
 export const metadata = {
   metadataBase: new URL("https://portfolio-pi-three-wmfjdk08k5.vercel.app"),
@@ -26,9 +25,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className="h-full antialiased" suppressHydrationWarning>
+    <html lang="en" className="h-full antialiased">
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <link rel="preconnect" href="https://api.fontshare.com" />
         <link
           rel="stylesheet"
