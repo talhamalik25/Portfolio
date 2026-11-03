@@ -186,17 +186,17 @@ export default function Journey() {
       id="journey"
       ref={sectionRef}
       aria-label="Journey timeline"
-      className="relative overflow-hidden bg-[#FAF7F2] py-24 text-[#111111] sm:py-28 lg:py-36"
+      className="relative overflow-hidden bg-surface-b py-24 text-content sm:py-28 lg:py-36"
     >
       <div className="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8">
         <div className="mx-auto mb-14 max-w-[760px] text-center lg:mb-20">
-          <div className="portfolio-kicker mb-5 text-[#EB5002]">06 — JOURNEY</div>
+          <div className="portfolio-kicker mb-5 text-accent-ink">06 — JOURNEY</div>
 
-          <h2 className="portfolio-display mb-5 text-[2.5rem] font-bold leading-[0.9] tracking-[-0.06em] text-[#111111] sm:text-[3.2rem] lg:text-[4.3rem]">
-            How I <span className="text-[#EB5002]">Got Here.</span>
+          <h2 className="portfolio-display mb-5 text-[2.5rem] font-bold leading-[0.9] tracking-[-0.06em] text-content sm:text-[3.2rem] lg:text-[4.3rem]">
+            How I <span className="text-accent-ink">Got Here.</span>
           </h2>
 
-          <p className="portfolio-copy mx-auto max-w-[42rem] text-[1.05rem] text-[#5B564F]">
+          <p className="portfolio-copy mx-auto max-w-[42rem] text-[1.05rem] text-muted">
             A timeline of the skills I&apos;ve built, the projects I&apos;ve shipped,
             and where I&apos;m headed next.
           </p>
@@ -231,29 +231,29 @@ export default function Journey() {
                         ref={(el) => {
                           nodeRefs.current[index] = el;
                         }}
-                        className="timeline-node relative z-10 flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#FAF7F2] bg-[#FF6B00] opacity-35 shadow-[0_0_0_rgba(255,107,0,0)]"
+                        className="timeline-node relative z-10 flex h-5 w-5 items-center justify-center rounded-full border-2 border-outline bg-[#FF6B00] opacity-35 shadow-[0_0_0_rgba(255,107,0,0)]"
                       >
-                        <span className="block h-2.5 w-2.5 rounded-full bg-[#FAF7F2]" aria-hidden="true" />
+                        <span className="block h-2.5 w-2.5 rounded-full bg-surface-b" aria-hidden="true" />
                       </div>
                     </div>
 
                     <div
-                      className="timeline-card rounded-[1.5rem] border border-[#1B1714]/8 bg-white p-5 shadow-[0_18px_40px_rgba(17,17,17,0.05)]"
+                      className="timeline-card rounded-[1.5rem] border border-outline bg-card p-5 shadow-[0_18px_40px_rgba(17,17,17,0.05)]"
                     >
                       <div className="mb-4 flex items-center justify-between gap-3">
-                        <span style={{ display: item.year ? undefined : "none" }} className="inline-flex rounded-full border border-[#EB5002]/15 bg-[#EB5002]/10 px-2.5 py-1 text-[0.64rem] font-bold uppercase tracking-[0.18em] text-[#EB5002]">
+                        <span style={{ display: item.year ? undefined : "none" }} className="inline-flex rounded-full border border-[#EB5002]/15 bg-[#EB5002]/10 px-2.5 py-1 text-[0.64rem] font-bold uppercase tracking-[0.18em] text-accent-ink">
                           {item.year}
                         </span>
-                        <span className="text-[0.64rem] font-semibold uppercase tracking-[0.16em] text-[#8A817B]">
+                        <span className="text-[0.64rem] font-semibold uppercase tracking-[0.16em] text-muted">
                           {item.label}
                         </span>
                       </div>
 
-                      <h3 className="mb-3 text-[1.2rem] font-bold leading-tight tracking-[-0.04em] text-[#111111]">
+                      <h3 className="mb-3 text-[1.2rem] font-bold leading-tight tracking-[-0.04em] text-content">
                         {item.title}
                       </h3>
 
-                      <p className="text-[0.96rem] leading-relaxed text-[#5E5852]">
+                      <p className="text-[0.96rem] leading-relaxed text-muted">
                         {item.description}
                       </p>
                     </div>
@@ -273,25 +273,25 @@ export default function Journey() {
                   >
                     <div
                       className={[
-                        "timeline-card relative row-start-1 rounded-[1.5rem] border border-[#1B1714]/8 bg-white p-5 shadow-[0_18px_40px_rgba(17,17,17,0.05)] sm:p-6",
+                        "timeline-card relative row-start-1 rounded-[1.5rem] border border-outline bg-card p-5 shadow-[0_18px_40px_rgba(17,17,17,0.05)] sm:p-6",
                         isLeft ? "col-start-1 mr-10 justify-self-end" : "col-start-3 ml-10",
                       ].join(" ")}
                       style={{ maxWidth: "420px" }}
                     >
                       <div className="mb-4 flex items-center justify-between gap-3">
-                        <span style={{ display: item.year ? undefined : "none" }} className="inline-flex rounded-full border border-[#EB5002]/15 bg-[#EB5002]/10 px-2.5 py-1 text-[0.64rem] font-bold uppercase tracking-[0.18em] text-[#EB5002]">
+                        <span style={{ display: item.year ? undefined : "none" }} className="inline-flex rounded-full border border-[#EB5002]/15 bg-[#EB5002]/10 px-2.5 py-1 text-[0.64rem] font-bold uppercase tracking-[0.18em] text-accent-ink">
                           {item.year}
                         </span>
-                        <span className="text-[0.64rem] font-semibold uppercase tracking-[0.16em] text-[#8A817B]">
+                        <span className="text-[0.64rem] font-semibold uppercase tracking-[0.16em] text-muted">
                           {item.label}
                         </span>
                       </div>
 
-                      <h3 className="mb-3 text-[1.35rem] font-bold leading-tight tracking-[-0.04em] text-[#111111] sm:text-[1.55rem]">
+                      <h3 className="mb-3 text-[1.35rem] font-bold leading-tight tracking-[-0.04em] text-content sm:text-[1.55rem]">
                         {item.title}
                       </h3>
 
-                      <p className="text-[0.98rem] leading-relaxed text-[#5E5852]">
+                      <p className="text-[0.98rem] leading-relaxed text-muted">
                         {item.description}
                       </p>
                     </div>
@@ -301,9 +301,9 @@ export default function Journey() {
                         ref={(el) => {
                           nodeRefs.current[index] = el;
                         }}
-                        className="timeline-node relative z-10 flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#FAF7F2] bg-[#FF6B00] opacity-35 shadow-[0_0_0_rgba(255,107,0,0)] md:h-6 md:w-6"
+                        className="timeline-node relative z-10 flex h-5 w-5 items-center justify-center rounded-full border-2 border-outline bg-[#FF6B00] opacity-35 shadow-[0_0_0_rgba(255,107,0,0)] md:h-6 md:w-6"
                       >
-                        <span className="block h-2.5 w-2.5 rounded-full bg-[#FAF7F2]" aria-hidden="true" />
+                        <span className="block h-2.5 w-2.5 rounded-full bg-surface-b" aria-hidden="true" />
                       </div>
                     </div>
 

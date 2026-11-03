@@ -6,6 +6,7 @@ import { navItems as configuredNavItems } from "@/data/navigation";
 import { timelineEntries } from "@/src/lib/timeline";
 import { readyEntries } from "@/src/lib/content";
 import { usePathname } from "next/navigation";
+import ThemeToggle from "@/src/components/ui/ThemeToggle";
 const navItems = readyEntries(configuredNavItems, "Navigation").filter(item => item.href !== "#experience" || timelineEntries.length > 0);
 
 export default function Navbar() {
@@ -86,14 +87,14 @@ export default function Navbar() {
         <nav
           aria-label="Main navigation"
           className={[
-            "relative flex items-center justify-between gap-4 rounded-full border border-white/5 bg-[#111111]/40 px-4 backdrop-blur-md transition-all duration-400 ease-out sm:px-5 lg:px-6",
-            isScrolled ? "bg-[#111111]/80 py-2 shadow-lg backdrop-blur-xl border-white/10" : "py-3",
+            "relative flex items-center justify-between gap-4 rounded-full border border-outline bg-card px-4 backdrop-blur-md transition-all duration-400 ease-out sm:px-5 lg:px-6",
+            isScrolled ? "bg-card py-2 shadow-lg backdrop-blur-xl border-outline" : "py-3",
           ].join(" ")}
         >
           <a
             href={homeHref("#top")}
             aria-label="Talha home"
-            className="relative z-10 flex shrink-0 items-center text-[0.82rem] font-black uppercase tracking-[0.42em] text-white transition-colors duration-200 hover:text-[#EB5002] sm:text-[0.9rem]"
+            className="relative z-10 flex shrink-0 items-center text-[0.82rem] font-black uppercase tracking-[0.42em] text-content transition-colors duration-200 hover:text-accent-ink sm:text-[0.9rem]"
           >
             TALHA
           </a>
@@ -110,8 +111,8 @@ export default function Navbar() {
                       aria-current={isActive ? (isWorkRoute ? "page" : "location") : undefined}
                       className={`group relative inline-flex items-center overflow-hidden text-[0.7rem] font-medium uppercase tracking-[0.12em] transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#EB5002] ${
                         isActive
-                          ? "text-white"
-                          : "text-white/50 hover:text-[#EB5002]"
+                          ? "text-content"
+                          : "text-muted hover:text-accent-ink"
                       }`}
                     >
                       <span className="relative flex overflow-hidden">
@@ -155,13 +156,14 @@ export default function Navbar() {
           </div>
 
           <div className="ml-auto flex items-center gap-3">
+            <ThemeToggle className="hidden lg:inline-flex" />
             <a
               href={homeHref("#contact")}
-              className="group relative hidden items-center justify-center gap-2 overflow-hidden rounded-full border border-white/10 bg-[#111111] px-4 py-2.5 text-[0.7rem] font-medium uppercase tracking-[0.18em] text-white transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#EB5002] focus:ring-offset-2 focus:ring-offset-[#0b0b0b] md:inline-flex"
+              className="group relative hidden items-center justify-center gap-2 overflow-hidden rounded-full border border-outline bg-card px-4 py-2.5 text-[0.7rem] font-medium uppercase tracking-[0.18em] text-content transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#EB5002] focus:ring-offset-2 focus:ring-offset-surface-a md:inline-flex"
             >
               <span className="absolute inset-0 -translate-x-[105%] bg-[#EB5002] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0 group-focus-visible:translate-x-0" />
-              <span className="relative text-white transition-colors duration-400 ease-out group-hover:text-[#0b0b0b] group-focus-visible:text-[#0b0b0b]">Let&apos;s Talk</span>
-              <span aria-hidden="true" className="relative text-base leading-none text-white transition-all duration-400 ease-out group-hover:translate-x-1 group-hover:text-[#0b0b0b] group-focus-visible:translate-x-1 group-focus-visible:text-[#0b0b0b]">↗</span>
+              <span className="relative text-content transition-colors duration-400 ease-out group-hover:text-content group-focus-visible:text-content">Let&apos;s Talk</span>
+              <span aria-hidden="true" className="relative text-base leading-none text-content transition-all duration-400 ease-out group-hover:translate-x-1 group-hover:text-content group-focus-visible:translate-x-1 group-focus-visible:text-content">↗</span>
             </a>
 
             <button
@@ -170,7 +172,7 @@ export default function Navbar() {
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-navigation"
               onClick={() => setIsMobileMenuOpen((open) => !open)}
-              className="relative flex h-10 items-center justify-center rounded-full border border-white/10 bg-[#111111]/70 px-4 text-[0.65rem] font-semibold uppercase tracking-[0.15em] text-white transition-all duration-200 ease-out hover:border-[#EB5002] hover:text-[#EB5002] focus:outline-none focus:ring-2 focus:ring-[#EB5002] focus:ring-offset-2 focus:ring-offset-[#0b0b0b] lg:hidden"
+              className="relative flex h-10 items-center justify-center rounded-full border border-outline bg-card px-4 text-[0.65rem] font-semibold uppercase tracking-[0.15em] text-content transition-all duration-200 ease-out hover:border-[#EB5002] hover:text-accent-ink focus:outline-none focus:ring-2 focus:ring-[#EB5002] focus:ring-offset-2 focus:ring-offset-surface-a lg:hidden"
             >
               <div className="relative flex items-center justify-center overflow-hidden h-4 w-12">
                 <span
@@ -209,11 +211,12 @@ export default function Navbar() {
         <div className="mx-auto max-w-[1180px]">
           <div
             className={[
-              "rounded-[28px] border border-white/10 bg-[#111111]/80 p-4 shadow-[0_18px_42px_rgba(0,0,0,0.24)] backdrop-blur-xl opacity-0 translate-y-[-12px] scale-[0.98] transition-all duration-420 ease-[cubic-bezier(0.22,1,0.36,1)]",
+              "rounded-[28px] border border-outline bg-card p-4 shadow-[0_18px_42px_rgba(0,0,0,0.24)] backdrop-blur-xl opacity-0 translate-y-[-12px] scale-[0.98] transition-all duration-420 ease-[cubic-bezier(0.22,1,0.36,1)]",
               isMobileMenuOpen ? "opacity-100 translate-y-0 scale-100" : "",
             ].join(" ")}
           >
             <nav aria-label="Mobile menu" className="flex flex-col gap-5">
+              <div className="flex items-center justify-between text-sm text-content"><span>Color theme</span><ThemeToggle /></div>
               <ul className="space-y-2">
                 {navItems.map((item, index) => (
                   <li
@@ -229,10 +232,10 @@ export default function Navbar() {
                       aria-label={item.label}
                       onClick={handleNavClick}
                       aria-current={isWorkRoute ? (item.href === "#work" ? "page" : undefined) : (activeSection === item.href.slice(1) ? "location" : undefined)}
-                      className="group flex items-center justify-between aria-[current=page]:text-[#EB5002] aria-[current=location]:text-[#EB5002] border-b border-white/8 py-3 text-[1.7rem] font-semibold uppercase tracking-[0.12em] text-white/90 transition-colors duration-200 hover:text-[#EB5002] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EB5002]"
+                      className="group flex items-center justify-between aria-[current=page]:text-accent-ink aria-[current=location]:text-accent-ink border-b border-outline py-3 text-[1.7rem] font-semibold uppercase tracking-[0.12em] text-muted transition-colors duration-200 hover:text-accent-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EB5002]"
                     >
                       <span>{item.label}</span>
-                      <span className="text-[0.7rem] font-medium tracking-[0.2em] text-[#EB5002]">{item.number}</span>
+                      <span className="text-[0.7rem] font-medium tracking-[0.2em] text-accent-ink">{item.number}</span>
                     </a>
                   </li>
                 ))}
@@ -241,7 +244,7 @@ export default function Navbar() {
               <a
                 href={homeHref("#contact")}
                 onClick={handleNavClick}
-                className={`group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full border border-white/10 bg-[#111111] px-5 py-3.5 text-[0.7rem] font-medium uppercase tracking-[0.18em] text-white transition-all duration-420 ease-[cubic-bezier(0.22,1,0.36,1)] focus:outline-none focus:ring-2 focus:ring-[#EB5002] focus:ring-offset-2 focus:ring-offset-[#0b0b0b] ${isMobileMenuOpen ? "translate-y-0 opacity-100" : "translate-y-[16px] opacity-0"}`}
+                className={`group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full border border-outline bg-card px-5 py-3.5 text-[0.7rem] font-medium uppercase tracking-[0.18em] text-content transition-all duration-420 ease-[cubic-bezier(0.22,1,0.36,1)] focus:outline-none focus:ring-2 focus:ring-[#EB5002] focus:ring-offset-2 focus:ring-offset-surface-a ${isMobileMenuOpen ? "translate-y-0 opacity-100" : "translate-y-[16px] opacity-0"}`}
                 style={{ transitionDelay: "160ms" }}
               >
                 <span className={[
@@ -250,11 +253,11 @@ export default function Navbar() {
                 ].join(" ")}
                 />
                 <span className={[
-                  "relative text-white transition-colors duration-400 ease-out group-hover:text-[#0b0b0b]",
-                  isMobileMenuOpen ? "text-[#0b0b0b]" : "",
+                  "relative text-content transition-colors duration-400 ease-out group-hover:text-content",
+                  isMobileMenuOpen ? "text-content" : "",
                 ].join(" ")}
                 >Let&apos;s Talk</span>
-                <span aria-hidden="true" className="relative text-base leading-none text-white transition-all duration-400 ease-out group-hover:translate-x-1 group-hover:text-[#0b0b0b]">↗</span>
+                <span aria-hidden="true" className="relative text-base leading-none text-content transition-all duration-400 ease-out group-hover:translate-x-1 group-hover:text-content">↗</span>
               </a>
             </nav>
           </div>

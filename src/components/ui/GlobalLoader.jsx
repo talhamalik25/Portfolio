@@ -82,20 +82,20 @@ export default function GlobalLoader() {
     <div
       ref={containerRef}
       aria-hidden="true"
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#0b0b0b] text-white"
+      className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-surface-a text-content"
     >
       <div className="flex flex-col items-center">
-        <p className="portfolio-display text-5xl md:text-7xl mb-2 text-[#f5f5f5]">TALHA</p>
-        <p className="portfolio-kicker max-w-[calc(100vw-2rem)] px-4 text-center text-[#f5f5f5]/70">
+        <p className="portfolio-display text-5xl md:text-7xl mb-2 text-content">TALHA</p>
+        <p className="portfolio-kicker max-w-[calc(100vw-2rem)] px-4 text-center text-muted">
           FULL-STACK DEVELOPER / AI AUTOMATION
         </p>
       </div>
 
       <div className="absolute bottom-16 md:bottom-24 w-full max-w-[280px] md:max-w-sm px-6 flex flex-col items-center gap-4">
-        <div ref={percentRef} className="portfolio-meta text-[#f5f5f5]/50 tabular-nums">
+        <div ref={percentRef} className="portfolio-meta text-muted tabular-nums">
           0%
         </div>
-        <div className="h-[2px] w-full bg-white/10 relative overflow-hidden rounded-full">
+        <div className="h-[2px] w-full bg-card relative overflow-hidden rounded-full">
           <div
             ref={progressRef}
             className="absolute top-0 left-0 h-full w-full bg-[#FF6B00] origin-left scale-x-0"

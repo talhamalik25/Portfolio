@@ -59,22 +59,22 @@ export default function Capabilities() {
     <section
       id="services"
       ref={sectionRef}
-      className="bg-[#0A0A0A] py-20 text-white sm:py-24 lg:py-28"
+      className="bg-surface-a py-20 text-content sm:py-24 lg:py-28"
       aria-labelledby="capabilities-heading"
       style={{
         backgroundImage:
-          "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0)",
+          "radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--text) 6%, transparent) 1px, transparent 0)",
         backgroundSize: "18px 18px",
       }}
     >
       <div className="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8">
         <header className="mb-10 max-w-3xl sm:mb-12">
-          <p className="portfolio-kicker mb-4 text-[#EB5002]">WHAT I DO</p>
+          <p className="portfolio-kicker mb-4 text-accent-ink">WHAT I DO</p>
           <h2
             id="capabilities-heading"
             className="portfolio-display text-4xl font-bold leading-[0.95] tracking-[-0.06em] sm:text-5xl lg:text-6xl"
           >
-            How I <span className="text-[#EB5002]">Build.</span>
+            How I <span className="text-accent-ink">Build.</span>
           </h2>
         </header>
 
@@ -83,21 +83,21 @@ export default function Capabilities() {
             <article
               key={title}
               data-capability-card
-              className="rounded-3xl border border-white/10 bg-[#11100F] p-6 transition-colors duration-300 hover:border-[#EB5002]/40 sm:p-7"
+              className="rounded-3xl border border-outline bg-card p-6 transition-colors duration-300 hover:border-[#EB5002]/40 sm:p-7"
             >
               <div className="mb-8 flex items-center justify-between">
-                <span className="text-xs font-semibold tracking-[0.2em] text-white/45">{number}</span>
-                <Icon className="h-5 w-5 text-[#EB5002]" aria-hidden="true" />
+                <span className="text-xs font-semibold tracking-[0.2em] text-muted">{number}</span>
+                <Icon className="h-5 w-5 text-accent-ink" aria-hidden="true" />
               </div>
-              <h3 className="portfolio-display mb-3 text-2xl font-bold leading-tight tracking-[-0.04em] text-white">
+              <h3 className="portfolio-display mb-3 text-2xl font-bold leading-tight tracking-[-0.04em] text-content">
                 {title}
               </h3>
-              <p className="portfolio-copy min-h-[5rem] text-base leading-relaxed text-white/65">
+              <p className="portfolio-copy min-h-[5rem] text-base leading-relaxed text-muted">
                 {description}
               </p>
               <ul className="mt-6 flex flex-wrap gap-2" aria-label={`${title} technologies`}>
                 {tags.map((tag) => (
-                  <li key={tag} className="rounded-full border border-white/10 px-3 py-1.5 text-xs text-white/60">
+                  <li key={tag} className="rounded-full border border-outline px-3 py-1.5 text-xs text-muted">
                     {tag}
                   </li>
                 ))}

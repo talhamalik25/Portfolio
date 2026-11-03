@@ -101,21 +101,21 @@ export default function Process() {
 
   if (!items.length) return null;
   return (
-    <section id="process" ref={sectionRef} aria-labelledby="process-heading" className="border-t border-white/10 bg-[#0A0A0A] py-20 text-white sm:py-24 lg:py-28">
+    <section id="process" ref={sectionRef} aria-labelledby="process-heading" className="border-t border-outline bg-surface-a py-20 text-content sm:py-24 lg:py-28">
       <div ref={stageRef} data-process-stage className="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8">
         <header className="mb-8">
-          <p className="portfolio-kicker mb-4 text-[#EB5002]">THE PROCESS</p>
-          <h2 id="process-heading" className="portfolio-display text-4xl leading-[0.95] sm:text-5xl lg:text-6xl">How I <span className="text-[#EB5002]">Work.</span></h2>
+          <p className="portfolio-kicker mb-4 text-accent-ink">THE PROCESS</p>
+          <h2 id="process-heading" className="portfolio-display text-4xl leading-[0.95] sm:text-5xl lg:text-6xl">How I <span className="text-accent-ink">Work.</span></h2>
         </header>
         <ol data-process-panels className="grid gap-12">
           {items.map((step, index) => (
             <li data-process-phase={step.visual} key={step.title} className="grid min-w-0 items-center gap-7 md:grid-cols-2 md:gap-10">
               <div>
-                <p className="mb-5 text-sm font-medium tracking-[0.18em] text-[#EB5002]">{String(index + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}</p>
+                <p className="mb-5 text-sm font-medium tracking-[0.18em] text-accent-ink">{String(index + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")}</p>
                 <h3 className="mb-5 text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">{step.title}</h3>
-                <p className="portfolio-copy max-w-md text-white/70">{step.description}</p>
+                <p className="portfolio-copy max-w-md text-muted">{step.description}</p>
                 <ul aria-label={step.title + " focus areas"} className="mt-6 flex flex-wrap gap-2">
-                  {step.tags.map(tag => <li key={tag} className="rounded-full border border-white/15 px-3 py-1.5 text-xs text-white/75">{tag}</li>)}
+                  {step.tags.map(tag => <li key={tag} className="rounded-full border border-outline px-3 py-1.5 text-xs text-muted">{tag}</li>)}
                 </ul>
               </div>
               <ProcessVisual phase={step.visual} />
@@ -128,7 +128,7 @@ export default function Process() {
         </ol>
         <div data-process-controls hidden className="mt-8">
           <div role="group" aria-label="Choose a process phase" className="flex flex-wrap gap-3">
-            {items.map((step, index) => <button key={step.title} type="button" onClick={() => selectPhase(index)} aria-current={activeIndex === index ? "step" : undefined} className="min-h-11 rounded-full border border-white/20 px-4 text-sm transition-colors hover:border-[#EB5002] aria-[current=step]:border-[#EB5002] aria-[current=step]:text-[#EB5002]">{step.title}</button>)}
+            {items.map((step, index) => <button key={step.title} type="button" onClick={() => selectPhase(index)} aria-current={activeIndex === index ? "step" : undefined} className="min-h-11 rounded-full border border-outline px-4 text-sm transition-colors hover:border-[#EB5002] aria-[current=step]:border-[#EB5002] aria-[current=step]:text-accent-ink">{step.title}</button>)}
           </div>
         </div>
       </div>

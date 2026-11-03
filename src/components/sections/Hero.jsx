@@ -101,7 +101,7 @@ export default function Hero() {
     <section
       id="top"
       ref={rootRef}
-      className="relative overflow-hidden bg-[#050302] text-white"
+      className="relative overflow-hidden bg-surface-a text-content"
       aria-label="Introduction"
     >
       <div
@@ -120,14 +120,14 @@ export default function Hero() {
             data-hero-animate
             className="portfolio-kicker relative z-30 mb-6 flex flex-col items-center gap-3.5 text-center text-[0.55rem] sm:text-[0.6rem] tracking-[0.15em] uppercase font-bold"
           >
-            <div className="flex items-center gap-2 text-white/70">
+            <div className="flex items-center gap-2 text-muted">
               <span className="h-1.5 w-1.5 rounded-full bg-[#EB5002]" />
               <span>HI, I&apos;M TALHA</span>
             </div>
 
-            <div className="flex items-center gap-2 text-[#EB5002]">
+            <div className="flex items-center gap-2 text-accent-ink">
               <span>FULL-STACK DEVELOPER</span>
-              <span className="text-white/30" aria-hidden="true">·</span>
+              <span className="text-muted" aria-hidden="true">·</span>
               <span>AI AUTOMATION</span>
             </div>
           </div>
@@ -152,7 +152,7 @@ export default function Hero() {
     <span
       className="
         portfolio-display whitespace-nowrap font-bold leading-[0.8]
-        tracking-[-0.04em] text-[#EB5002]
+        tracking-[-0.04em] text-accent-ink
         text-[clamp(4rem,22vw,16rem)]
         sm:text-[clamp(6rem,17vw,17rem)]
         md:text-[clamp(6rem,17vw,15rem)]
@@ -204,7 +204,7 @@ export default function Hero() {
             <h1
               data-hero-statement
               data-hero-animate
-              className="portfolio-display w-full text-[1.9rem] font-bold leading-[1.05] tracking-[-0.03em] text-white sm:text-[2.6rem] md:text-[3.2rem] lg:text-[4rem]"
+              className="portfolio-display w-full text-[1.9rem] font-bold leading-[1.05] tracking-[-0.03em] text-content sm:text-[2.6rem] md:text-[3.2rem] lg:text-[4rem]"
             >
               I build full-stack web apps and automations that work end to end.
             </h1>
@@ -212,22 +212,22 @@ export default function Hero() {
             <p
               data-hero-copy
               data-hero-animate
-              className="portfolio-copy mt-4 md:mt-5 w-full max-w-[34rem] text-center text-[0.95rem] md:text-[1.15rem] leading-relaxed text-white/75"
+              className="portfolio-copy mt-4 md:mt-5 w-full max-w-[34rem] text-center text-[0.95rem] md:text-[1.15rem] leading-relaxed text-muted"
             >
               Frontend Developer at AKTech and BS CS student at Iqra University,
               Karachi. I build with Next.js, Node.js and MongoDB.
             </p>
-            <a href="https://aktech.tech" target="_blank" rel="noopener noreferrer" className="mt-4 rounded-full border border-[#EB5002]/20 bg-[#EB5002]/10 px-3 py-1.5 text-xs text-[#EB5002]">Currently at AKTech ↗</a>
+            <a href="https://aktech.tech" target="_blank" rel="noopener noreferrer" className="mt-4 rounded-full border border-[#EB5002]/20 bg-[#EB5002]/10 px-3 py-1.5 text-xs text-accent-ink">Currently at AKTech ↗</a>
 
             <div className="mt-8 md:mt-10 flex w-full flex-col items-center justify-center gap-4 sm:flex-row">
               <a
                 href="#contact"
                 data-hero-cta
                 data-hero-animate
-                className="portfolio-button-label group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-bold border border-[#EB5002] bg-[#EB5002] px-8 py-3.5 text-[0.8rem] md:text-[0.85rem] text-[#0b0b0b] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.03] focus:outline-none focus:ring-2 focus:ring-[#EB5002]"
+                className="portfolio-button-label group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-bold border border-[#EB5002] bg-[#EB5002] px-8 py-3.5 text-[0.8rem] md:text-[0.85rem] text-content transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.03] focus:outline-none focus:ring-2 focus:ring-[#EB5002]"
               >
                 <span className="absolute inset-0 -translate-x-[100%] bg-black transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
-                <span className="relative text-[#ffffff] whitespace-nowrap">
+                <span className="relative text-content whitespace-nowrap">
                   Contact Me
                 </span>
               </a>
@@ -236,7 +236,7 @@ export default function Hero() {
                 href="#work"
                 data-hero-cta
                 data-hero-animate
-                className="portfolio-button-label group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-bold border border-white/10 bg-white/[0.02] px-8 py-3.5 text-[0.8rem] md:text-[0.85rem] text-white backdrop-blur-sm transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-white/10 hover:border-white/20 focus:outline-none focus:ring-2 focus:ring-[#EB5002]"
+                className="portfolio-button-label group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full font-bold border border-outline bg-card px-8 py-3.5 text-[0.8rem] md:text-[0.85rem] text-content backdrop-blur-sm transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-card hover:border-outline focus:outline-none focus:ring-2 focus:ring-[#EB5002]"
               >
                 <span className="relative whitespace-nowrap">
                   View Work
