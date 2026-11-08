@@ -5,8 +5,7 @@ const { chromium } = require("playwright");
 const projects = [
   { slug: "sooti-mehal", liveUrl: "https://sootimehal.com" },
   { slug: "malik-enterprices", liveUrl: "https://malikenterprices.com" },
-  // TODO: Add project 3 with its slug and liveUrl when it is ready.
-  // TODO: Add project 4 with its slug and liveUrl when it is ready.
+  { slug: "jewellery-store", liveUrl: "https://jewellery-store-eight-theta.vercel.app/" },
 ];
 
 const rootDirectory = path.resolve(__dirname, "..");

@@ -149,7 +149,7 @@ export default function Hero() {
               className="pointer-events-none absolute top-0 left-1/2 z-20 aspect-[4/5] w-[min(76vw,340px)] -translate-x-1/2 sm:w-[min(68vw,360px)] md:w-[min(52vw,390px)] lg:w-[min(42vw,420px)] xl:w-[420px]"
             >
               <div
-                className="h-full w-full overflow-hidden [mask-composite:intersect] [mask-image:linear-gradient(to_bottom,transparent_0%,black_14%,black_48%,transparent_100%),linear-gradient(to_right,transparent_0%,black_16%,black_84%,transparent_100%)] [-webkit-mask-composite:source-in] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,black_14%,black_48%,transparent_100%),linear-gradient(to_right,transparent_0%,black_16%,black_84%,transparent_100%)]"
+                className="relative h-full w-full overflow-hidden [mask-composite:intersect] [mask-image:linear-gradient(to_bottom,transparent_0%,black_14%,black_48%,transparent_100%),linear-gradient(to_right,transparent_0%,black_16%,black_84%,transparent_100%)] [-webkit-mask-composite:source-in] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,black_14%,black_48%,transparent_100%),linear-gradient(to_right,transparent_0%,black_16%,black_84%,transparent_100%)]"
               >
                 <Image
                   src="/images/profile/heroimg.png"
@@ -194,12 +194,9 @@ export default function Hero() {
                 href="#contact"
                 data-hero-cta
                 data-hero-animate
-                className="portfolio-button-label group relative inline-flex items-center justify-center overflow-hidden rounded-full border border-accent bg-accent px-8 py-3.5 text-[0.8rem] font-bold text-background transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:scale-[1.03] focus:ring-2 focus:ring-accent focus:outline-none md:text-[0.85rem]"
+                className="portfolio-button-label inline-flex items-center justify-center rounded-full border border-accent bg-accent px-8 py-3.5 text-[0.8rem] font-bold text-background transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-accent-bright focus:ring-2 focus:ring-accent focus:outline-none md:text-[0.85rem]"
               >
-                <span className="absolute inset-0 -translate-x-full bg-background transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0" />
-                <span className="relative whitespace-nowrap text-background group-hover:text-accent">
-                  Contact Me
-                </span>
+                <span className="whitespace-nowrap">Contact Me</span>
               </a>
 
               <a

@@ -78,8 +78,8 @@ export default function Navbar() {
     <>
       <header
         className={[
-          "fixed left-1/2 top-5 z-50 w-[calc(100%-1.5rem)] max-w-[1180px] -translate-x-1/2 transition-all duration-300 ease-out",
-          isMounted ? "translate-y-0 opacity-100" : "-translate-y-2 opacity-0",
+          "fixed left-1/2 top-5 z-50 w-[calc(100%-1.5rem)] max-w-[1180px] -translate-x-1/2 motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-out",
+          isMounted ? "translate-y-0 opacity-100" : "motion-reduce:translate-y-0 motion-reduce:opacity-100 -translate-y-2 opacity-0",
         ].join(" ")}
       >
         <nav

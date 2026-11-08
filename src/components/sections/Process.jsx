@@ -7,6 +7,7 @@ import { processSteps } from "@/data/sections";
 import { readyEntries } from "@/src/lib/content";
 import { useMotionEffect } from "@/src/hooks/useMotionEffect";
 import ProcessVisual from "./ProcessVisual";
+import SectionHeader from "@/src/components/ui/SectionHeader";
 
 gsap.registerPlugin(ScrollTrigger);
 const items = readyEntries(processSteps, "Process");
@@ -103,10 +104,13 @@ export default function Process() {
   return (
     <section id="process" ref={sectionRef} aria-labelledby="process-heading" className="border-t border-white/10 bg-section py-20 text-white sm:py-24 lg:py-28">
       <div ref={stageRef} data-process-stage className="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8">
-        <header className="mb-8">
-          <p className="portfolio-kicker mb-4 text-accent">The process</p>
-          <h2 id="process-heading" className="portfolio-display text-4xl leading-[0.95] sm:text-5xl lg:text-6xl">How I <span className="text-accent">Work.</span></h2>
-        </header>
+        <SectionHeader
+          kicker="The process"
+          title="How I"
+          accent="Work."
+          headingId="process-heading"
+          lede="A short path from brief to launch. The numbered phases stay readable without pinning on small screens."
+        />
         <ol data-process-panels className="grid gap-12">
           {items.map((step, index) => (
             <li data-process-phase={step.visual} key={step.title} className="grid min-w-0 items-center gap-7 md:grid-cols-2 md:gap-10">

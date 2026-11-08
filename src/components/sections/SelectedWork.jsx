@@ -52,7 +52,7 @@ export default function SelectedWork() {
           title="Projects I've"
           accent="Built."
           headingId="work-heading"
-          lede="Selected websites and product work, with notes on my role and implementation."
+          lede="Live websites and a product in progress, with working demos and the implementation notes I can share so far."
         >
           <Link
             href="/work"

@@ -8,16 +8,30 @@ const siteDescription =
 
 export const metadata = {
   metadataBase: new URL("https://portfolio-pi-three-wmfjdk08k5.vercel.app"),
+  applicationName: "Talha Malik Portfolio",
+  authors: [{ name: "Talha Malik", url: "https://portfolio-pi-three-wmfjdk08k5.vercel.app" }],
+  creator: "Talha Malik",
   title: {
     default: siteTitle,
     template: "%s | Talha Malik",
   },
   description: siteDescription,
+  keywords: [
+    "Talha Malik",
+    "Full-Stack Developer",
+    "Frontend Developer",
+    "Next.js",
+    "Karachi",
+    "AKTech",
+  ],
   alternates: { canonical: "/" },
+  icons: { icon: "/icon.svg" },
   openGraph: {
     title: siteTitle,
     description: siteDescription,
     type: "website",
+    locale: "en_US",
+    siteName: "Talha Malik",
     url: "/",
     images: [{ url: "/images/profile/heroimg.png", width: 1200, height: 1500, alt: "Portrait of Talha Malik" }],
   },
@@ -41,6 +55,24 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className="flex min-h-full flex-col bg-background text-foreground">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Person",
+              name: "Talha Malik",
+              jobTitle: "Full-Stack Developer",
+              url: "https://portfolio-pi-three-wmfjdk08k5.vercel.app",
+              email: "mailto:mtmaliktalha2005@gmail.com",
+              address: { "@type": "PostalAddress", addressLocality: "Karachi", addressCountry: "PK" },
+              sameAs: [
+                "https://github.com/talhamalik25",
+                "https://www.linkedin.com/in/muhammad-talha-malik-465957307",
+              ],
+            }),
+          }}
+        />
         <GlobalLoader />
         <ScrollProgress />
         {children}

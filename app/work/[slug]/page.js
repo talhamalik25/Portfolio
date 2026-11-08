@@ -14,13 +14,18 @@ export async function generateMetadata({ params }) {
   const title = project.title + " — Talha Malik";
   const description =
     project.summary || project.title + " — project details and available links by Talha Malik.";
-  const images = [project.image || "/images/profile/heroimg.png"];
+  const images = [
+    {
+      url: project.image || "/images/profile/heroimg.png",
+      alt: project.alt || project.title,
+    },
+  ];
   return {
     title: { absolute: title },
     description,
     alternates: { canonical: "/work/" + slug },
     openGraph: { title, description, type: "website", url: "/work/" + slug, images },
-    twitter: { card: "summary_large_image", title, description, images },
+    twitter: { card: "summary_large_image", title, description, images: images.map((image) => image.url) },
   };
 }
 
@@ -39,7 +44,10 @@ export default async function ProjectPage({ params }) {
         <Link href="/work" className="inline-flex min-h-11 items-center text-accent-link">
           ← All works
         </Link>
-        {project.category ? <p className="portfolio-kicker mt-8 text-accent">{project.category}</p> : null}
+        <p className="portfolio-kicker mt-8 text-accent">
+          {project.number ? `${project.number} — ` : ""}
+          {project.category || "Project"}
+        </p>
         <h1 className="portfolio-display mt-4 text-4xl sm:text-6xl">{project.title}</h1>
         {project.status === "in-progress" ? (
           <p className="mt-5 w-fit rounded-full border border-accent/40 px-4 py-1 text-sm text-accent-link">
@@ -55,9 +63,13 @@ export default async function ProjectPage({ params }) {
             height={900}
             sizes="(max-width: 1024px) 100vw, 960px"
             preload
-            className="mt-10 h-auto w-full rounded-2xl"
+            className="mt-10 h-auto w-full rounded-3xl border border-white/10"
           />
-        ) : null}
+        ) : (
+          <div className="mt-10 flex min-h-[240px] items-center justify-center rounded-3xl border border-white/10 bg-surface-deep text-white/40">
+            Preview coming as the product ships
+          </div>
+        )}
         {project.liveUrl || project.githubUrl ? (
           <div className="mt-8 flex flex-wrap gap-4">
             {project.liveUrl ? (

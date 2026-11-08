@@ -25,6 +25,15 @@ export default function WorkGrid() {
       {categories.map(item => <button key={item} type="button" aria-pressed={category === item} onClick={() => setCategory(item)} className="min-h-11 rounded-full border border-white/20 px-5 text-sm hover:border-accent aria-pressed:border-accent aria-pressed:bg-accent/10">{item}</button>)}
     </div>
     <p role="status" className="mb-6 text-sm text-white/60">{visible.length} {visible.length === 1 ? "project" : "projects"}</p>
-    <div ref={gridRef} className="grid gap-5 md:grid-cols-2">{visible.map(project => <ProjectCard key={project.slug} project={project} />)}</div>
+    <div ref={gridRef} className="grid gap-6">
+      {visible[0] ? (
+        <ProjectCard key={visible[0].slug} project={visible[0]} featured={category === "All"} />
+      ) : null}
+      <div className="grid gap-6 md:grid-cols-2">
+        {visible.slice(1).map((project) => (
+          <ProjectCard key={project.slug} project={project} />
+        ))}
+      </div>
+    </div>
   </>;
 }

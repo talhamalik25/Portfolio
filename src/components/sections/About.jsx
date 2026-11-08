@@ -25,8 +25,8 @@ export default function About() {
         <SectionHeader
           index="02"
           kicker="About"
-          title="Who I"
-          accent="am."
+          title="About"
+          accent="Me."
           headingId="about-heading"
           light
         />
