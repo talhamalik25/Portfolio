@@ -3,15 +3,15 @@
 import { useEffect, useState } from "react";
 
 import { navItems as configuredNavItems } from "@/data/navigation";
-import { timelineEntries } from "@/src/lib/timeline";
 import { readyEntries } from "@/src/lib/content";
 import { usePathname } from "next/navigation";
-const navItems = readyEntries(configuredNavItems, "Navigation").filter(item => item.href !== "#experience" || timelineEntries.length > 0);
+
+const navItems = readyEntries(configuredNavItems, "Navigation");
 
 export default function Navbar() {
   const pathname = usePathname();
   const isWorkRoute = pathname === "/work" || pathname.startsWith("/work/");
-  const homeHref = (hash) => pathname === "/" ? hash : "/" + hash;
+  const homeHref = (hash) => (pathname === "/" ? hash : "/" + hash);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
@@ -21,20 +21,19 @@ export default function Navbar() {
     const handleScroll = () => setIsScrolled(window.scrollY > 12);
 
     const updateActiveSection = () => {
-      // Activate only the section that contains the tracking line. This keeps
-      // the Hero neutral and avoids navItems ordering choosing an older section.
       const activationLine = Math.min(160, window.innerHeight * 0.3);
-      const currentSection = navItems
-        .map((item) => document.getElementById(item.href.slice(1)))
-        .filter((section) => {
-          if (!section) return false;
-          const bounds = section.getBoundingClientRect();
-          return bounds.top <= activationLine && bounds.bottom > activationLine;
-        })
-        .sort(
-          (first, second) =>
-            second.getBoundingClientRect().top - first.getBoundingClientRect().top,
-        )[0]?.id ?? "";
+      const currentSection =
+        navItems
+          .map((item) => document.getElementById(item.href.slice(1)))
+          .filter((section) => {
+            if (!section) return false;
+            const bounds = section.getBoundingClientRect();
+            return bounds.top <= activationLine && bounds.bottom > activationLine;
+          })
+          .sort(
+            (first, second) =>
+              second.getBoundingClientRect().top - first.getBoundingClientRect().top,
+          )[0]?.id ?? "";
 
       setActiveSection(currentSection);
     };
@@ -86,64 +85,62 @@ export default function Navbar() {
         <nav
           aria-label="Main navigation"
           className={[
-            "relative flex items-center justify-between gap-4 rounded-full border border-white/5 bg-[#111111]/40 px-4 backdrop-blur-md transition-all duration-400 ease-out sm:px-5 lg:px-6",
-            isScrolled ? "bg-[#111111]/80 py-2 shadow-lg backdrop-blur-xl border-white/10" : "py-3",
+            "relative flex items-center justify-between gap-4 rounded-full border border-white/5 bg-surface/40 px-4 backdrop-blur-md transition-all duration-400 ease-out sm:px-5 lg:px-6",
+            isScrolled ? "border-white/10 bg-surface/80 py-2 shadow-lg backdrop-blur-xl" : "py-3",
           ].join(" ")}
         >
           <a
             href={homeHref("#top")}
             aria-label="Talha home"
-            className="relative z-10 flex shrink-0 items-center text-[0.82rem] font-black uppercase tracking-[0.42em] text-white transition-colors duration-200 hover:text-[#EB5002] sm:text-[0.9rem]"
+            className="relative z-10 flex shrink-0 items-center text-[0.82rem] font-black uppercase tracking-[0.42em] text-white transition-colors duration-200 hover:text-accent sm:text-[0.9rem]"
           >
             TALHA
           </a>
 
           <div className="hidden flex-1 items-center justify-center lg:flex">
-            <ul className="flex items-center gap-5 xl:gap-8">
+            <ul className="flex items-center gap-4 xl:gap-7">
               {navItems.map((item) => {
-                const isActive = isWorkRoute ? item.href === "#work" : activeSection === item.href.replace("#", "");
+                const isActive = isWorkRoute
+                  ? item.href === "#work"
+                  : activeSection === item.href.replace("#", "");
                 return (
                   <li key={item.label}>
                     <a
                       href={homeHref(item.href)}
                       aria-label={item.label}
                       aria-current={isActive ? (isWorkRoute ? "page" : "location") : undefined}
-                      className={`group relative inline-flex items-center overflow-hidden text-[0.7rem] font-medium uppercase tracking-[0.12em] transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#EB5002] ${
-                        isActive
-                          ? "text-white"
-                          : "text-white/50 hover:text-[#EB5002]"
+                      className={`group relative inline-flex items-center gap-2 overflow-hidden text-[0.7rem] font-medium uppercase tracking-[0.12em] transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-accent ${
+                        isActive ? "text-white" : "text-white/50 hover:text-accent"
                       }`}
                     >
+                      <span className="text-[0.55rem] tracking-[0.16em] text-accent">{item.number}</span>
                       <span className="relative flex overflow-hidden">
                         <span className="flex" aria-hidden="true">
                           {item.label.toUpperCase().split("").map((char, index) => (
                             <span
                               key={`label-${index}`}
-                              className="inline-block transition-transform duration-300 ease-out group-hover:-translate-y-full group-focus-visible:-translate-y-full"
+                              className="inline-block transition-transform duration-300 ease-out motion-safe:group-hover:-translate-y-full motion-safe:group-focus-visible:-translate-y-full"
                               style={{ transitionDelay: `${index * 20}ms` }}
                             >
-                              {char}
+                              {char === " " ? "\u00A0" : char}
                             </span>
                           ))}
                         </span>
-                        <span
-                          aria-hidden="true"
-                          className="absolute inset-0 flex"
-                        >
+                        <span aria-hidden="true" className="absolute inset-0 flex">
                           {item.label.toUpperCase().split("").map((char, index) => (
                             <span
                               key={`roll-${index}`}
-                              className="inline-block translate-y-full transition-transform duration-300 ease-out group-hover:translate-y-0 group-focus-visible:translate-y-0"
+                              className="inline-block translate-y-full transition-transform duration-300 ease-out motion-safe:group-hover:translate-y-0 motion-safe:group-focus-visible:translate-y-0"
                               style={{ transitionDelay: `${index * 20}ms` }}
                             >
-                              {char}
+                              {char === " " ? "\u00A0" : char}
                             </span>
                           ))}
                         </span>
                       </span>
                       <span
                         aria-hidden="true"
-                        className={`absolute bottom-0 left-1/2 h-[3px] w-[3px] -translate-x-1/2 rounded-full bg-[#EB5002] transition-opacity duration-300 ${
+                        className={`absolute bottom-0 left-1/2 h-[3px] w-[3px] -translate-x-1/2 rounded-full bg-accent transition-opacity duration-300 ${
                           isActive ? "opacity-100" : "opacity-0"
                         }`}
                       />
@@ -157,11 +154,18 @@ export default function Navbar() {
           <div className="ml-auto flex items-center gap-3">
             <a
               href={homeHref("#contact")}
-              className="group relative hidden items-center justify-center gap-2 overflow-hidden rounded-full border border-white/10 bg-[#111111] px-4 py-2.5 text-[0.7rem] font-medium uppercase tracking-[0.18em] text-white transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-[#EB5002] focus:ring-offset-2 focus:ring-offset-[#0b0b0b] md:inline-flex"
+              className="group relative hidden items-center justify-center gap-2 overflow-hidden rounded-full border border-white/10 bg-surface px-4 py-2.5 text-[0.7rem] font-medium uppercase tracking-[0.18em] text-white transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background md:inline-flex"
             >
-              <span className="absolute inset-0 -translate-x-[105%] bg-[#EB5002] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0 group-focus-visible:translate-x-0" />
-              <span className="relative text-white transition-colors duration-400 ease-out group-hover:text-[#0b0b0b] group-focus-visible:text-[#0b0b0b]">Let&apos;s Talk</span>
-              <span aria-hidden="true" className="relative text-base leading-none text-white transition-all duration-400 ease-out group-hover:translate-x-1 group-hover:text-[#0b0b0b] group-focus-visible:translate-x-1 group-focus-visible:text-[#0b0b0b]">↗</span>
+              <span className="absolute inset-0 -translate-x-[105%] bg-accent transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0 group-focus-visible:translate-x-0" />
+              <span className="relative text-white transition-colors duration-400 ease-out group-hover:text-background group-focus-visible:text-background">
+                Let&apos;s Talk
+              </span>
+              <span
+                aria-hidden="true"
+                className="relative text-base leading-none text-white transition-all duration-400 ease-out group-hover:translate-x-1 group-hover:text-background group-focus-visible:translate-x-1 group-focus-visible:text-background"
+              >
+                ↗
+              </span>
             </a>
 
             <button
@@ -170,14 +174,14 @@ export default function Navbar() {
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-navigation"
               onClick={() => setIsMobileMenuOpen((open) => !open)}
-              className="relative flex h-10 items-center justify-center rounded-full border border-white/10 bg-[#111111]/70 px-4 text-[0.65rem] font-semibold uppercase tracking-[0.15em] text-white transition-all duration-200 ease-out hover:border-[#EB5002] hover:text-[#EB5002] focus:outline-none focus:ring-2 focus:ring-[#EB5002] focus:ring-offset-2 focus:ring-offset-[#0b0b0b] lg:hidden"
+              className="relative flex h-10 items-center justify-center rounded-full border border-white/10 bg-surface/70 px-4 text-[0.65rem] font-semibold uppercase tracking-[0.15em] text-white transition-all duration-200 ease-out hover:border-accent hover:text-accent focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background lg:hidden"
             >
-              <div className="relative flex items-center justify-center overflow-hidden h-4 w-12">
+              <div className="relative flex h-4 w-12 items-center justify-center overflow-hidden">
                 <span
                   aria-hidden={isMobileMenuOpen}
                   className={[
                     "absolute w-full text-center transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
-                    isMobileMenuOpen ? "-translate-y-4 opacity-0" : "translate-y-0 opacity-100"
+                    isMobileMenuOpen ? "-translate-y-4 opacity-0" : "translate-y-0 opacity-100",
                   ].join(" ")}
                 >
                   MENU
@@ -186,7 +190,7 @@ export default function Navbar() {
                   aria-hidden={!isMobileMenuOpen}
                   className={[
                     "absolute w-full text-center transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]",
-                    isMobileMenuOpen ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+                    isMobileMenuOpen ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
                   ].join(" ")}
                 >
                   CLOSE
@@ -209,7 +213,7 @@ export default function Navbar() {
         <div className="mx-auto max-w-[1180px]">
           <div
             className={[
-              "rounded-[28px] border border-white/10 bg-[#111111]/80 p-4 shadow-[0_18px_42px_rgba(0,0,0,0.24)] backdrop-blur-xl opacity-0 translate-y-[-12px] scale-[0.98] transition-all duration-420 ease-[cubic-bezier(0.22,1,0.36,1)]",
+              "rounded-[28px] border border-white/10 bg-surface/80 p-4 shadow-[0_18px_42px_rgba(0,0,0,0.24)] backdrop-blur-xl opacity-0 translate-y-[-12px] scale-[0.98] transition-all duration-420 ease-[cubic-bezier(0.22,1,0.36,1)]",
               isMobileMenuOpen ? "opacity-100 translate-y-0 scale-100" : "",
             ].join(" ")}
           >
@@ -228,11 +232,19 @@ export default function Navbar() {
                       href={homeHref(item.href)}
                       aria-label={item.label}
                       onClick={handleNavClick}
-                      aria-current={isWorkRoute ? (item.href === "#work" ? "page" : undefined) : (activeSection === item.href.slice(1) ? "location" : undefined)}
-                      className="group flex items-center justify-between aria-[current=page]:text-[#EB5002] aria-[current=location]:text-[#EB5002] border-b border-white/8 py-3 text-[1.7rem] font-semibold uppercase tracking-[0.12em] text-white/90 transition-colors duration-200 hover:text-[#EB5002] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#EB5002]"
+                      aria-current={
+                        isWorkRoute
+                          ? item.href === "#work"
+                            ? "page"
+                            : undefined
+                          : activeSection === item.href.slice(1)
+                            ? "location"
+                            : undefined
+                      }
+                      className="group flex items-center justify-between border-b border-white/8 py-3 text-[1.7rem] font-semibold uppercase tracking-[0.12em] text-white/90 transition-colors duration-200 hover:text-accent aria-[current=location]:text-accent aria-[current=page]:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     >
                       <span>{item.label}</span>
-                      <span className="text-[0.7rem] font-medium tracking-[0.2em] text-[#EB5002]">{item.number}</span>
+                      <span className="text-[0.7rem] font-medium tracking-[0.2em] text-accent">{item.number}</span>
                     </a>
                   </li>
                 ))}
@@ -241,20 +253,29 @@ export default function Navbar() {
               <a
                 href={homeHref("#contact")}
                 onClick={handleNavClick}
-                className={`group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full border border-white/10 bg-[#111111] px-5 py-3.5 text-[0.7rem] font-medium uppercase tracking-[0.18em] text-white transition-all duration-420 ease-[cubic-bezier(0.22,1,0.36,1)] focus:outline-none focus:ring-2 focus:ring-[#EB5002] focus:ring-offset-2 focus:ring-offset-[#0b0b0b] ${isMobileMenuOpen ? "translate-y-0 opacity-100" : "translate-y-[16px] opacity-0"}`}
+                className={`group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full border border-white/10 bg-surface px-5 py-3.5 text-[0.7rem] font-medium uppercase tracking-[0.18em] text-white transition-all duration-420 ease-[cubic-bezier(0.22,1,0.36,1)] focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background ${isMobileMenuOpen ? "translate-y-0 opacity-100" : "translate-y-[16px] opacity-0"}`}
                 style={{ transitionDelay: "160ms" }}
               >
-                <span className={[
-                  "absolute inset-0 -translate-x-[105%] bg-[#EB5002] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0",
-                  isMobileMenuOpen ? "translate-x-0" : "",
-                ].join(" ")}
+                <span
+                  className={[
+                    "absolute inset-0 -translate-x-[105%] bg-accent transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-0",
+                    isMobileMenuOpen ? "translate-x-0" : "",
+                  ].join(" ")}
                 />
-                <span className={[
-                  "relative text-white transition-colors duration-400 ease-out group-hover:text-[#0b0b0b]",
-                  isMobileMenuOpen ? "text-[#0b0b0b]" : "",
-                ].join(" ")}
-                >Let&apos;s Talk</span>
-                <span aria-hidden="true" className="relative text-base leading-none text-white transition-all duration-400 ease-out group-hover:translate-x-1 group-hover:text-[#0b0b0b]">↗</span>
+                <span
+                  className={[
+                    "relative text-white transition-colors duration-400 ease-out group-hover:text-background",
+                    isMobileMenuOpen ? "text-background" : "",
+                  ].join(" ")}
+                >
+                  Let&apos;s Talk
+                </span>
+                <span
+                  aria-hidden="true"
+                  className="relative text-base leading-none text-white transition-all duration-400 ease-out group-hover:translate-x-1 group-hover:text-background"
+                >
+                  ↗
+                </span>
               </a>
             </nav>
           </div>

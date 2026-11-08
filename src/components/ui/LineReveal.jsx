@@ -16,7 +16,7 @@ export default function LineReveal({ children, className = "" }) {
     const paragraph = textRef.current;
     if (!paragraph || typeof children !== "string") return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      paragraph.style.color = "#EB5002";
+      paragraph.style.color = "var(--accent)";
       return () => { paragraph.style.color = ""; };
     }
 
@@ -42,7 +42,7 @@ export default function LineReveal({ children, className = "" }) {
           overlay.className = "reveal-overlay";
           overlay.setAttribute("aria-hidden", "true");
           Object.assign(overlay.style, {
-            position: "absolute", inset: "0", color: "#EB5002",
+            position: "absolute", inset: "0", color: "var(--accent)",
             clipPath: "inset(0 100% 0 0)", whiteSpace: "nowrap",
           });
           line.appendChild(overlay);

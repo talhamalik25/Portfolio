@@ -42,10 +42,10 @@ export default function ScrollProgress() {
   }, []));
 
   return (
-    <div className="fixed top-0 left-0 w-full h-[2px] bg-[#FF6B00]/10 z-50 pointer-events-none">
+    <div className="pointer-events-none fixed top-0 left-0 z-50 h-[2px] w-full bg-accent-bright/10">
       <div
         ref={progressRef}
-        className="h-full w-full bg-[#FF6B00] origin-left scale-x-0"
+        className="h-full w-full origin-left scale-x-0 bg-accent-bright"
       ></div>
     </div>
   );

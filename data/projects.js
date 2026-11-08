@@ -4,7 +4,7 @@ export const projects = [
     "slug": "sooti-mehal",
     "number": "01",
     "title": "Sooti Mehal",
-    "summary": "Fashion / clothing brand website",
+    "summary": "Fashion and clothing brand website for men's and women's collections.",
     "role": "[FILL: Sooti Mehal role]",
     "stack": [
       "[FILL: Sooti Mehal stack]"
@@ -45,7 +45,7 @@ export const projects = [
     "slug": "malik-enterprices",
     "number": "02",
     "title": "Malik Enterprices",
-    "summary": "[FILL: Malik Enterprices one-line summary]",
+    "summary": "Jewellery store website for Malik Enterprices.",
     "role": "[FILL: Malik Enterprices role]",
     "stack": [
       "[FILL: Malik Enterprices stack]"
@@ -117,26 +117,28 @@ export const projects = [
     }
   },
   {
-    "slug": "gym-crm",
+    "slug": "fitivo",
     "number": "04",
-    "title": "Gym CRM",
+    "title": "Fitivo",
     "category": "CRM",
-    "summary": "[FILL: Gym CRM summary]",
-    "role": "[FILL: Gym CRM role]",
+    "summary": "Gym management workspace in progress — memberships, attendance and operations in one place.",
+    "role": "[FILL: Fitivo role]",
     "stack": [
-      "[FILL: Gym CRM stack]"
+      "Next.js",
+      "JavaScript"
     ],
     "liveUrl": "",
-    "githubUrl": "[FILL: Gym CRM GitHub URL]",
-    "image": "[FILL: Gym CRM image]",
+    "githubUrl": "[FILL: Fitivo GitHub URL]",
+    "image": "[FILL: Fitivo image]",
+    "alt": "Fitivo gym management workspace",
     "status": "in-progress",
     "details": {
-      "overview": "[FILL: Gym CRM overview]",
+      "overview": "Fitivo is a gym management product I am building. It is in progress, so this page will grow as the interface and features land.",
       "whatIBuilt": [
-        "[FILL: Gym CRM what I built]"
+        "[FILL: Fitivo what I built]"
       ],
       "challenges": [
-        "[FILL: Gym CRM challenges]"
+        "[FILL: Fitivo challenges]"
       ]
     },
     "screenshots": [],

@@ -1,6 +1,7 @@
 "use client";
 import { readyEntries } from "@/src/lib/content";
 import { useMotionEffect } from "@/src/hooks/useMotionEffect";
+import SectionHeader from "@/src/components/ui/SectionHeader";
 
 import { useCallback, useRef } from "react";
 import gsap from "gsap";
@@ -10,8 +11,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 const milestoneData = [
   {
-    year: "[FILL: year]",
-    label: "First Projects",
+    year: "",
+    label: "Foundations",
     title: "Started with HTML, CSS and JavaScript",
     description: "Built my first static projects.",
   },
@@ -25,37 +26,26 @@ const milestoneData = [
     year: "",
     label: "Frontend",
     title: "Learned React, Next.js and Tailwind CSS",
-    description: "",
+    description: "The stack I use for interfaces today.",
   },
   {
     year: "",
-    label: "Full-Stack Projects",
+    label: "Full-stack projects",
     title: "Built full-stack projects",
     description: "Worked with Node.js, Express and MongoDB.",
   },
   {
     year: "Now",
-    label: "Current Focus",
-    title: "Strengthening my JavaScript fundamentals",
-    description: "Focused on backend development and AI automation.",
-  },
-  {
-    year: "Now",
     label: "AKTech Digital Solutions",
     title: "Frontend Developer at AKTech",
-    description: "Building web interfaces alongside my BS CS studies at Iqra University, Karachi.",
+    description:
+      "Building web interfaces alongside my BS CS studies at Iqra University, Karachi.",
   },
   {
-    year: "Next",
+    year: "Direction",
     label: "Next",
-    title: "SaaS products",
-    description: "Build SaaS products.",
-  },
-  {
-    year: "Later",
-    label: "Long-Term Focus",
-    title: "Deeper AI engineering",
-    description: "Go deeper into AI engineering.",
+    title: "SaaS products and deeper AI engineering",
+    description: "Where I want the work to go — not a role I hold today.",
   },
 ];
 
@@ -66,145 +56,131 @@ export default function Journey() {
   const pathRef = useRef(null);
   const nodeRefs = useRef([]);
 
-  useMotionEffect(useCallback(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const ctx = gsap.context(() => {
-      const path = pathRef.current;
-      const nodes = nodeRefs.current.filter(Boolean);
-      if (!path || nodes.length === 0) return undefined;
+  useMotionEffect(
+    useCallback(() => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      const ctx = gsap.context(() => {
+        const path = pathRef.current;
+        const nodes = nodeRefs.current.filter(Boolean);
+        if (!path || nodes.length === 0) return undefined;
 
-      const updatePath = () => {
-        const sectionRect = path.ownerSVGElement.getBoundingClientRect();
-        const width = sectionRect.width;
-        const height = sectionRect.height;
+        const updatePath = () => {
+          const sectionRect = path.ownerSVGElement.getBoundingClientRect();
+          const width = sectionRect.width;
+          const height = sectionRect.height;
+          const svg = path.ownerSVGElement;
+          if (svg) svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
 
-        const svg = path.ownerSVGElement;
-        if (svg) {
-          svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
-        }
+          const points = nodes.map((node) => {
+            const rect = node.getBoundingClientRect();
+            return {
+              x: rect.left - sectionRect.left + rect.width / 2,
+              y: rect.top - sectionRect.top + rect.height / 2,
+            };
+          });
+          if (!points.length) return;
 
-        const points = nodes.map((node) => {
-          const rect = node.getBoundingClientRect();
-          return {
-            x: rect.left - sectionRect.left + rect.width / 2,
-            y: rect.top - sectionRect.top + rect.height / 2,
-          };
+          const isDesktop = window.innerWidth >= 768;
+          let d = `M ${points[0].x} ${points[0].y}`;
+          points.forEach((point, index) => {
+            if (index === 0) return;
+            const prev = points[index - 1];
+            if (!isDesktop) {
+              d += ` L ${point.x} ${point.y}`;
+              return;
+            }
+            const spread = Math.max(20, Math.abs(point.x - prev.x) * 0.28);
+            const midpointX = (prev.x + point.x) / 2;
+            const controlY = prev.y + (point.y - prev.y) / 2 - spread;
+            d += ` Q ${midpointX} ${controlY}, ${point.x} ${point.y}`;
+          });
+
+          path.setAttribute("d", d);
+          const length = path.getTotalLength();
+          gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
+        };
+
+        updatePath();
+        let resizeTimer;
+        const handleResize = () => {
+          window.clearTimeout(resizeTimer);
+          resizeTimer = window.setTimeout(() => updatePath(), 80);
+        };
+        window.addEventListener("resize", handleResize);
+
+        gsap.utils.toArray(".timeline-card").forEach((card) => {
+          gsap.from(card, {
+            y: 28,
+            opacity: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: card,
+              start: "top 82%",
+              toggleActions: "play none none none",
+            },
+          });
         });
 
-        if (!points.length) return;
-
-        const isMobile = window.innerWidth < 1024;
-        const railX = isMobile ? 28 : 500;
-
-        let d = isMobile
-          ? `M ${railX} ${points[0].y}`
-          : `M ${points[0].x} ${points[0].y}`;
-
-        points.forEach((point, index) => {
-          if (index === 0) return;
-          const prev = points[index - 1];
-
-          if (isMobile) {
-            d += ` L ${railX} ${point.y}`;
-            return;
-          }
-
-          const spread = Math.max(20, Math.abs(point.x - prev.x) * 0.28);
-          const midpointX = (prev.x + point.x) / 2;
-          const controlY = prev.y + (point.y - prev.y) / 2 - spread;
-          d += ` Q ${midpointX} ${controlY}, ${point.x} ${point.y}`;
+        gsap.utils.toArray(".timeline-node").forEach((node) => {
+          gsap.set(node, { scale: 1, opacity: 0.35, boxShadow: "0 0 0 rgba(255,107,0,0)" });
+          gsap.to(node, {
+            scale: 1.28,
+            opacity: 1,
+            boxShadow: "0 0 20px rgba(255,107,0,0.6)",
+            duration: 0.35,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: node,
+              start: "top 80%",
+              toggleActions: "play none none reverse",
+            },
+          });
         });
 
-        path.setAttribute("d", d);
-        const length = path.getTotalLength();
-        gsap.set(path, { strokeDasharray: length, strokeDashoffset: length });
-      };
-
-      updatePath();
-
-      let resizeTimer;
-      const handleResize = () => {
-        window.clearTimeout(resizeTimer);
-        resizeTimer = window.setTimeout(() => updatePath(), 80);
-      };
-
-      window.addEventListener("resize", handleResize);
-
-      gsap.utils.toArray(".timeline-card").forEach((card, index) => {
-        const fromLeft = index % 2 === 0;
-        gsap.from(card, {
-          x: window.innerWidth >= 1024 ? (fromLeft ? -60 : 60) : 0,
-          y: window.innerWidth < 1024 ? 28 : 18,
-          opacity: 0,
-          duration: 0.8,
-          ease: "power3.out",
+        gsap.to(path, {
+          strokeDashoffset: 0,
+          ease: "none",
           scrollTrigger: {
-            trigger: card,
-            start: "top 82%",
-            toggleActions: "play none none none",
+            trigger: sectionRef.current,
+            start: "top 70%",
+            end: "bottom 70%",
+            scrub: 0.5,
           },
         });
-      });
 
-      gsap.utils.toArray(".timeline-node").forEach((node) => {
-        gsap.set(node, { scale: 1, opacity: 0.35, boxShadow: "0 0 0 rgba(255,107,0,0)" });
-        gsap.to(node, {
-          scale: 1.28,
-          opacity: 1,
-          boxShadow: "0 0 20px rgba(255,107,0,0.6)",
-          duration: 0.35,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: node,
-            start: "top 80%",
-            toggleActions: "play none none reverse",
-          },
-        });
-      });
+        return () => {
+          window.removeEventListener("resize", handleResize);
+          window.clearTimeout(resizeTimer);
+        };
+      }, sectionRef);
 
-      gsap.to(path, {
-        strokeDashoffset: 0,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 70%",
-          end: "bottom 70%",
-          scrub: 0.5,
-        },
-      });
+      return () => ctx.revert();
+    }, []),
+  );
 
-      return () => {
-        window.removeEventListener("resize", handleResize);
-        window.clearTimeout(resizeTimer);
-      };
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []));
   return (
     <section
       id="journey"
       ref={sectionRef}
-      aria-label="Journey timeline"
-      className="relative overflow-hidden bg-[#FAF7F2] py-24 text-[#111111] sm:py-28 lg:py-36"
+      aria-labelledby="journey-heading"
+      className="relative overflow-hidden bg-cream py-24 text-ink-strong sm:py-28 lg:py-36"
     >
       <div className="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto mb-14 max-w-[760px] text-center lg:mb-20">
-          <div className="portfolio-kicker mb-5 text-[#EB5002]">06 — JOURNEY</div>
-
-          <h2 className="portfolio-display mb-5 text-[2.5rem] font-bold leading-[0.9] tracking-[-0.06em] text-[#111111] sm:text-[3.2rem] lg:text-[4.3rem]">
-            How I <span className="text-[#EB5002]">Got Here.</span>
-          </h2>
-
-          <p className="portfolio-copy mx-auto max-w-[42rem] text-[1.05rem] text-[#5B564F]">
-            A timeline of the skills I&apos;ve built, the projects I&apos;ve shipped,
-            and where I&apos;m headed next.
-          </p>
-        </div>
+        <SectionHeader
+          index="06"
+          kicker="Journey"
+          title="How I"
+          accent="Got Here."
+          headingId="journey-heading"
+          light
+          align="center"
+          lede="A timeline of the skills I have built, the work I can show, and where I am headed next."
+        />
 
         <div className="relative mx-auto max-w-[1040px]">
           <svg
-            className="pointer-events-none absolute inset-0 hidden h-full w-full md:block"
+            className="pointer-events-none absolute inset-0 h-full w-full"
             viewBox="0 0 1000 1000"
             preserveAspectRatio="none"
             aria-hidden="true"
@@ -212,107 +188,60 @@ export default function Journey() {
             <path
               ref={pathRef}
               d="M 500 0"
-              stroke="#FF6B00"
+              className="stroke-accent-bright"
               strokeWidth="2.5"
               fill="none"
               strokeLinecap="round"
             />
           </svg>
 
-          <div className="space-y-8 md:space-y-10">
-            <div className="md:hidden">
-              <div className="relative ml-3 pl-7">
-                <div className="absolute left-[18px] top-0 h-full w-px bg-[#FF6B00]/35" aria-hidden="true" />
-
-                {milestones.map((item, index) => (
-                  <div key={item.year + item.title} className="relative grid grid-cols-[32px_1fr] gap-4 pb-6 last:pb-0">
-                    <div className="relative flex items-center justify-center py-4">
-                      <div
-                        ref={(el) => {
-                          nodeRefs.current[index] = el;
-                        }}
-                        className="timeline-node relative z-10 flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#FAF7F2] bg-[#FF6B00] opacity-35 shadow-[0_0_0_rgba(255,107,0,0)]"
-                      >
-                        <span className="block h-2.5 w-2.5 rounded-full bg-[#FAF7F2]" aria-hidden="true" />
-                      </div>
-                    </div>
-
-                    <div
-                      className="timeline-card rounded-[1.5rem] border border-[#1B1714]/8 bg-white p-5 shadow-[0_18px_40px_rgba(17,17,17,0.05)]"
-                    >
-                      <div className="mb-4 flex items-center justify-between gap-3">
-                        <span style={{ display: item.year ? undefined : "none" }} className="inline-flex rounded-full border border-[#EB5002]/15 bg-[#EB5002]/10 px-2.5 py-1 text-[0.64rem] font-bold uppercase tracking-[0.18em] text-[#EB5002]">
-                          {item.year}
-                        </span>
-                        <span className="text-[0.64rem] font-semibold uppercase tracking-[0.16em] text-[#8A817B]">
-                          {item.label}
-                        </span>
-                      </div>
-
-                      <h3 className="mb-3 text-[1.2rem] font-bold leading-tight tracking-[-0.04em] text-[#111111]">
-                        {item.title}
-                      </h3>
-
-                      <p className="text-[0.96rem] leading-relaxed text-[#5E5852]">
-                        {item.description}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="hidden md:block">
-              {milestones.map((item, index) => {
-                const isLeft = index % 2 === 0;
-
-                return (
-                  <div
-                    key={item.year + item.title}
-                    className="relative grid grid-cols-[1fr_80px_1fr] items-center gap-0"
+          <ol className="relative space-y-8 md:space-y-10">
+            {milestones.map((item, index) => {
+              const isLeft = index % 2 === 0;
+              return (
+                <li
+                  key={item.title}
+                  className="grid grid-cols-[32px_1fr] items-center gap-4 md:grid-cols-[1fr_80px_1fr] md:gap-0"
+                >
+                  <article
+                    className={[
+                      "timeline-card rounded-[1.5rem] border border-ink/10 bg-white p-5 shadow-[0_18px_40px_rgba(17,17,17,0.05)] sm:p-6",
+                      "col-start-2 md:row-start-1 md:max-w-[420px]",
+                      isLeft ? "md:col-start-1 md:mr-10 md:justify-self-end" : "md:col-start-3 md:ml-10",
+                    ].join(" ")}
                   >
-                    <div
-                      className={[
-                        "timeline-card relative row-start-1 rounded-[1.5rem] border border-[#1B1714]/8 bg-white p-5 shadow-[0_18px_40px_rgba(17,17,17,0.05)] sm:p-6",
-                        isLeft ? "col-start-1 mr-10 justify-self-end" : "col-start-3 ml-10",
-                      ].join(" ")}
-                      style={{ maxWidth: "420px" }}
-                    >
-                      <div className="mb-4 flex items-center justify-between gap-3">
-                        <span style={{ display: item.year ? undefined : "none" }} className="inline-flex rounded-full border border-[#EB5002]/15 bg-[#EB5002]/10 px-2.5 py-1 text-[0.64rem] font-bold uppercase tracking-[0.18em] text-[#EB5002]">
+                    <div className="mb-4 flex items-center justify-between gap-3">
+                      {item.year ? (
+                        <span className="inline-flex rounded-full border border-accent/15 bg-accent/10 px-2.5 py-1 text-[0.64rem] font-bold tracking-[0.18em] text-accent uppercase">
                           {item.year}
                         </span>
-                        <span className="text-[0.64rem] font-semibold uppercase tracking-[0.16em] text-[#8A817B]">
-                          {item.label}
-                        </span>
-                      </div>
-
-                      <h3 className="mb-3 text-[1.35rem] font-bold leading-tight tracking-[-0.04em] text-[#111111] sm:text-[1.55rem]">
-                        {item.title}
-                      </h3>
-
-                      <p className="text-[0.98rem] leading-relaxed text-[#5E5852]">
-                        {item.description}
-                      </p>
+                      ) : (
+                        <span />
+                      )}
+                      <span className="text-[0.64rem] font-semibold tracking-[0.16em] text-muted-label uppercase">
+                        {item.label}
+                      </span>
                     </div>
+                    <h3 className="mb-3 text-[1.2rem] leading-tight font-bold tracking-[-0.04em] text-ink-strong md:text-[1.45rem]">
+                      {item.title}
+                    </h3>
+                    <p className="text-[0.96rem] leading-relaxed text-muted-body">{item.description}</p>
+                  </article>
 
-                    <div className="relative col-start-2 row-start-1 flex items-center justify-center py-4">
-                      <div
-                        ref={(el) => {
-                          nodeRefs.current[index] = el;
-                        }}
-                        className="timeline-node relative z-10 flex h-5 w-5 items-center justify-center rounded-full border-2 border-[#FAF7F2] bg-[#FF6B00] opacity-35 shadow-[0_0_0_rgba(255,107,0,0)] md:h-6 md:w-6"
-                      >
-                        <span className="block h-2.5 w-2.5 rounded-full bg-[#FAF7F2]" aria-hidden="true" />
-                      </div>
+                  <div className="relative col-start-1 row-start-1 flex items-center justify-center py-4 md:col-start-2">
+                    <div
+                      ref={(el) => {
+                        nodeRefs.current[index] = el;
+                      }}
+                      className="timeline-node relative z-10 flex h-5 w-5 items-center justify-center rounded-full border-2 border-cream bg-accent-bright opacity-35 md:h-6 md:w-6"
+                    >
+                      <span className="block h-2.5 w-2.5 rounded-full bg-cream" aria-hidden="true" />
                     </div>
-
-                    <div className="hidden md:block" aria-hidden="true" />
                   </div>
-                );
-              })}
-            </div>
-          </div>
+                </li>
+              );
+            })}
+          </ol>
         </div>
       </div>
     </section>

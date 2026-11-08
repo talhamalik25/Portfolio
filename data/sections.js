@@ -44,10 +44,10 @@ export const github = {
 
 export const faqs = [
   { question: "What do you build?", answer: "I build web interfaces and full-stack web apps, and I am exploring AI automation. My Work section shows examples." },
-  { question: "How long does a website take?", answer: "It depends on the scope, content and integrations. [FILL: how I estimate timelines after reviewing a brief]" },
-  { question: "Do you work with businesses or only full-time roles?", answer: "I work as a Frontend Developer at AKTech and am open to selected projects. [FILL: the types of business projects I can take on]" },
+  { question: "How long does a website take?", answer: "It depends on the scope, content and integrations. I estimate after reviewing the brief." },
+  { question: "Do you work with businesses or only full-time roles?", answer: "I work as a Frontend Developer at AKTech and am open to selected projects." },
   { question: "What stack do you use?", answer: "I build with Next.js, React, Node.js and MongoDB, with Tailwind CSS for styling. I use GSAP and Three.js for motion when the project calls for it." },
-  { question: "How do we start a project?", answer: "Send me a short outline of what you need through the contact section or by email. [FILL: my preferred next step after an enquiry]" },
+  { question: "How do we start a project?", answer: "Send a short outline of what you need through the contact section or by email." },
 ];
 
 export const testimonials = {

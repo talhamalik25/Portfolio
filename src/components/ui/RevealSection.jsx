@@ -34,7 +34,7 @@ export default function RevealSection({ id, light = false, compact = false, chil
 
   return <section id={id} ref={sectionRef} aria-labelledby={id + "-heading"}
     className={[
-      "border-t", light ? "border-[#1A1613]/10 bg-[#FAF7F2] text-[#1A1613]" : "border-white/10 bg-[#0A0A0A] text-white",
+      "border-t", light ? "border-ink/10 bg-cream text-ink" : "border-white/10 bg-section text-white",
       compact ? "py-14 sm:py-16" : "py-20 sm:py-24 lg:py-28", className,
     ].join(" ")}>
     <div className="mx-auto max-w-[1240px] px-4 sm:px-6 lg:px-8">{children}</div>

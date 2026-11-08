@@ -1,9 +1,5 @@
-import Experience from "@/src/components/sections/Experience";
 import Process from "@/src/components/sections/Process";
-import GitHub from "@/src/components/sections/GitHub";
 import FAQ from "@/src/components/sections/FAQ";
-import CTA from "@/src/components/sections/CTA";
-import Testimonials from "@/src/components/sections/Testimonials";
 import ResumeLink from "@/src/components/ui/ResumeLink";
 import Navbar from "@/src/components/layout/Navbar";
 import Hero from "@/src/components/sections/Hero";
@@ -20,24 +16,20 @@ export default function Home() {
     <>
       <a
         href="#main-content"
-        className="skip-link"
+        className="skip-link fixed top-4 left-4 z-[110] -translate-y-[200%] rounded-full bg-accent px-4 py-3 font-bold text-background focus:translate-y-0 focus:outline-2 focus:outline-offset-[3px] focus:outline-white"
       >
         Skip to content
       </a>
       <Navbar />
       <main id="main-content" tabIndex={-1}>
         <Hero />
-        <SelectedWork />
         <About />
-        <Experience />
         <Capabilities />
+        <SelectedWork />
         <Stack />
-        <Process />
-        <GitHub />
         <Journey />
+        <Process />
         <FAQ />
-        <Testimonials />
-        <CTA />
         <Contact resumeLink={<ResumeLink />} />
       </main>
       <Footer />
