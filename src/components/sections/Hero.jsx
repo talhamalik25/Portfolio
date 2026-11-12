@@ -1,28 +1,56 @@
 "use client";
 
-import { useCallback, useRef, useEffect } from "react";
+import { useCallback, useRef, useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useMotionEffect } from "@/src/hooks/useMotionEffect";
 
-// Dynamically import 3D Laptop Workspace scene to optimize initial page load and avoid SSR issues
+// Dynamically import 3D Laptop Workspace to optimize initial page load and avoid SSR hydration issues
 const HeroScene = dynamic(() => import("./HeroScene"), {
   ssr: false,
   loading: () => (
     <div className="flex h-full w-full items-center justify-center">
-      <div className="h-48 w-72 animate-pulse rounded-xl bg-white/[0.03]" />
+      <div className="h-56 w-80 animate-pulse rounded-2xl bg-white/[0.03]" />
     </div>
   ),
 });
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Project Showcase Catalog for the 3D Workstation Screen
+const SHOWCASE_PROJECTS = [
+  {
+    id: "dentora",
+    number: "01",
+    name: "Dentora",
+    category: "Dental Clinic & Healthcare",
+    description: "Modern web platform for a specialized dental clinic with streamlined patient booking.",
+    liveUrl: "https://portfolio-pi-three-wmfjdk08k5.vercel.app/",
+  },
+  {
+    id: "jewellery",
+    number: "02",
+    name: "Jewellery Store",
+    category: "Luxury E-Commerce",
+    description: "Full-stack jewellery storefront (Atelier & Co.) with catalog, cart, and protected admin routes.",
+    caseStudyUrl: "#work",
+  },
+  {
+    id: "malik",
+    number: "03",
+    name: "Malik Enterprises",
+    category: "Industrial B2B & Workwear",
+    description: "Industrial products and protective workwear catalog with quote estimation paths.",
+    caseStudyUrl: "#work",
+  },
+];
+
 /**
  * MagneticCTA
  * Tactile physics-based magnetic micro-interaction.
- * The button and inner content pull toward the cursor independently for high-end dimensional feel.
+ * The button container and inner content pull toward the cursor independently for high-end dimensional feel.
  */
 function MagneticCTA({
   children,
@@ -126,8 +154,12 @@ function MagneticCTA({
 
 export default function Hero() {
   const rootRef = useRef(null);
+  const [activeProject, setActiveProject] = useState("dentora");
 
-  // GSAP Choreographed Master Entrance for Stage 1
+  const currentProject =
+    SHOWCASE_PROJECTS.find((p) => p.id === activeProject) || SHOWCASE_PROJECTS[0];
+
+  // GSAP Choreographed Master Entrance
   useMotionEffect(
     useCallback(() => {
       const ctx = gsap.context(() => {
@@ -195,11 +227,18 @@ export default function Hero() {
           // 8. 3D Laptop Workspace Entrance
           .fromTo(
             "[data-hero-workspace]",
-            { opacity: 0, scale: 0.9, filter: "blur(8px)" },
+            { opacity: 0, scale: 0.92, filter: "blur(8px)" },
             { opacity: 1, scale: 1, filter: "blur(0px)", duration: 1.2, ease: "power2.out" },
             0.35,
           )
-          // 9. Scroll indicator
+          // 9. Project Selector Controls
+          .fromTo(
+            "[data-hero-selector]",
+            { opacity: 0, y: 14 },
+            { opacity: 1, y: 0, duration: 0.8 },
+            0.8,
+          )
+          // 10. Scroll indicator
           .fromTo(
             "[data-hero-scroll]",
             { opacity: 0, y: 10 },
@@ -215,6 +254,21 @@ export default function Hero() {
           yoyo: true,
           duration: 1.3,
           ease: "power2.inOut",
+        });
+
+        // ScrollTrigger: gentle depth parallax as user scrolls toward About
+        ScrollTrigger.create({
+          trigger: rootRef.current,
+          start: "top top",
+          end: "bottom top",
+          scrub: 0.6,
+          onUpdate: (self) => {
+            const p = self.progress;
+            const workspaceEl = document.querySelector("[data-hero-workspace]");
+            if (workspaceEl) {
+              workspaceEl.style.transform = `translateY(${p * 60}px)`;
+            }
+          },
         });
       }, rootRef);
 
@@ -236,18 +290,18 @@ export default function Hero() {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
       >
-        {/* Warm Rim Glow Highlighting the 3D Workspace */}
-        <div className="absolute top-[40%] right-[10%] h-[600px] w-[600px] -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(235,80,2,0.11)_0%,rgba(255,107,0,0.03)_45%,transparent_70%)] blur-3xl" />
+        {/* Warm Studio Rim Glow Behind the 3D Laptop */}
+        <div className="absolute top-[42%] right-[10%] h-[640px] w-[640px] -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(235,80,2,0.12)_0%,rgba(255,107,0,0.03)_45%,transparent_70%)] blur-3xl" />
 
-        {/* Ambient Overhead Fill */}
-        <div className="absolute inset-x-0 top-0 h-[450px] bg-[radial-gradient(ellipse_at_top,rgba(235,80,2,0.05),transparent_65%)]" />
+        {/* Ambient Overhead Illumination */}
+        <div className="absolute inset-x-0 top-0 h-[480px] bg-[radial-gradient(ellipse_at_top,rgba(235,80,2,0.06),transparent_65%)]" />
 
-        {/* Fine Editorial Grid */}
+        {/* Precision Architectural Grid */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4.5rem_4.5rem] [mask-image:radial-gradient(ellipse_at_center,black_35%,transparent_80%)] opacity-60" />
       </div>
 
       {/* Main Layout Container */}
-      <div className="relative z-10 mx-auto flex min-h-dvh max-w-[1380px] flex-col justify-between px-4 pt-28 pb-12 sm:px-6 sm:pt-32 sm:pb-16 lg:px-10 lg:pt-36">
+      <div className="relative z-10 mx-auto flex min-h-dvh max-w-[1400px] flex-col justify-between px-4 pt-28 pb-12 sm:px-6 sm:pt-32 sm:pb-16 lg:px-10 lg:pt-36">
         {/* Top Editorial Kicker Row */}
         <header
           data-hero-kicker
@@ -290,9 +344,9 @@ export default function Hero() {
           </div>
         </header>
 
-        {/* Asymmetric Editorial Hero Stage */}
+        {/* Asymmetric Editorial Master Stage */}
         <div className="relative my-auto grid w-full items-center gap-10 lg:grid-cols-12 lg:gap-12 xl:gap-16">
-          {/* ================= LEFT SIDE: Editorial Typography & CTAs (lg:col-span-6 xl:col-span-6) ================= */}
+          {/* ================= LEFT SIDE: Editorial Typography & CTAs (lg:col-span-6) ================= */}
           <div className="relative z-20 flex flex-col items-start text-left lg:col-span-6 xl:col-span-6">
             {/* Primary Identity: TALHA MALIK */}
             <div className="overflow-hidden">
@@ -328,15 +382,15 @@ export default function Hero() {
               I design and engineer digital products for the real world.
             </p>
 
-            {/* Contextual Editorial Copy */}
+            {/* Concise Supporting Introduction */}
             <p
               data-hero-bio
               data-hero-animate
               className="portfolio-copy mt-4 max-w-[32rem] text-[0.95rem] leading-relaxed text-white/70 sm:text-[1.02rem] md:mt-5"
             >
               Frontend Developer at AKTech and BS CS student at Iqra University, Karachi.
-              Building high-performance web systems, Next.js architecture, and intelligent
-              automation that work end to end.
+              Building modern web applications, high-performance interactive systems, and
+              business software that work end to end.
             </p>
 
             {/* AKTech Status Pill */}
@@ -354,7 +408,7 @@ export default function Hero() {
               </a>
             </div>
 
-            {/* Refined Primary & Secondary Magnetic CTAs */}
+            {/* Refined Magnetic CTAs */}
             <div className="mt-8 flex w-full flex-col items-stretch gap-4 sm:w-auto sm:flex-row sm:items-center md:mt-10">
               <MagneticCTA
                 href="#work"
@@ -362,7 +416,7 @@ export default function Hero() {
                 data-hero-animate
                 className="portfolio-button-label min-h-[50px] rounded-full border border-accent bg-accent px-8 py-3.5 text-[0.82rem] font-bold text-background shadow-[0_4px_24px_rgba(235,80,2,0.25)] transition-all duration-300 hover:bg-accent-bright hover:shadow-[0_8px_32px_rgba(235,80,2,0.4)] focus:ring-2 focus:ring-accent focus:outline-none md:text-[0.86rem]"
               >
-                <span>View Work</span>
+                <span>View Selected Work</span>
               </MagneticCTA>
 
               <MagneticCTA
@@ -371,30 +425,82 @@ export default function Hero() {
                 data-hero-animate
                 className="portfolio-button-label min-h-[50px] rounded-full border border-white/15 bg-white/[0.03] px-8 py-3.5 text-[0.82rem] font-bold text-white backdrop-blur-md transition-all duration-300 hover:border-accent/40 hover:bg-white/[0.08] hover:text-white focus:ring-2 focus:ring-accent focus:outline-none md:text-[0.86rem]"
               >
-                <span>Contact Me</span>
+                <span>Let&apos;s Talk</span>
               </MagneticCTA>
             </div>
           </div>
 
-          {/* ================= RIGHT SIDE: 3D Laptop Workspace (lg:col-span-6 xl:col-span-6) ================= */}
+          {/* ================= RIGHT SIDE: 3D Laptop Workspace & Showcase (lg:col-span-6) ================= */}
           <div
             data-hero-workspace
             data-hero-animate
             className="relative z-10 flex w-full flex-col items-center justify-center lg:col-span-6 xl:col-span-6"
           >
             {/* Interactive 3D Canvas Stage */}
-            <div className="relative flex h-[350px] w-full max-w-[560px] items-center justify-center sm:h-[420px] md:h-[480px] lg:h-[520px]">
-              <HeroScene className="h-full w-full" />
+            <div className="relative flex h-[350px] w-full max-w-[580px] items-center justify-center sm:h-[420px] md:h-[480px] lg:h-[520px]">
+              <HeroScene activeProject={activeProject} className="h-full w-full" />
             </div>
 
-            {/* Workspace Curatorial Metadata */}
-            <div className="mt-2 flex w-full max-w-[520px] items-center justify-between border-t border-white/[0.06] pt-3 text-[0.55rem] font-medium tracking-[0.2em] text-white/40 uppercase select-none">
-              <span className="flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-                <span>PROJECT // SOOTI MEHAL</span>
-              </span>
-              <span>16:10 WORKSTATION VIEW</span>
-              <span className="text-accent/70">STAGE 1 PROTOTYPE</span>
+            {/* Interactive Project Showcase Selector */}
+            <div
+              data-hero-selector
+              data-hero-animate
+              className="mt-3 flex w-full max-w-[540px] flex-col gap-2.5 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-3 backdrop-blur-md"
+            >
+              {/* Tab Selector Header */}
+              <div className="flex items-center justify-between border-b border-white/[0.06] pb-2 text-[0.55rem] font-semibold tracking-[0.2em] text-white/40 uppercase">
+                <span className="flex items-center gap-1.5">
+                  <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                  <span>Interactive Display</span>
+                </span>
+                <span className="text-accent/80">{currentProject.category}</span>
+              </div>
+
+              {/* Project Tab Buttons */}
+              <div
+                role="tablist"
+                aria-label="Project screen showcase switcher"
+                className="grid grid-cols-3 gap-1.5"
+              >
+                {SHOWCASE_PROJECTS.map((project) => {
+                  const isActive = activeProject === project.id;
+                  return (
+                    <button
+                      key={project.id}
+                      role="tab"
+                      aria-selected={isActive}
+                      tabIndex={0}
+                      onClick={() => setActiveProject(project.id)}
+                      className={`group relative flex flex-col items-center justify-center rounded-xl px-2 py-2 text-center transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent ${
+                        isActive
+                          ? "border border-accent/40 bg-accent/15 text-white shadow-[0_0_16px_rgba(235,80,2,0.15)]"
+                          : "border border-white/[0.05] bg-white/[0.02] text-white/50 hover:border-white/15 hover:bg-white/[0.05] hover:text-white/80"
+                      }`}
+                    >
+                      <span className="text-[0.52rem] font-medium tracking-[0.15em] text-accent/70 uppercase">
+                        {project.number}
+                      </span>
+                      <span className="mt-0.5 text-[0.72rem] font-semibold tracking-[-0.01em] whitespace-nowrap">
+                        {project.name}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Active Project Summary & Quick Link */}
+              <div className="flex items-center justify-between pt-1 text-[0.62rem] text-white/60">
+                <span className="line-clamp-1 max-w-[340px]">
+                  {currentProject.description}
+                </span>
+                <a
+                  href="#work"
+                  className="inline-flex shrink-0 items-center gap-1 text-accent transition-colors hover:text-accent-bright"
+                >
+                  <span>Explore Work</span>
+                  <span>→</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
