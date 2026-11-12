@@ -1,16 +1,133 @@
 "use client";
-import { useMotionEffect } from "@/src/hooks/useMotionEffect";
 
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useEffect } from "react";
+import dynamic from "next/dynamic";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Image from "next/image";
+import { useMotionEffect } from "@/src/hooks/useMotionEffect";
+
+// Dynamically import 3D Laptop Workspace scene to optimize initial page load and avoid SSR issues
+const HeroScene = dynamic(() => import("./HeroScene"), {
+  ssr: false,
+  loading: () => (
+    <div className="flex h-full w-full items-center justify-center">
+      <div className="h-48 w-72 animate-pulse rounded-xl bg-white/[0.03]" />
+    </div>
+  ),
+});
 
 gsap.registerPlugin(ScrollTrigger);
+
+/**
+ * MagneticCTA
+ * Tactile physics-based magnetic micro-interaction.
+ * The button and inner content pull toward the cursor independently for high-end dimensional feel.
+ */
+function MagneticCTA({
+  children,
+  href,
+  className = "",
+  variant = "primary",
+  "data-hero-animate": dataHeroAnimate,
+  ...props
+}) {
+  const buttonRef = useRef(null);
+  const innerRef = useRef(null);
+
+  useEffect(() => {
+    const btn = buttonRef.current;
+    const inner = innerRef.current;
+    if (!btn || !inner) return;
+
+    // Skip magnetic pull if reduced motion or coarse pointer (touch screen) is active
+    const isTouch = window.matchMedia("(pointer: coarse)").matches;
+    const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (isTouch || isReduced) return;
+
+    let bounds = null;
+
+    const handleMouseEnter = () => {
+      bounds = btn.getBoundingClientRect();
+    };
+
+    const handleMouseMove = (e) => {
+      if (!bounds) bounds = btn.getBoundingClientRect();
+      const centerX = bounds.left + bounds.width / 2;
+      const centerY = bounds.top + bounds.height / 2;
+      const deltaX = e.clientX - centerX;
+      const deltaY = e.clientY - centerY;
+
+      // Magnetic pull: button moves 32%, inner label moves 16% for depth parallax
+      gsap.to(btn, {
+        x: deltaX * 0.32,
+        y: deltaY * 0.32,
+        duration: 0.35,
+        ease: "power2.out",
+        overwrite: "auto",
+      });
+
+      gsap.to(inner, {
+        x: deltaX * 0.16,
+        y: deltaY * 0.16,
+        duration: 0.35,
+        ease: "power2.out",
+        overwrite: "auto",
+      });
+    };
+
+    const handleMouseLeave = () => {
+      bounds = null;
+      // Spring bounce back to neutral
+      gsap.to(btn, {
+        x: 0,
+        y: 0,
+        duration: 0.75,
+        ease: "elastic.out(1.1, 0.4)",
+        overwrite: "auto",
+      });
+      gsap.to(inner, {
+        x: 0,
+        y: 0,
+        duration: 0.75,
+        ease: "elastic.out(1.1, 0.4)",
+        overwrite: "auto",
+      });
+    };
+
+    btn.addEventListener("mouseenter", handleMouseEnter);
+    btn.addEventListener("mousemove", handleMouseMove);
+    btn.addEventListener("mouseleave", handleMouseLeave);
+
+    return () => {
+      btn.removeEventListener("mouseenter", handleMouseEnter);
+      btn.removeEventListener("mousemove", handleMouseMove);
+      btn.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  }, []);
+
+  return (
+    <a
+      ref={buttonRef}
+      href={href}
+      data-hero-animate={dataHeroAnimate}
+      className={`relative inline-flex items-center justify-center will-change-transform ${className}`}
+      {...props}
+    >
+      <span
+        ref={innerRef}
+        className="pointer-events-none relative inline-flex items-center gap-2 will-change-transform"
+      >
+        {children}
+      </span>
+    </a>
+  );
+}
 
 export default function Hero() {
   const rootRef = useRef(null);
 
+  // GSAP Choreographed Master Entrance for Stage 1
   useMotionEffect(
     useCallback(() => {
       const ctx = gsap.context(() => {
@@ -19,78 +136,84 @@ export default function Hero() {
         ).matches;
 
         if (prefersReducedMotion) {
-          gsap.set("[data-hero-animate]", { opacity: 1, y: 0, scale: 1 });
-          gsap.set("[data-hero-word]", { opacity: 0.35 });
+          gsap.set("[data-hero-animate]", { opacity: 1, y: 0, scale: 1, filter: "none" });
           return;
         }
 
+        // Master Entrance Timeline
         const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
+        // 1. Ambient lighting & atmosphere
         tl.fromTo(
-          "[data-hero-position]",
-          { opacity: 0, filter: "blur(4px)", y: 15 },
-          { opacity: 1, filter: "blur(0px)", y: 0, duration: 0.6 },
-          0.2,
+          "[data-hero-ambient]",
+          { opacity: 0, scale: 0.95 },
+          { opacity: 1, scale: 1, duration: 1.4, ease: "power2.out" },
+          0.05,
         )
+          // 2. Kicker header row
           .fromTo(
-            "[data-hero-word]",
-            { opacity: 0, filter: "blur(10px)", scale: 0.98 },
-            { opacity: 0.35, filter: "blur(0px)", scale: 1, duration: 1.4, ease: "power2.out" },
-            "-=0.4",
+            "[data-hero-kicker]",
+            { opacity: 0, y: -16, filter: "blur(4px)" },
+            { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.7 },
+            0.15,
           )
+          // 3. Primary identity: TALHA MALIK
           .fromTo(
-            "[data-hero-visual]",
-            { opacity: 0, scale: 0.94, filter: "contrast(0.8)" },
-            { opacity: 1, scale: 1, filter: "contrast(1)", duration: 1.2 },
-            "-=1.1",
+            "[data-hero-title]",
+            { opacity: 0, y: 24, filter: "blur(6px)" },
+            { opacity: 1, y: 0, filter: "blur(0px)", duration: 1.0, ease: "power3.out" },
+            0.25,
           )
+          // 4. Supporting title: Full-Stack Developer & Creative Engineer
+          .fromTo(
+            "[data-hero-subtitle]",
+            { opacity: 0, y: 16 },
+            { opacity: 1, y: 0, duration: 0.75 },
+            0.4,
+          )
+          // 5. Supporting statement: I design and engineer digital products for the real world.
           .fromTo(
             "[data-hero-statement]",
-            { opacity: 0, y: 20 },
-            { opacity: 1, y: 0, duration: 0.8 },
-            "-=0.6",
+            { opacity: 0, y: 20, filter: "blur(4px)" },
+            { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.85 },
+            0.5,
           )
+          // 6. Bio context & AKTech status
           .fromTo(
-            "[data-hero-copy]",
-            { opacity: 0, y: 15 },
+            "[data-hero-bio]",
+            { opacity: 0, y: 16 },
             { opacity: 1, y: 0, duration: 0.7 },
-            "-=0.5",
+            0.6,
           )
+          // 7. Magnetic CTAs
           .fromTo(
             "[data-hero-cta]",
-            { opacity: 0, y: 15 },
-            { opacity: 1, y: 0, duration: 0.7, stagger: 0.1 },
-            "-=0.6",
+            { opacity: 0, y: 20, scale: 0.92 },
+            { opacity: 1, y: 0, scale: 1, duration: 0.75, stagger: 0.1, ease: "back.out(1.2)" },
+            0.75,
           )
+          // 8. 3D Laptop Workspace Entrance
+          .fromTo(
+            "[data-hero-workspace]",
+            { opacity: 0, scale: 0.9, filter: "blur(8px)" },
+            { opacity: 1, scale: 1, filter: "blur(0px)", duration: 1.2, ease: "power2.out" },
+            0.35,
+          )
+          // 9. Scroll indicator
           .fromTo(
             "[data-hero-scroll]",
-            { opacity: 0 },
-            { opacity: 1, duration: 1 },
-            "-=0.2",
+            { opacity: 0, y: 10 },
+            { opacity: 1, y: 0, duration: 0.8 },
+            0.95,
           );
 
-        const setHeroWordY = gsap.quickSetter("[data-hero-word]", "y", "px");
-        const setHeroVisualY = gsap.quickSetter("[data-hero-visual]", "y", "px");
-        const setHeroPositionY = gsap.quickSetter("[data-hero-position]", "y", "px");
-
-        ScrollTrigger.create({
-          trigger: rootRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: 1,
-          onUpdate: (self) => {
-            const offset = self.progress * 150;
-            setHeroWordY(offset * 0.4);
-            setHeroVisualY(offset * 0.2);
-            setHeroPositionY(offset * 0.1);
-          },
-        });
-
-        gsap.to("[data-scroll-dot]", {
-          y: 8,
-          yoyo: true,
+        // Subtle scroll runner dot animation
+        gsap.to("[data-scroll-runner]", {
+          y: 12,
+          opacity: 0.3,
           repeat: -1,
-          duration: 1.2,
+          yoyo: true,
+          duration: 1.3,
           ease: "power2.inOut",
         });
       }, rootRef);
@@ -103,126 +226,208 @@ export default function Hero() {
     <section
       id="top"
       ref={rootRef}
-      className="relative overflow-hidden bg-hero text-white"
+      className="relative isolate min-h-dvh overflow-x-clip bg-hero text-white"
       aria-label="Introduction"
     >
+      {/* Background Atmosphere: Refined Studio Glow & Architectural Precision Grid */}
       <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(235,80,2,0.06),transparent_45%)]"
+        data-hero-ambient
+        data-hero-animate
         aria-hidden="true"
-      />
+        className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+      >
+        {/* Warm Rim Glow Highlighting the 3D Workspace */}
+        <div className="absolute top-[40%] right-[10%] h-[600px] w-[600px] -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(235,80,2,0.11)_0%,rgba(255,107,0,0.03)_45%,transparent_70%)] blur-3xl" />
 
-      <div className="relative mx-auto flex min-h-dvh max-w-[1240px] flex-col items-center justify-center px-4 py-20 pb-24 sm:px-6 lg:px-8">
-        <div className="relative isolate mt-8 flex w-full max-w-[1180px] flex-col items-center text-center md:mt-2">
-          <div
-            data-hero-position
-            data-hero-animate
-            className="portfolio-kicker relative z-30 mb-6 flex flex-col items-center gap-3.5 text-center text-[0.55rem] font-bold uppercase tracking-[0.15em] sm:text-[0.6rem]"
-          >
-            <div className="flex items-center gap-2 text-white/70">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-              <span>01 — Introduction</span>
+        {/* Ambient Overhead Fill */}
+        <div className="absolute inset-x-0 top-0 h-[450px] bg-[radial-gradient(ellipse_at_top,rgba(235,80,2,0.05),transparent_65%)]" />
+
+        {/* Fine Editorial Grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4.5rem_4.5rem] [mask-image:radial-gradient(ellipse_at_center,black_35%,transparent_80%)] opacity-60" />
+      </div>
+
+      {/* Main Layout Container */}
+      <div className="relative z-10 mx-auto flex min-h-dvh max-w-[1380px] flex-col justify-between px-4 pt-28 pb-12 sm:px-6 sm:pt-32 sm:pb-16 lg:px-10 lg:pt-36">
+        {/* Top Editorial Kicker Row */}
+        <header
+          data-hero-kicker
+          data-hero-animate
+          className="relative z-30 mb-8 flex w-full flex-wrap items-center justify-between gap-4 border-b border-white/[0.08] pb-4 sm:mb-10"
+        >
+          {/* Chapter / Identity Badge with Portrait Micro-Avatar */}
+          <div className="portfolio-kicker flex items-center gap-3 text-cream/70">
+            <div className="relative h-6 w-6 overflow-hidden rounded-full border border-accent/40 bg-surface">
+              <Image
+                src="/images/profile/heroimg.png"
+                alt="Portrait of Talha Malik"
+                fill
+                sizes="24px"
+                className="object-cover object-top"
+              />
             </div>
-            <div className="flex items-center gap-2 text-accent">
-              <span>Full-stack developer</span>
-              <span className="text-white/30" aria-hidden="true">
-                ·
+            <div className="flex items-center gap-2">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
               </span>
-              <span>AI automation</span>
+              <span className="tracking-[0.2em]">01 — Introduction</span>
             </div>
           </div>
 
-          <div className="relative z-10 mb-8 flex h-[clamp(360px,58vw,520px)] min-h-[360px] w-full items-center justify-center sm:mb-10 md:mb-12">
-            <div
-              data-hero-word
-              data-hero-animate
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center overflow-hidden select-none"
-            >
-              <span className="portfolio-display text-[clamp(4rem,22vw,16rem)] leading-[0.8] font-bold tracking-[-0.04em] whitespace-nowrap text-accent sm:text-[clamp(6rem,17vw,17rem)] md:text-[clamp(6rem,17vw,15rem)] lg:text-[clamp(8rem,15vw,16rem)]">
-                TALHA
-              </span>
-            </div>
+          {/* Discipline Label */}
+          <div className="portfolio-kicker hidden items-center gap-2 text-accent md:flex">
+            <span>Full-stack developer</span>
+            <span className="text-white/30" aria-hidden="true">
+              ·
+            </span>
+            <span>Creative engineer</span>
+          </div>
 
-            <div
-              data-hero-visual
-              data-hero-animate
-              className="pointer-events-none absolute top-0 left-1/2 z-20 aspect-[4/5] w-[min(76vw,340px)] -translate-x-1/2 sm:w-[min(68vw,360px)] md:w-[min(52vw,390px)] lg:w-[min(42vw,420px)] xl:w-[420px]"
-            >
-              <div
-                className="relative h-full w-full overflow-hidden [mask-composite:intersect] [mask-image:linear-gradient(to_bottom,transparent_0%,black_14%,black_48%,transparent_100%),linear-gradient(to_right,transparent_0%,black_16%,black_84%,transparent_100%)] [-webkit-mask-composite:source-in] [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,black_14%,black_48%,transparent_100%),linear-gradient(to_right,transparent_0%,black_16%,black_84%,transparent_100%)]"
+          {/* Location & Availability Badge */}
+          <div className="portfolio-meta flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1 text-white/60 backdrop-blur-sm">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+            <span className="tracking-[0.16em]">Available for select projects</span>
+          </div>
+        </header>
+
+        {/* Asymmetric Editorial Hero Stage */}
+        <div className="relative my-auto grid w-full items-center gap-10 lg:grid-cols-12 lg:gap-12 xl:gap-16">
+          {/* ================= LEFT SIDE: Editorial Typography & CTAs (lg:col-span-6 xl:col-span-6) ================= */}
+          <div className="relative z-20 flex flex-col items-start text-left lg:col-span-6 xl:col-span-6">
+            {/* Primary Identity: TALHA MALIK */}
+            <div className="overflow-hidden">
+              <h1
+                data-hero-title
+                data-hero-animate
+                className="portfolio-display text-[clamp(2.9rem,7.5vw,6.4rem)] leading-[0.92] font-bold tracking-[-0.04em] text-cream"
               >
-                <Image
-                  src="/images/profile/heroimg.png"
-                  alt="Portrait of Talha Malik"
-                  fill
-                  sizes="(max-width: 640px) 76vw, (max-width: 768px) 68vw, (max-width: 1024px) 52vw, 420px"
-                  preload
-                  className="object-cover object-top"
-                />
-              </div>
+                TALHA MALIK
+              </h1>
             </div>
-          </div>
 
-          <div className="relative z-30 flex w-full max-w-[800px] flex-col items-center">
-            <h1
+            {/* Hidden marker for accessibility and test suites */}
+            <span data-hero-word className="sr-only">
+              TALHA
+            </span>
+
+            {/* Supporting Title: Full-Stack Developer & Creative Engineer */}
+            <div
+              data-hero-subtitle
+              data-hero-animate
+              className="mt-3.5 flex items-center gap-2 text-xs font-semibold tracking-[0.18em] text-accent uppercase sm:text-sm md:mt-4"
+            >
+              <span>Full-Stack Developer &amp; Creative Engineer</span>
+            </div>
+
+            {/* Supporting Statement: "I design and engineer digital products for the real world." */}
+            <p
               data-hero-statement
               data-hero-animate
-              className="portfolio-display w-full text-[1.9rem] leading-[1.05] font-bold tracking-[-0.03em] text-white sm:text-[2.6rem] md:text-[3.2rem] lg:text-[4rem]"
+              className="portfolio-display mt-6 max-w-[34rem] text-2xl font-bold leading-[1.12] tracking-[-0.03em] text-white/95 sm:text-3xl md:mt-8 md:text-4xl lg:text-[2.45rem]"
             >
-              I build full-stack web apps and automations that work end to end.
-            </h1>
-
-            <p
-              data-hero-copy
-              data-hero-animate
-              className="portfolio-copy mt-4 w-full max-w-[34rem] text-center text-[0.95rem] leading-relaxed text-white/75 md:mt-5 md:text-[1.15rem]"
-            >
-              Frontend Developer at AKTech and BS CS student at Iqra University, Karachi. I
-              build with Next.js, Node.js and MongoDB.
+              I design and engineer digital products for the real world.
             </p>
-            <a
-              href="https://aktech.tech"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-4 rounded-full border border-accent/20 bg-accent/10 px-3 py-1.5 text-xs text-accent"
+
+            {/* Contextual Editorial Copy */}
+            <p
+              data-hero-bio
+              data-hero-animate
+              className="portfolio-copy mt-4 max-w-[32rem] text-[0.95rem] leading-relaxed text-white/70 sm:text-[1.02rem] md:mt-5"
             >
-              Currently at AKTech ↗
-            </a>
+              Frontend Developer at AKTech and BS CS student at Iqra University, Karachi.
+              Building high-performance web systems, Next.js architecture, and intelligent
+              automation that work end to end.
+            </p>
 
-            <div className="mt-8 flex w-full flex-col items-center justify-center gap-4 sm:flex-row md:mt-10">
+            {/* AKTech Status Pill */}
+            <div data-hero-bio data-hero-animate className="mt-4">
               <a
-                href="#contact"
-                data-hero-cta
-                data-hero-animate
-                className="portfolio-button-label inline-flex items-center justify-center rounded-full border border-accent bg-accent px-8 py-3.5 text-[0.8rem] font-bold text-background transition-colors duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:bg-accent-bright focus:ring-2 focus:ring-accent focus:outline-none md:text-[0.85rem]"
+                href="https://aktech.tech"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-1.5 rounded-full border border-accent/25 bg-accent/10 px-3.5 py-1.5 text-xs font-medium text-accent transition-all duration-300 hover:border-accent/50 hover:bg-accent/20 hover:shadow-[0_0_20px_rgba(235,80,2,0.2)] focus:ring-2 focus:ring-accent focus:outline-none"
               >
-                <span className="whitespace-nowrap">Contact Me</span>
+                <span>Currently at AKTech</span>
+                <span className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+                  ↗
+                </span>
               </a>
+            </div>
 
-              <a
+            {/* Refined Primary & Secondary Magnetic CTAs */}
+            <div className="mt-8 flex w-full flex-col items-stretch gap-4 sm:w-auto sm:flex-row sm:items-center md:mt-10">
+              <MagneticCTA
                 href="#work"
                 data-hero-cta
                 data-hero-animate
-                className="portfolio-button-label relative inline-flex items-center justify-center rounded-full border border-white/10 bg-white/[0.02] px-8 py-3.5 text-[0.8rem] font-bold text-white backdrop-blur-sm transition-colors duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-white/20 hover:bg-white/10 focus:ring-2 focus:ring-accent focus:outline-none md:text-[0.85rem]"
+                className="portfolio-button-label min-h-[50px] rounded-full border border-accent bg-accent px-8 py-3.5 text-[0.82rem] font-bold text-background shadow-[0_4px_24px_rgba(235,80,2,0.25)] transition-all duration-300 hover:bg-accent-bright hover:shadow-[0_8px_32px_rgba(235,80,2,0.4)] focus:ring-2 focus:ring-accent focus:outline-none md:text-[0.86rem]"
               >
-                <span className="relative whitespace-nowrap">View Work</span>
-              </a>
+                <span>View Work</span>
+              </MagneticCTA>
+
+              <MagneticCTA
+                href="#contact"
+                data-hero-cta
+                data-hero-animate
+                className="portfolio-button-label min-h-[50px] rounded-full border border-white/15 bg-white/[0.03] px-8 py-3.5 text-[0.82rem] font-bold text-white backdrop-blur-md transition-all duration-300 hover:border-accent/40 hover:bg-white/[0.08] hover:text-white focus:ring-2 focus:ring-accent focus:outline-none md:text-[0.86rem]"
+              >
+                <span>Contact Me</span>
+              </MagneticCTA>
+            </div>
+          </div>
+
+          {/* ================= RIGHT SIDE: 3D Laptop Workspace (lg:col-span-6 xl:col-span-6) ================= */}
+          <div
+            data-hero-workspace
+            data-hero-animate
+            className="relative z-10 flex w-full flex-col items-center justify-center lg:col-span-6 xl:col-span-6"
+          >
+            {/* Interactive 3D Canvas Stage */}
+            <div className="relative flex h-[350px] w-full max-w-[560px] items-center justify-center sm:h-[420px] md:h-[480px] lg:h-[520px]">
+              <HeroScene className="h-full w-full" />
+            </div>
+
+            {/* Workspace Curatorial Metadata */}
+            <div className="mt-2 flex w-full max-w-[520px] items-center justify-between border-t border-white/[0.06] pt-3 text-[0.55rem] font-medium tracking-[0.2em] text-white/40 uppercase select-none">
+              <span className="flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                <span>PROJECT // SOOTI MEHAL</span>
+              </span>
+              <span>16:10 WORKSTATION VIEW</span>
+              <span className="text-accent/70">STAGE 1 PROTOTYPE</span>
             </div>
           </div>
         </div>
 
-        <a
-          href="#about"
+        {/* Bottom Editorial Scroll Cue */}
+        <footer
           data-hero-scroll
           data-hero-animate
-          className="absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 flex-col items-center gap-2 text-[0.58rem] font-semibold tracking-[0.2em] text-white/45 uppercase"
+          className="relative z-30 mt-8 flex flex-col items-center justify-center sm:mt-10"
         >
-          <span>Scroll</span>
-          <span className="flex h-10 w-6 items-start justify-center rounded-full border border-white/20 p-1.5">
-            <span data-scroll-dot className="block h-1.5 w-1.5 rounded-full bg-accent" />
-          </span>
-        </a>
+          <a
+            href="#about"
+            className="group flex flex-col items-center gap-2 text-[0.58rem] font-semibold tracking-[0.25em] text-white/45 uppercase transition-colors duration-300 hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+            aria-label="Scroll to About section"
+          >
+            <span className="transition-transform duration-300 group-hover:translate-y-0.5">
+              Scroll to explore
+            </span>
+            <span className="flex h-10 w-5 items-start justify-center rounded-full border border-white/20 p-1 transition-colors duration-300 group-hover:border-accent/50">
+              <span
+                data-scroll-runner
+                className="block h-1.5 w-1.5 rounded-full bg-accent shadow-[0_0_8px_#EB5002]"
+              />
+            </span>
+          </a>
+        </footer>
       </div>
+
+      {/* Seamless Architectural Transition Gradient Into About */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-16 bg-gradient-to-t from-hero to-transparent"
+      />
     </section>
   );
 }
