@@ -21,8 +21,178 @@ function getMotionServerSnapshot() {
 }
 
 /**
+ * generateKeyboardTexture
+ * Procedurally draws a photorealistic MacBook Pro keyboard deck:
+ * - 6 rows of individual rounded keycaps with subtle drop shadows
+ * - Crisp key markings, function row, inverted-T arrow cluster, spacebar
+ * - Left and right precision speaker micro-grilles
+ * - Smooth glass trackpad with fine metallic border
+ */
+function generateKeyboardTexture() {
+  const canvas = document.createElement("canvas");
+  canvas.width = 1024;
+  canvas.height = 512;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return null;
+
+  // 1. Deck Base Finish (Space Gray anodized aluminum texture)
+  ctx.fillStyle = "#28282d";
+  ctx.fillRect(0, 0, 1024, 512);
+
+  // Subtle metallic horizontal grain
+  ctx.fillStyle = "rgba(255, 255, 255, 0.02)";
+  for (let y = 0; y < 512; y += 3) {
+    ctx.fillRect(0, y, 1024, 1);
+  }
+
+  // 2. Speaker Grilles (Left & Right Flanks)
+  ctx.fillStyle = "#161619";
+  const drawSpeaker = (startX) => {
+    for (let x = startX; x < startX + 54; x += 5) {
+      for (let y = 30; y < 290; y += 5) {
+        ctx.beginPath();
+        ctx.arc(x, y, 1.2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+  };
+  drawSpeaker(40);
+  drawSpeaker(930);
+
+  // 3. Recessed Keyboard Well
+  const wellX = 110;
+  const wellY = 24;
+  const wellW = 804;
+  const wellH = 276;
+  ctx.fillStyle = "#121215";
+  ctx.beginPath();
+  ctx.roundRect(wellX, wellY, wellW, wellH, 8);
+  ctx.fill();
+
+  // Subtle inner well shadow
+  ctx.strokeStyle = "rgba(0, 0, 0, 0.6)";
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // 4. Individual Key Rows Definition
+  const rowLayouts = [
+    // Row 0: Function Keys (14 keys)
+    [
+      { label: "esc", w: 56 },
+      { label: "F1", w: 46 }, { label: "F2", w: 46 }, { label: "F3", w: 46 },
+      { label: "F4", w: 46 }, { label: "F5", w: 46 }, { label: "F6", w: 46 },
+      { label: "F7", w: 46 }, { label: "F8", w: 46 }, { label: "F9", w: 46 },
+      { label: "F10", w: 46 }, { label: "F11", w: 46 }, { label: "F12", w: 46 },
+      { label: "TouchID", w: 50 },
+    ],
+    // Row 1: Number Row (14 keys)
+    [
+      { label: "~", w: 46 },
+      { label: "1", w: 46 }, { label: "2", w: 46 }, { label: "3", w: 46 },
+      { label: "4", w: 46 }, { label: "5", w: 46 }, { label: "6", w: 46 },
+      { label: "7", w: 46 }, { label: "8", w: 46 }, { label: "9", w: 46 },
+      { label: "0", w: 46 }, { label: "-", w: 46 }, { label: "=", w: 46 },
+      { label: "delete", w: 68 },
+    ],
+    // Row 2: QWERTY Row (14 keys)
+    [
+      { label: "tab", w: 68 },
+      { label: "Q", w: 46 }, { label: "W", w: 46 }, { label: "E", w: 46 },
+      { label: "R", w: 46 }, { label: "T", w: 46 }, { label: "Y", w: 46 },
+      { label: "U", w: 46 }, { label: "I", w: 46 }, { label: "O", w: 46 },
+      { label: "P", w: 46 }, { label: "[", w: 46 }, { label: "]", w: 46 },
+      { label: "\\", w: 46 },
+    ],
+    // Row 3: ASDF Row (13 keys)
+    [
+      { label: "caps", w: 78 },
+      { label: "A", w: 46 }, { label: "S", w: 46 }, { label: "D", w: 46 },
+      { label: "F", w: 46 }, { label: "G", w: 46 }, { label: "H", w: 46 },
+      { label: "J", w: 46 }, { label: "K", w: 46 }, { label: "L", w: 46 },
+      { label: ";", w: 46 }, { label: "'", w: 46 },
+      { label: "return", w: 82 },
+    ],
+    // Row 4: ZXCV Row (12 keys)
+    [
+      { label: "shift", w: 102 },
+      { label: "Z", w: 46 }, { label: "X", w: 46 }, { label: "C", w: 46 },
+      { label: "V", w: 46 }, { label: "B", w: 46 }, { label: "N", w: 46 },
+      { label: "M", w: 46 }, { label: ",", w: 46 }, { label: ".", w: 46 },
+      { label: "/", w: 46 },
+      { label: "shift", w: 104 },
+    ],
+    // Row 5: Bottom Modifier & Space Row
+    [
+      { label: "fn", w: 44 }, { label: "control", w: 48 }, { label: "option", w: 56 },
+      { label: "cmd", w: 68 }, { label: "", w: 260 }, { label: "cmd", w: 68 },
+      { label: "option", w: 56 }, { label: "◄", w: 42 }, { label: "▲▼", w: 42 },
+      { label: "►", w: 42 },
+    ],
+  ];
+
+  const keyH = [32, 40, 40, 40, 40, 42];
+  let curY = wellY + 8;
+
+  rowLayouts.forEach((row, rowIdx) => {
+    let curX = wellX + 12;
+    const h = keyH[rowIdx];
+
+    row.forEach((key) => {
+      // Keycap Body
+      ctx.fillStyle = "#1b1b1f";
+      ctx.beginPath();
+      ctx.roundRect(curX, curY, key.w, h, 4);
+      ctx.fill();
+
+      // Top Keycap Specular Bevel Edge
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      // Bottom Keycap Shadow
+      ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
+      ctx.fillRect(curX + 2, curY + h - 2, key.w - 4, 2);
+
+      // Key Label
+      if (key.label) {
+        ctx.fillStyle = "rgba(220, 220, 225, 0.65)";
+        ctx.font = "10px -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(key.label, curX + key.w / 2, curY + h / 2);
+      }
+
+      curX += key.w + 6;
+    });
+
+    curY += h + 6;
+  });
+
+  // 5. Glass Trackpad
+  const tpX = 332;
+  const tpY = 320;
+  const tpW = 360;
+  const tpH = 175;
+
+  ctx.fillStyle = "#222226";
+  ctx.beginPath();
+  ctx.roundRect(tpX, tpY, tpW, tpH, 10);
+  ctx.fill();
+
+  // Trackpad Fine Metallic Border
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.12)";
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.generateMipmaps = true;
+  return texture;
+}
+
+/**
  * ScreenDisplay
- * Preloads and textures the active project screenshot onto the 16:10 display plane.
+ * Textures the active project screenshot onto the 16:10 screen plane.
  */
 function ScreenDisplay({ activeProject }) {
   const textures = useTexture({
@@ -50,61 +220,63 @@ function ScreenDisplay({ activeProject }) {
 }
 
 /**
- * RealisticWorkstationLaptop
+ * PhotorealisticLaptop
  *
- * Meticulously modeled 16-inch modern unibody workstation laptop:
- * - Rounded-corner unibody dark graphite aluminum chassis (#1a1a1d, metallic 0.88, roughness 0.28)
- * - Chamfered specular perimeter lip catching crisp studio rim reflections
- * - Recessed matte keyboard deck with 5 individual rows of keycaps and illuminated spacebar
- * - Precision glass trackpad with hairline border
- * - Cylindrical rear hinge assembly
- * - 16:10 display lid opened at an ergonomic 108° viewing angle
- * - High-resolution active project screen display casting authentic illumination onto the keyboard
+ * Meticulously proportioned, unclipped 16-inch workstation laptop:
+ * - Clean front-facing 3/4 beauty angle (rotation.y = -0.22)
+ * - Scaled to fit comfortably inside the canvas viewport with generous padding
+ * - Anodized Space Gray aluminum with specular edge chamfers
+ * - Procedural photorealistic keyboard deck texture
+ * - Thin black glass display bezels with camera eye
+ * - Neutral studio lighting response with zero unnatural orange spill
  */
-function RealisticWorkstationLaptop({ activeProject, interactionRef, isInteracting }) {
+function PhotorealisticLaptop({ activeProject, interactionRef }) {
   const groupRef = useRef(null);
-  const restingRotation = useMemo(() => ({ x: 0.1, y: -0.52 }), []);
+  const restingRotation = useMemo(() => ({ x: 0.08, y: -0.22 }), []);
 
-  useFrame((state, delta) => {
+  // Keyboard deck canvas texture
+  const keyboardTex = useMemo(() => {
+    if (typeof window === "undefined") return null;
+    return generateKeyboardTexture();
+  }, []);
+
+  useFrame((state) => {
     if (!groupRef.current) return;
     const inter = interactionRef.current;
 
     if (!inter.isDragging) {
-      // Natural inertial velocity decay
+      // Fluid inertial decay
       inter.velocity.x *= 0.92;
       inter.velocity.y *= 0.92;
 
-      // Apply coasting velocity
       inter.rotation.y += inter.velocity.x;
       inter.rotation.x += inter.velocity.y;
 
-      // Gentle spring-return toward resting beauty angle when settled
-      const returnFactor = 0.035;
+      // Gentle spring return to resting beauty angle
+      const returnFactor = 0.04;
       inter.rotation.x = THREE.MathUtils.lerp(
         inter.rotation.x,
-        restingRotation.x + inter.mouse.y * 0.08,
+        restingRotation.x + inter.mouse.y * 0.05,
         returnFactor,
       );
       inter.rotation.y = THREE.MathUtils.lerp(
         inter.rotation.y,
-        restingRotation.y + inter.mouse.x * 0.12,
+        restingRotation.y + inter.mouse.x * 0.08,
         returnFactor,
       );
 
-      // Subtle breathing idle motion
+      // Subtle resting float
       const t = state.clock.getElapsedTime();
-      groupRef.current.position.y = -0.32 + Math.sin(t * 1.4) * 0.025;
+      groupRef.current.position.y = -0.15 + Math.sin(t * 1.3) * 0.015;
     } else {
-      // Direct drag manipulation
       inter.rotation.y += inter.velocity.x;
       inter.rotation.x += inter.velocity.y;
     }
 
-    // Strict safety limits to prevent unnatural inversion or lost angles
-    inter.rotation.x = THREE.MathUtils.clamp(inter.rotation.x, -0.15, 0.42);
-    inter.rotation.y = THREE.MathUtils.clamp(inter.rotation.y, -1.35, 0.35);
+    // Safety clamps: keeps the laptop legible and within visual container
+    inter.rotation.x = THREE.MathUtils.clamp(inter.rotation.x, -0.1, 0.32);
+    inter.rotation.y = THREE.MathUtils.clamp(inter.rotation.y, -0.75, 0.35);
 
-    // Smoothly apply rotation to group
     groupRef.current.rotation.x = THREE.MathUtils.lerp(
       groupRef.current.rotation.x,
       inter.rotation.x,
@@ -117,53 +289,23 @@ function RealisticWorkstationLaptop({ activeProject, interactionRef, isInteracti
     );
   });
 
-  // Materials with authentic PBR calibration
-  const aluminumDark = useMemo(
+  // Materials with neutral studio PBR tuning
+  const aluminumBody = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: new THREE.Color("#19191c"),
+        color: new THREE.Color("#323238"),
         roughness: 0.28,
-        metalness: 0.9,
+        metalness: 0.88,
       }),
     [],
   );
 
-  const aluminumEdge = useMemo(
+  const aluminumBevel = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: new THREE.Color("#2a2a2e"),
-        roughness: 0.22,
-        metalness: 0.94,
-      }),
-    [],
-  );
-
-  const keyboardWellMat = useMemo(
-    () =>
-      new THREE.MeshStandardMaterial({
-        color: new THREE.Color("#0c0c0e"),
-        roughness: 0.65,
-        metalness: 0.2,
-      }),
-    [],
-  );
-
-  const keycapMat = useMemo(
-    () =>
-      new THREE.MeshStandardMaterial({
-        color: new THREE.Color("#161619"),
-        roughness: 0.5,
-        metalness: 0.35,
-      }),
-    [],
-  );
-
-  const trackpadMat = useMemo(
-    () =>
-      new THREE.MeshStandardMaterial({
-        color: new THREE.Color("#202024"),
+        color: new THREE.Color("#4c4c56"),
         roughness: 0.18,
-        metalness: 0.82,
+        metalness: 0.94,
       }),
     [],
   );
@@ -171,9 +313,9 @@ function RealisticWorkstationLaptop({ activeProject, interactionRef, isInteracti
   const bezelMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: new THREE.Color("#080809"),
+        color: new THREE.Color("#08080a"),
         roughness: 0.1,
-        metalness: 0.15,
+        metalness: 0.2,
       }),
     [],
   );
@@ -181,110 +323,87 @@ function RealisticWorkstationLaptop({ activeProject, interactionRef, isInteracti
   const hingeMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: new THREE.Color("#111113"),
+        color: new THREE.Color("#18181c"),
         roughness: 0.35,
-        metalness: 0.92,
+        metalness: 0.9,
       }),
     [],
   );
 
-  const accentGlow = useMemo(
+  const keyboardDeckMaterial = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: new THREE.Color("#EB5002"),
-        emissive: new THREE.Color("#EB5002"),
-        emissiveIntensity: 0.8,
+        map: keyboardTex || undefined,
+        color: keyboardTex ? "#ffffff" : "#18181c",
+        roughness: 0.35,
+        metalness: 0.4,
       }),
-    [],
+    [keyboardTex],
   );
 
   return (
-    <group ref={groupRef} position={[0, -0.32, 0]} rotation={[0.1, -0.52, 0]}>
+    <group ref={groupRef} position={[0, -0.15, 0]} rotation={[0.08, -0.22, 0]} scale={0.82}>
       {/* ================= 1. BASE / LOWER CHASSIS ================= */}
       <group position={[0, 0, 0]}>
         {/* Main Aluminum Unibody Slab */}
-        <mesh material={aluminumDark} position={[0, -0.065, 0]}>
+        <mesh material={aluminumBody} position={[0, -0.065, 0]}>
           <boxGeometry args={[4.1, 0.13, 2.7]} />
         </mesh>
 
-        {/* Chamfered Perimeter Rim Highlight */}
-        <mesh material={aluminumEdge} position={[0, -0.125, 0]}>
+        {/* Specular Perimeter Chamfer Edge */}
+        <mesh material={aluminumBevel} position={[0, -0.126, 0]}>
           <boxGeometry args={[4.04, 0.012, 2.64]} />
         </mesh>
 
         {/* Front Opening Thumb Scoop */}
-        <mesh material={aluminumEdge} position={[0, -0.015, 1.346]}>
+        <mesh material={aluminumBevel} position={[0, -0.015, 1.346]}>
           <boxGeometry args={[0.55, 0.03, 0.012]} />
         </mesh>
 
-        {/* Recessed Keyboard Deck */}
-        <mesh material={keyboardWellMat} position={[0, 0.003, -0.22]}>
-          <boxGeometry args={[3.36, 0.008, 1.48]} />
-        </mesh>
-
-        {/* Keyboard Key Rows with Individual Relief */}
-        {[-0.68, -0.45, -0.22, 0.01, 0.24].map((z, rowIdx) => (
-          <mesh
-            key={rowIdx}
-            material={keycapMat}
-            position={[0, 0.014, -0.22 + z]}
-          >
-            <boxGeometry args={[3.28, 0.014, 0.185]} />
-          </mesh>
-        ))}
-
-        {/* Backlit Spacebar Accent Indicator */}
-        <mesh position={[0, 0.018, 0.14]} material={accentGlow}>
-          <boxGeometry args={[0.1, 0.006, 0.02]} />
-        </mesh>
-
-        {/* Left & Right Speaker Micro-Grilles */}
-        <mesh material={keyboardWellMat} position={[-1.82, 0.003, -0.22]}>
-          <boxGeometry args={[0.18, 0.006, 1.48]} />
-        </mesh>
-        <mesh material={keyboardWellMat} position={[1.82, 0.003, -0.22]}>
-          <boxGeometry args={[0.18, 0.006, 1.48]} />
-        </mesh>
-
-        {/* Large Precision Glass Trackpad */}
-        <mesh material={trackpadMat} position={[0, 0.005, 0.76]}>
-          <boxGeometry args={[1.48, 0.006, 0.92]} />
-        </mesh>
-
-        {/* Trackpad Hairline Border Trim */}
-        <mesh material={aluminumEdge} position={[0, 0.002, 0.76]}>
-          <boxGeometry args={[1.5, 0.002, 0.94]} />
+        {/* Photorealistic Keyboard & Trackpad Deck Plane */}
+        <mesh
+          material={keyboardDeckMaterial}
+          position={[0, 0.002, 0.02]}
+          rotation={[-Math.PI / 2, 0, 0]}
+        >
+          <planeGeometry args={[3.95, 2.55]} />
         </mesh>
       </group>
 
-      {/* ================= 2. HINGE ASSEMBLY ================= */}
+      {/* ================= 2. HINGE CYLINDER ================= */}
       <mesh
         material={hingeMat}
-        position={[0, 0.015, -1.33]}
+        position={[0, 0.018, -1.33]}
         rotation={[0, 0, Math.PI / 2]}
       >
-        <cylinderGeometry args={[0.048, 0.048, 3.1, 24]} />
+        <cylinderGeometry args={[0.046, 0.046, 3.1, 24]} />
       </mesh>
 
-      {/* ================= 3. DISPLAY LID (108° Open Angle) ================= */}
-      <group position={[0, 0.015, -1.33]} rotation={[-1.24, 0, 0]}>
-        {/* Lid Rear Unibody Panel */}
-        <mesh material={aluminumDark} position={[0, 1.34, -0.042]}>
+      {/* ================= 3. DISPLAY LID (105° Open Angle) ================= */}
+      <group position={[0, 0.018, -1.33]} rotation={[-1.28, 0, 0]}>
+        {/* Rear Lid Aluminum Shell */}
+        <mesh material={aluminumBody} position={[0, 1.35, -0.042]}>
           <boxGeometry args={[4.1, 2.7, 0.084]} />
         </mesh>
 
-        {/* Minimalist Studio Emblem on Lid Back */}
-        <mesh position={[0, 1.34, -0.086]} material={accentGlow}>
-          <ringGeometry args={[0.08, 0.1, 32]} />
+        {/* Outer Lid Bevel Highlight */}
+        <mesh material={aluminumBevel} position={[0, 1.35, -0.08]}>
+          <boxGeometry args={[4.04, 2.64, 0.01]} />
         </mesh>
 
-        {/* Glossy Black Display Glass Bezel */}
-        <mesh material={bezelMat} position={[0, 1.34, 0.003]}>
+        {/* Minimalist Apple-Style Studio Emblem */}
+        <mesh position={[0, 1.35, -0.088]}>
+          <ringGeometry args={[0.08, 0.1, 32]} />
+          <meshBasicMaterial color="#ffffff" opacity={0.65} transparent />
+        </mesh>
+
+        {/* Black Glass Display Bezel */}
+        <mesh material={bezelMat} position={[0, 1.35, 0.003]}>
           <boxGeometry args={[4.05, 2.65, 0.008]} />
         </mesh>
 
         {/* Top Bezel HD Camera Eye */}
-        <mesh position={[0, 2.61, 0.009]}>
+        <mesh position={[0, 2.62, 0.009]}>
           <circleGeometry args={[0.02, 16]} />
           <meshBasicMaterial color="#1e293b" />
         </mesh>
@@ -292,20 +411,28 @@ function RealisticWorkstationLaptop({ activeProject, interactionRef, isInteracti
         {/* Active 16:10 Project Showcase Screen Display */}
         <mesh position={[0, 1.34, 0.008]}>
           <planeGeometry args={[3.84, 2.42]} />
-          <Suspense
-            fallback={
-              <meshBasicMaterial color="#09090b" />
-            }
-          >
+          <Suspense fallback={<meshBasicMaterial color="#09090b" />}>
             <ScreenDisplay activeProject={activeProject} />
           </Suspense>
         </mesh>
 
-        {/* Authentic Digital Screen Backlight Cast onto Keyboard */}
+        {/* Subtle Glass Surface Sheen Overlay */}
+        <mesh position={[0, 1.34, 0.01]}>
+          <planeGeometry args={[3.84, 2.42]} />
+          <meshPhysicalMaterial
+            transparent
+            opacity={0.06}
+            roughness={0.05}
+            transmission={0.9}
+            color="#ffffff"
+          />
+        </mesh>
+
+        {/* Screen Ambient Downlight onto Keyboard */}
         <pointLight
-          position={[0, 1.1, 0.6]}
-          intensity={0.85}
-          distance={3.2}
+          position={[0, 1.0, 0.6]}
+          intensity={0.6}
+          distance={2.8}
           color="#ffffff"
         />
       </group>
@@ -329,12 +456,11 @@ export default function HeroScene({ activeProject = "dentora", className = "" })
     isDragging: false,
     prevPointer: { x: 0, y: 0 },
     velocity: { x: 0, y: 0 },
-    rotation: { x: 0.1, y: -0.52 },
+    rotation: { x: 0.08, y: -0.22 },
     mouse: { x: 0, y: 0 },
   });
 
   const handlePointerDown = (e) => {
-    // Left click or touch
     if (e.button !== 0 && e.pointerType === "mouse") return;
 
     interactionRef.current.isDragging = true;
@@ -355,7 +481,6 @@ export default function HeroScene({ activeProject = "dentora", className = "" })
   const handlePointerMove = (e) => {
     const inter = interactionRef.current;
 
-    // Track normalized mouse for idle parallax
     inter.mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
     inter.mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
 
@@ -366,8 +491,7 @@ export default function HeroScene({ activeProject = "dentora", className = "" })
 
     inter.prevPointer = { x: e.clientX, y: e.clientY };
 
-    // Fluid sensitivity tuned for tactile weight
-    const sensitivity = 0.0075;
+    const sensitivity = 0.006;
     inter.velocity.x = deltaX * sensitivity;
     inter.velocity.y = deltaY * sensitivity;
   };
@@ -386,7 +510,6 @@ export default function HeroScene({ activeProject = "dentora", className = "" })
   };
 
   if (!isMotionEnabled) {
-    // Accessible, high-contrast static preview for users with reduced motion preferences
     const previewSrc =
       activeProject === "jewellery"
         ? "/images/projects/jewellery-store.jpg"
@@ -399,7 +522,7 @@ export default function HeroScene({ activeProject = "dentora", className = "" })
         className={`flex items-center justify-center ${className}`}
         aria-label="3D Developer Laptop Workspace — Static High-Resolution View"
       >
-        <div className="relative aspect-[16/10] w-full max-w-[560px] overflow-hidden rounded-2xl border border-white/10 bg-[#121215] p-3 shadow-2xl">
+        <div className="relative aspect-[16/10] w-full max-w-[540px] overflow-hidden rounded-2xl border border-white/10 bg-[#141418] p-3 shadow-2xl">
           <div className="relative h-full w-full overflow-hidden rounded-xl border border-white/5 bg-black">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -427,7 +550,7 @@ export default function HeroScene({ activeProject = "dentora", className = "" })
       role="region"
     >
       <Canvas
-        camera={{ position: [3.1, 2.0, 4.0], fov: 38 }}
+        camera={{ position: [1.1, 1.4, 4.6], fov: 32 }}
         dpr={[1, 1.5]}
         gl={{
           antialias: true,
@@ -437,55 +560,61 @@ export default function HeroScene({ activeProject = "dentora", className = "" })
         }}
         style={{ width: "100%", height: "100%", pointerEvents: "auto" }}
       >
-        {/* Studio Lighting Rig with Calibrated Contrast */}
-        <ambientLight intensity={0.95} color="#18181b" />
+        {/* Realistic Neutral Studio Lighting Rig */}
+        <ambientLight intensity={1.4} color="#f8fafc" />
 
-        {/* Studio Key Light (Top-Left, Clean Warm Cream #FAF7F2) */}
+        {/* Studio Key Light (Top-Left Clean White) */}
         <directionalLight
-          position={[-4.5, 6.5, 5.5]}
-          intensity={2.8}
-          color="#FAF7F2"
+          position={[-3.5, 5.5, 5.0]}
+          intensity={2.4}
+          color="#ffffff"
         />
 
-        {/* Studio Fill Light (Front-Right, Soft Neutral Slate) */}
+        {/* Studio Fill Light (Front-Right Neutral Soft Fill) */}
         <directionalLight
-          position={[5.5, 3.5, 3.5]}
-          intensity={1.4}
-          color="#cbd5e1"
+          position={[4.0, 2.5, 3.5]}
+          intensity={1.2}
+          color="#e2e8f0"
         />
 
-        {/* Dramatic Rim Accent Light (Portfolio Brand Orange #EB5002) */}
+        {/* Subtle Overhead Fill */}
         <directionalLight
-          position={[1.5, 4.0, -4.5]}
-          intensity={3.8}
-          color="#EB5002"
+          position={[0, 4.5, 1.0]}
+          intensity={0.8}
+          color="#ffffff"
         />
 
-        {/* Soft Realistic Contact Shadow Ground Plane */}
+        {/* Neutral Rear Rim Light (Clean Crisp Edge Definition — No Orange Spill) */}
+        <directionalLight
+          position={[1.5, 3.0, -4.0]}
+          intensity={1.2}
+          color="#f1f5f9"
+        />
+
+        {/* Ground Contact Shadow */}
         <ContactShadows
-          position={[0, -0.38, 0]}
-          opacity={0.75}
-          scale={7.5}
-          blur={2.2}
-          far={3.8}
+          position={[0, -0.25, 0]}
+          opacity={0.65}
+          scale={7.0}
+          blur={2.0}
+          far={3.0}
           color="#000000"
         />
 
-        {/* Interactive Laptop Model */}
-        <RealisticWorkstationLaptop
+        {/* Photorealistic Workstation Laptop Model */}
+        <PhotorealisticLaptop
           activeProject={activeProject}
           interactionRef={interactionRef}
-          isInteracting={isInteracting}
         />
       </Canvas>
 
-      {/* Minimalist Floating Interaction Hint */}
+      {/* Subtle Drag Hint Overlay */}
       <div
-        className={`pointer-events-none absolute bottom-2 left-1/2 -translate-x-1/2 transition-opacity duration-500 ${
-          hasInteracted && !isInteracting ? "opacity-0" : "opacity-90"
+        className={`pointer-events-none absolute bottom-1 left-1/2 -translate-x-1/2 transition-opacity duration-500 ${
+          hasInteracted && !isInteracting ? "opacity-0" : "opacity-85"
         }`}
       >
-        <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-black/60 px-3 py-1 text-[0.58rem] font-medium tracking-[0.16em] text-white/60 uppercase backdrop-blur-md">
+        <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-black/60 px-2.5 py-0.5 text-[0.55rem] font-medium tracking-[0.16em] text-white/50 uppercase backdrop-blur-md">
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
           <span>Drag to explore</span>
         </div>
