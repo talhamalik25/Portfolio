@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { gsap, ScrollTrigger, SplitText, useGSAP } from '@/lib/gsap';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import AnimatedButton from '@/components/ui/AnimatedButton';
 import Magnetic from '@/components/ui/Magnetic';
 import { EASE } from '@/lib/motion';
@@ -270,26 +271,40 @@ const HomeBanner = () => {
 
       <div ref={innerContentRef} className="max-w-7xl mx-auto w-full relative z-10">
         <div className="relative text-center">
-          <h1
-            ref={nameRef}
-            aria-label={site.name}
-            className="select-none leading-none cursor-default mb-6 md:mb-4"
-          >
-            <span aria-hidden="true" className="block">
-              <span
-                data-hero-line
-                className="block font-display font-black uppercase text-hero tracking-tight"
-              >
-                TALHA
+          <div className="relative isolate overflow-visible lg:overflow-hidden">
+            <div className="pointer-events-none absolute inset-x-0 top-[max(-9rem,calc(-30vw-1.5rem))] bottom-[50%] z-0 overflow-hidden lg:inset-0">
+              <Image
+                src="/heroimg.png"
+                alt=""
+                aria-hidden="true"
+                width={900}
+                height={675}
+                priority
+                sizes="(min-width: 1024px) 576px, 130vw"
+                className="absolute left-1/2 top-0 h-auto w-[min(130vw,32rem)] -translate-x-1/2 object-contain opacity-70 lg:w-full lg:max-w-[36rem] lg:opacity-50"
+              />
+            </div>
+            <h1
+              ref={nameRef}
+              aria-label={site.name}
+              className="relative z-10 select-none leading-none cursor-default mb-6 md:mb-4"
+            >
+              <span aria-hidden="true" className="block">
+                <span
+                  data-hero-line
+                  className="block font-display font-black uppercase text-hero tracking-tight"
+                >
+                  TALHA
+                </span>
+                <span
+                  data-hero-line
+                  className="serif-accent block text-hero-sm leading-[0.85] md:ml-[14vw]"
+                >
+                  malik
+                </span>
               </span>
-              <span
-                data-hero-line
-                className="serif-accent block text-hero-sm leading-[0.85] md:ml-[14vw]"
-              >
-                malik
-              </span>
-            </span>
-          </h1>
+            </h1>
+          </div>
 
           <div ref={stampRef} className="absolute -top-6 right-0 lg:right-4 xl:right-10 hidden sm:block opacity-0">
             <StampBadge onClick={() => handleScroll('contact')} />
