@@ -151,7 +151,7 @@ export default function GlobalPreloader({ onComplete }: { onComplete?: () => voi
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-[99999] flex items-center justify-center bg-[#0B110E] cursor-wait text-cream select-none pointer-events-auto"
+      className="fixed inset-0 z-[99999] flex items-center justify-center bg-[#141414] cursor-wait text-cream select-none pointer-events-auto"
       style={{ willChange: 'transform' }}
     >
       <div

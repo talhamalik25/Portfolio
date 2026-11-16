@@ -7,33 +7,8 @@ import AnimatedHeading from '@/components/ui/AnimateHeading';
 import FlowField from '@/components/canvas/FlowField';
 
 const CREDENTIALS = [
-  {
-    year: '2026',
-    title: 'Software Engineer Intern - MERN Stack',
-    organization: 'e-strats, Islamabad',
-    type: 'Industry',
-  },
-  {
-    year: '2026',
-    title: 'HEC National Skills Competency Test (NSCT)',
-    organization: 'HEC, PSEB & P@SHA',
-    stat: '95th Percentile, Top 5% nationwide',
-    type: 'Recognition',
-  },
-  {
-    year: '2024-25',
-    title: 'Web and Mobile App Development',
-    organization: 'Saylani Mass IT Training (SMIT), Peshawar',
-    stat: 'Full-Stack MERN, TypeScript, Next.js & Hybrid Apps',
-    type: 'Certification',
-  },
-  {
-    year: '2022-26',
-    title: 'BS Computer Science',
-    organization: 'University of Peshawar',
-    stat: '3.60 / 4.00 GPA',
-    type: 'Education',
-  },
+  { year: 'Current', title: 'Frontend Developer', organization: 'AKTech Digital Solutions', type: 'Industry', stat: '' },
+  { year: '', title: 'BS Computer Science', organization: 'Iqra University', type: 'Education', stat: '' },
 ];
 
 const About = () => {
@@ -43,8 +18,8 @@ const About = () => {
     { t: 'i?' },
   ];
   const descriptionText =
-    'I am a software engineer driven by a passion for building clean, intuitive, and reliable digital experiences.';
-  const aboutMeText = `I build web applications that bridge thoughtful frontend interfaces with robust backend systems. To me, software is more than code on a screen; it is about making technology feel effortless and genuinely useful to real people.\n\nMy journey began with a simple curiosity for how things work under the hood. Over time, that curiosity evolved into a genuine passion for fluid interface animations, reliable backend architecture, and building user journeys that feel effortless and alive.\n\nWhether I am polishing micro-interactions or engineering full-stack systems, my core focus remains unchanged: creating software that brings people joy, solves real problems, and leaves a lasting positive impact.`;
+    'I am Talha Malik, a Full Stack Developer based in Karachi, Pakistan.';
+  const aboutMeText = `I work as a Frontend Developer at AKTech Digital Solutions. My education is BS Computer Science at Iqra University. I build responsive websites and full-stack web applications.\n\nMy toolkit includes React, Next.js, JavaScript, TypeScript, Node.js, Express.js, MongoDB and Tailwind CSS. I connect frontend interfaces with backend services and application data.\n\nMy projects include Sooti Mehal, Malik Enterprises and a jewellery e-commerce application. I am also developing Fitivo, a multi-tenant gym management SaaS that is currently in progress.`;
 
   const sectionRef = useRef<HTMLDivElement>(null);
   const tableRef = useRef<HTMLDivElement>(null);
@@ -213,7 +188,7 @@ const About = () => {
   );
 
   return (
-    <div className="bg-cream">
+    <div className="bg-surface-base">
       <section
         ref={sectionRef}
         id="about"

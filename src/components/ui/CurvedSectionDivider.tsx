@@ -12,8 +12,8 @@ interface CurvedSectionDividerProps {
 
 export default function CurvedSectionDivider({
   className = '',
-  curveColor = '#E2E8E4',
-  bottomColor = '#0A0F0D',
+  curveColor = '#0B0B0B',
+  bottomColor = '#0B0B0B',
 }: CurvedSectionDividerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const curveRef = useRef<HTMLDivElement>(null);

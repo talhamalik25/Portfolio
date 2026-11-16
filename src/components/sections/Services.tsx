@@ -54,20 +54,20 @@ const Services = () => {
       description:
         'Crafting responsive, accessible, and elegant interfaces that deliver exceptional user experiences. I focus on clarity, performance, and seamless interaction across devices.',
       items: [
-        'React, Next.js, TailwindCSS, GSAP',
+        'React, Next.js, Tailwind CSS',
         'Optimized Rendering & Animations',
-        'Figma to Code Implementation',
+        'Responsive Website Development',
       ],
     },
     {
       id: '03',
       title: 'Optimization & Performance',
       description:
-        'Optimizing codebases, APIs, and assets for speed, scalability, and maintainability. I ensure your applications run efficiently with best practices in caching, SEO, and deployment.',
+        'Optimizing codebases, APIs, and assets for speed, scalability, and maintainability. My focus is clear application structure, responsive interfaces and maintainable code.',
       items: [
         'Performance Tuning & Code Refactoring',
         'SEO & Accessibility Optimization',
-        'Deployment (Vercel, AWS, Docker)',
+        'Deployment with Vercel',
       ],
     },
   ];

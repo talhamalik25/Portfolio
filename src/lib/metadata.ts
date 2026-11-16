@@ -2,13 +2,13 @@ import { Metadata } from 'next';
 
 export const siteMetadata: Metadata = {
   title: {
-    default: 'Aitezaz Sikandar - Full Stack Developer',
-    template: '%s | Aitezaz Sikandar',
+    default: 'Talha Malik - Full Stack Developer',
+    template: '%s | Talha Malik',
   },
   description:
     'Web developer specializing in React, Next.js, and MERN Stack development. Building fast, scalable, and user-focused web applications.',
   keywords: [
-    'Aitezaz Sikandar',
+    'Talha Malik',
     'Web Developer',
     'Frontend Developer',
     'Full Stack Developer',
@@ -20,39 +20,39 @@ export const siteMetadata: Metadata = {
   ],
   authors: [
     {
-      name: 'Aitezaz Sikandar Khan',
+      name: 'Talha Malik',
     },
   ],
-  creator: 'Aitezaz Sikandar',
-  metadataBase: new URL('https://aitezazdev.vercel.app'),
+  creator: 'Talha Malik',
+  metadataBase: new URL('https://portfolio-pi-three-wmfjdk08k5.vercel.app'),
   alternates: {
     canonical: './',
   },
   icons: {
-    icon: '/logo.webp',
+    icon: '/talha-logo.svg',
   },
   openGraph: {
-    title: 'Aitezaz Sikandar - Full Stack Developer',
+    title: 'Talha Malik - Full Stack Developer',
     description:
-      'Portfolio of Aitezaz Sikandar, Full Stack Developer specializing in MERN stack, Next.js, and polished web experiences.',
-    url: 'https://aitezazdev.vercel.app',
-    siteName: 'Aitezaz Sikandar Portfolio',
+      'Portfolio of Talha Malik, Full Stack Developer specializing in MERN stack, Next.js, and polished web experiences.',
+    url: 'https://portfolio-pi-three-wmfjdk08k5.vercel.app',
+    siteName: 'Talha Malik Portfolio',
     images: [
       {
-        url: '/og-image.png',
+        url: '/talha-og.png',
         width: 1200,
         height: 630,
-        alt: 'Aitezaz Sikandar - Full Stack Developer',
+        alt: 'Talha Malik - Full Stack Developer',
       },
     ],
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Aitezaz Sikandar - Full Stack Developer',
+    title: 'Talha Malik - Full Stack Developer',
     description:
-      'Portfolio of Aitezaz Sikandar, Full Stack Developer specializing in MERN stack, Next.js, and polished web experiences.',
-    images: ['/og-image.png'],
+      'Portfolio of Talha Malik, Full Stack Developer specializing in MERN stack, Next.js, and polished web experiences.',
+    images: ['/talha-og.png'],
   },
   robots: {
     index: true,

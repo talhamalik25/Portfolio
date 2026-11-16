@@ -23,64 +23,20 @@ export interface StackCategory {
 }
 
 export const STACK_SECTIONS: StackCategory[] = [
-  {
-    id: 'frontend',
-    title: 'FRONTEND',
-    technologies: [
-      { name: 'JavaScript', category: 'frontend', icon: '/Services/js.png' },
-      { name: 'TypeScript', category: 'frontend', icon: '/Services/typescript.svg' },
-      { name: 'React', category: 'frontend', icon: '/Services/react.png' },
-      { name: 'Next.js', category: 'frontend', icon: '/Services/next.webp' },
-      { name: 'Redux Toolkit', category: 'frontend', icon: '/Services/reduxtoolkit.svg' },
-      { name: 'Tailwind CSS', category: 'frontend', icon: '/Services/tailwind.png' },
-      { name: 'Bootstrap', category: 'frontend', icon: '/Services/bootstrap.svg' },
-      { name: 'GSAP', category: 'frontend', icon: '/Services/gsap.png' },
-    ],
-  },
-  {
-    id: 'backend',
-    title: 'BACKEND & REAL-TIME',
-    technologies: [
-      { name: 'Node.js', category: 'backend', icon: '/Services/node.png' },
-      { name: 'Express.js', category: 'backend', icon: '/Services/express.png' },
-      { name: 'Socket.io', category: 'backend', icon: '/Services/socketio.svg' },
-      { name: 'Firebase', category: 'backend', icon: '/Services/firebase.svg' },
-    ],
-  },
-  {
-    id: 'database',
-    title: 'DATABASE & ORM',
-    technologies: [
-      { name: 'MongoDB', category: 'database', icon: '/Services/mongodb.svg' },
-      { name: 'Mongoose', category: 'database', icon: '/Services/mongoose.svg' },
-      { name: 'MySQL', category: 'database', icon: '/Services/mysql.svg' },
-    ],
-  },
-  {
-    id: 'devops',
-    title: 'DEVOPS & CLOUD',
-    technologies: [
-      { name: 'Docker', category: 'devops', icon: '/Services/docker.svg' },
-      { name: 'GitHub Actions', category: 'devops', icon: '/Services/githubactions.svg' },
-      { name: 'AWS', category: 'devops', icon: '/Services/aws.webp' },
-      { name: 'Nginx', category: 'devops', icon: '/Services/nginx.svg' },
-      { name: 'Linux', category: 'devops', icon: '/Services/linux.svg' },
-    ],
-  },
-  {
-    id: 'tools',
-    title: 'AI, TESTING & TOOLS',
-    technologies: [
-      { name: 'Gemini AI', category: 'tools', icon: '/Services/geminiai.svg' },
-      { name: 'Jest', category: 'tools', icon: '/Services/jest.svg' },
-      { name: 'Zod', category: 'tools', icon: '/Services/zod.svg' },
-      { name: 'Stripe', category: 'tools', icon: '/Services/stripe.svg' },
-      { name: 'Cloudinary', category: 'tools', icon: '/Services/cloudinary.svg' },
-      { name: 'Git', category: 'tools', icon: '/Services/git.png' },
-      { name: 'Postman', category: 'tools', icon: '/Services/postman-icon.svg' },
-      { name: 'Figma', category: 'tools', icon: '/Services/figma.png' },
-    ],
-  },
+ { id: 'frontend', title: 'FRONTEND', technologies: [
+ { name: 'JavaScript', category: 'frontend', icon: '/Services/js.png' },
+ { name: 'TypeScript', category: 'frontend', icon: '/Services/typescript.svg' },
+ { name: 'React', category: 'frontend', icon: '/Services/react.png' },
+ { name: 'Next.js', category: 'frontend', icon: '/Services/next.webp' },
+ { name: 'Tailwind CSS', category: 'frontend', icon: '/Services/tailwind.png' },
+ ] },
+ { id: 'backend', title: 'BACKEND', technologies: [
+ { name: 'Node.js', category: 'backend', icon: '/Services/node.png' },
+ { name: 'Express.js', category: 'backend', icon: '/Services/express.png' },
+ ] },
+ { id: 'database', title: 'DATABASE', technologies: [
+ { name: 'MongoDB', category: 'database', icon: '/Services/mongodb.svg' },
+ ] },
 ];
 
 const TechStack = () => {
@@ -100,10 +56,8 @@ const TechStack = () => {
   const filterOptions = [
     { id: 'all', label: 'All Categories' },
     { id: 'frontend', label: 'Frontend' },
-    { id: 'backend', label: 'Backend & Real-Time' },
-    { id: 'database', label: 'Database & ORM' },
-    { id: 'devops', label: 'DevOps & Cloud' },
-    { id: 'tools', label: 'AI, Testing & Tools' },
+    { id: 'backend', label: 'Backend' },
+    { id: 'database', label: 'Database' },
   ];
 
   const visibleSections =
@@ -223,7 +177,7 @@ const TechStack = () => {
                 onClick={() => setActiveFilter(option.id)}
                 className={`text-xs sm:text-sm font-mono tracking-wider px-3.5 py-1.5 rounded-full border transition-all duration-300 cursor-pointer ${
                   isActive
-                    ? 'bg-cream text-ink border-cream font-semibold shadow-md'
+                    ? 'bg-accent text-ink border-cream font-semibold shadow-md'
                     : 'bg-elevated-dark/60 text-gray-soft border-white/10 hover:border-accent/40 hover:text-cream'
                 }`}
               >

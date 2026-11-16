@@ -8,13 +8,13 @@ export default function manifest(): MetadataRoute.Manifest {
     description: site.tagline,
     start_url: '/',
     display: 'standalone',
-    background_color: '#0A0F0D',
-    theme_color: '#34D399',
+    background_color: '#0B0B0B',
+    theme_color: '#FF6B00',
     icons: [
       {
-        src: '/logo.webp',
+        src: '/talha-logo.svg',
         sizes: 'any',
-        type: 'image/webp',
+        type: 'image/svg+xml',
       },
     ],
   };

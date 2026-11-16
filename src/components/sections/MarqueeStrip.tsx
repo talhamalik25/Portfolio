@@ -9,7 +9,7 @@ export default function MarqueeStrip() {
   const track1Ref = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
 
-  const items = ['Available for Work', 'Open to Opportunities', "Let's Build", 'MERN Stack'];
+  const items = ['Talha Malik', 'Full Stack Developer', "Let's Build", 'MERN Stack'];
 
   useEffect(() => {
     if (reduced) return;
@@ -118,7 +118,7 @@ export default function MarqueeStrip() {
       className="w-full relative z-20 overflow-hidden select-none border-t border-b border-border-dark"
       aria-hidden="true"
     >
-      <div className="overflow-hidden bg-cream py-3">
+      <div className="overflow-hidden bg-surface py-3">
         <div
           ref={track1Ref}
           className="inline-flex items-center gap-0 whitespace-nowrap"

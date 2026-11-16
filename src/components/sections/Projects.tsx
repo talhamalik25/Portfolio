@@ -292,7 +292,7 @@ function MobileSnapProjects({ projects, router }: MobileSnapProjectsProps) {
   );
 
   return (
-    <div ref={sectionRef} className="md:hidden bg-cream pb-12">
+    <div ref={sectionRef} className="md:hidden bg-surface pb-12">
       <div className="px-6 pt-16 pb-8">
         <AnimatedHeading
           words={[{ t: 'SELECTED' }, { t: 'works', serif: true }]}
@@ -343,7 +343,7 @@ function MobileSnapProjects({ projects, router }: MobileSnapProjectsProps) {
                   className="mc-num font-mono font-black leading-none"
                   style={{
                     fontSize: 'clamp(2rem, 9vw, 2.6rem)',
-                    color: '#34D399',
+                    color: '#FF6B00',
                     letterSpacing: '-0.03em',
                   }}
                 >
@@ -385,8 +385,8 @@ function MobileSnapProjects({ projects, router }: MobileSnapProjectsProps) {
                     View Project
                   </span>
                   <span
-                    className="flex items-center justify-center w-9 h-9 rounded-full text-[#0A0F0D] text-sm"
-                    style={{ background: '#34D399', boxShadow: '0 0 16px rgba(52, 211, 153, 0.35)' }}
+                    className="flex items-center justify-center w-9 h-9 rounded-full text-[#0B0B0B] text-sm"
+                    style={{ background: '#FF6B00', boxShadow: '0 0 16px rgba(255, 107, 0, 0.35)' }}
                   >
                     →
                   </span>
@@ -572,7 +572,7 @@ export default function ProjectsPage() {
     const row = e.currentTarget;
     const line = row.querySelector('.hover-line-ref');
     if (line) gsap.to(line, { width: '100%', duration: 0.15, ease: 'power2.out' });
-    gsap.to(row, { backgroundColor: 'rgba(196, 93, 62, 0.04)', duration: 0.15, ease: 'power2.out' });
+    gsap.to(row, { backgroundColor: 'rgba(255, 107, 0, 0.04)', duration: 0.15, ease: 'power2.out' });
     const scrollY = (window as any).__lenis
       ? Math.round((window as any).__lenis.scroll)
       : Math.round(window.scrollY);
@@ -585,7 +585,7 @@ export default function ProjectsPage() {
       id="projects"
       ref={containerRef}
       onMouseLeave={handleTableMouseLeave}
-      className="relative w-full bg-cream text-charcoal overflow-hidden"
+      className="relative w-full bg-surface text-charcoal overflow-hidden"
     >
       <div className="hidden md:block pt-16 pb-20 md:pt-20 md:pb-24 px-6 sm:px-8 md:px-12 lg:px-16 max-w-7xl mx-auto">
         <div className="mb-12">

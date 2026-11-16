@@ -1,38 +1,27 @@
 export const site = {
-  name: 'Aitezaz Sikandar',
-  firstName: 'Aitezaz',
-  lastName: 'Sikandar',
-  handle: 'aitezazdev',
-  brand: 'aitezaz.dev',
-  email: 'aitezazsikandar@gmail.com',
-  location: 'Pakistan',
+  name: 'Talha Malik',
+  firstName: 'TALHA',
+  lastName: 'Malik',
+  handle: 'talhamalik25',
+  brand: 'TALHA',
+  email: 'mtmaliktalha2005@gmail.com',
+  location: 'Karachi, Pakistan',
   timeZone: 'Asia/Karachi',
   timeZoneLabel: 'PKT',
-  url: 'https://aitezazdev.vercel.app',
+  url: 'https://portfolio-pi-three-wmfjdk08k5.vercel.app',
   tagline: 'Full Stack Developer crafting fast, expressive web experiences.',
   roles: [
     'Full Stack Developer',
     'React & Next.js Engineer',
     'MERN Stack Developer',
-    'Open to Work Worldwide',
+    'Full Stack Web Development',
   ],
 } as const;
 
-export type SocialKey = 'github' | 'linkedin' | 'instagram' | 'source';
-
-export const socials: Record<SocialKey, { label: string; href: string }> = {
-  github: { label: 'GitHub', href: 'https://github.com/aitezazdev' },
-  linkedin: { label: 'Linkedin', href: 'https://linkedin.com/in/aitezaz-sikandar' },
-  instagram: { label: 'Instagram', href: 'https://instagram.com/ur_zaz' },
-  source: { label: 'Source Code', href: 'https://github.com/aitezazdev/Portfolio' },
+export const socials = {
+  github: { label: 'GitHub', href: 'https://github.com/talhamalik25' },
 };
-
-export const socialList: Array<{ label: string; href: string }> = [
-  socials.linkedin,
-  socials.instagram,
-  socials.github,
-  socials.source,
-];
+export const socialList: Array<{ label: string; href: string }> = [socials.github];
 
 export const navLinks = [
   { name: 'Home', href: '/#top', menuOnly: true },

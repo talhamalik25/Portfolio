@@ -25,12 +25,12 @@ export default function Home() {
         banner={<HomeBanner />}
         about={<About />}
       >
-        <CurvedSectionDivider curveColor="#0A0F0D" bottomColor="#E2E8E4" />
-        <section className="relative z-20 bg-cream">
+        <CurvedSectionDivider curveColor="#0B0B0B" bottomColor="#141414" />
+        <section className="relative z-20 bg-surface">
           <Projects />
         </section>
         <MarqueeStrip />
-        <CurvedSectionDivider curveColor="#E2E8E4" bottomColor="#0A0F0D" />
+        <CurvedSectionDivider curveColor="#141414" bottomColor="#0B0B0B" />
         <div className="relative z-25 bg-ink overflow-hidden">
           <Contact />
           <Footer />

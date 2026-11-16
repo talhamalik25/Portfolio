@@ -253,7 +253,7 @@ const HomeBanner = () => {
   return (
     <section
       ref={sectionRef}
-      className="min-h-[100dvh] md:min-h-screen px-6 sm:px-8 md:px-12 lg:px-16 pt-28 pb-8 md:pt-20 md:pb-0 bg-cream flex items-center relative overflow-hidden"
+      className="min-h-[100dvh] md:min-h-screen px-6 sm:px-8 md:px-12 lg:px-16 pt-28 pb-8 md:pt-20 md:pb-0 bg-surface-base flex items-center relative overflow-hidden"
     >
       <AmbientGeometry />
 
@@ -262,7 +262,7 @@ const HomeBanner = () => {
           ref={spotlightRef}
           className="absolute inset-0 pointer-events-none z-[1] opacity-0"
           style={{
-            background: 'radial-gradient(400px circle at var(--x, 0px) var(--y, 0px), rgba(196, 93, 62, 0.07), transparent 85%)',
+            background: 'radial-gradient(400px circle at var(--x, 0px) var(--y, 0px), rgba(255, 107, 0, 0.07), transparent 85%)',
             willChange: 'opacity',
           }}
         />
@@ -280,13 +280,13 @@ const HomeBanner = () => {
                 data-hero-line
                 className="block font-display font-black uppercase text-hero tracking-tight"
               >
-                AITEZAZ
+                TALHA
               </span>
               <span
                 data-hero-line
                 className="serif-accent block text-hero-sm leading-[0.85] md:ml-[14vw]"
               >
-                sikandar
+                malik
               </span>
             </span>
           </h1>
@@ -302,7 +302,7 @@ const HomeBanner = () => {
               ref={paragraphRef}
               className="text-warm font-sans text-base sm:text-lg md:text-xl leading-relaxed mb-8 md:mb-10 text-center mx-auto"
             >
-              Full-stack engineer building fast, scalable, and reliable web applications.
+              Full Stack Developer based in Karachi, Pakistan, building responsive websites and full-stack applications.
             </p>
 
             <div ref={tickerRef} className="w-full flex justify-center">
@@ -324,11 +324,11 @@ const HomeBanner = () => {
               />
               <AnimatedButton
                 as="a"
-                href="/01_aitezaz_resume.pdf"
+                href="https://github.com/talhamalik25"
                 target="_blank"
                 rel="noopener noreferrer"
-                topText="RESUME"
-                bottomText="DOWNLOAD →"
+                topText="GITHUB"
+                bottomText="VIEW PROFILE →"
                 variant="outline"
               />
             </div>
